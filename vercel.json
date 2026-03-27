@@ -1,9 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "aboutme.mungxbt.site" }],
-      "destination": "/about.html"
-    }
-  ]
-}
