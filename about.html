@@ -105,6 +105,25 @@
   .footer-links { display: flex; gap: 1.5rem; }
   .footer-links a { font-size: 0.75rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--amber); }
+
+  /* ── Mobile Fixes ── */
+  @media (max-width: 480px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.03em; }
+    .page { padding: 2.5rem 1rem 4rem; }
+    .about-grid { gap: 2rem; }
+    .avatar-wrap, .avatar-ring { width: 120px; height: 120px; }
+    .avatar-initials { width: 110px; height: 110px; font-size: 2rem; }
+    .skills-cols { grid-template-columns: 1fr; }
+    .download-section { flex-direction: column; align-items: flex-start; }
+    footer { padding: 1.5rem 1rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+  @media (max-width: 360px) {
+    .nav-links a { font-size: 0.65rem; }
+    h1 { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+  }
 </style>
 </head>
 <body>
@@ -142,7 +161,7 @@
         </a>
         <div class="contact-item contact-item--link" onclick="navigator.clipboard.writeText('saputra.mung@gmail.com').then(()=>{this.querySelector('.copy-label').textContent='Copied!';setTimeout(()=>{this.querySelector('.copy-label').textContent='saputra.mung@gmail.com'},2000)})" style="cursor:pointer;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <span class="copy-label">saputra.mung@gmail.com</span>
+          <span class="copy-label"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a796b7a7f7e786b24677f646d4a6d676b636624696567">[email&#160;protected]</a></span>
         </div>
         <div class="contact-item">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -304,8 +323,14 @@
 </footer>
 
 <script>
+  // Apply saved theme immediately
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+  }
+
   document.getElementById('themeBtn').addEventListener('click', () => {
     document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
   });
 </script>
 </body>

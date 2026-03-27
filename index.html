@@ -116,6 +116,26 @@
   .footer-links a { font-size: 0.75rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--amber); }
   .pb { padding-bottom: 3rem; }
+
+  /* ── Mobile Fixes ── */
+  @media (max-width: 480px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.03em; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .stats-row { margin: 0 1rem 2rem; padding: 0; }
+    section { padding: 1.5rem 1rem 0; }
+    .skills-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    .projects-grid { grid-template-columns: 1fr; }
+    .community-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem 1rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+  @media (max-width: 360px) {
+    .nav-links { gap: 0.5rem; }
+    .nav-links a { font-size: 0.65rem; }
+    h1 { font-size: clamp(2.2rem, 10vw, 3rem); }
+  }
   .btn-bitcoin {
     display: inline-flex; align-items: center; gap: 10px;
     background: var(--amber); color: #0e0e0e;
@@ -383,8 +403,14 @@
 </footer>
 
 <script>
+  // Apply saved theme immediately
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+  }
+
   document.getElementById('themeBtn').addEventListener('click', () => {
     document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
   });
 
   // Bitcoin button ripple effect
