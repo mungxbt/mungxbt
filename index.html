@@ -52,19 +52,19 @@
   .theme-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--amber); border-radius: 50%; transition: transform 0.3s; }
   .light .theme-btn::after { transform: translateX(16px); }
 
-  .hero { position: relative; z-index: 1; padding: 5rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+  .hero { position: relative; z-index: 1; padding: 2.5rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow);
-    padding: 5px 12px; border-radius: 4px; margin-bottom: 2rem;
+    padding: 5px 12px; border-radius: 4px; margin-bottom: 1.25rem;
   }
   .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-  h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--text); }
+  h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1rem; color: var(--text); }
   h1 .name-line { display: block; }
   h1 .accent { color: var(--amber); }
-  .hero-sub { font-size: 1rem; color: var(--text2); max-width: 480px; line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+  .hero-sub { font-size: 0.9rem; color: var(--text2); max-width: 480px; line-height: 1.6; margin-bottom: 1.5rem; font-weight: 300; }
   .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--amber); color: #0e0e0e; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; text-decoration: none; transition: opacity 0.2s, transform 0.1s; }
   .btn-primary:hover { opacity: 0.85; }
@@ -78,7 +78,7 @@
   .stat-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--amber); letter-spacing: -0.02em; }
   .stat-label { font-size: 0.75rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
 
-  section { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 2rem 2rem 0; }
+  section { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 1.25rem 2rem 0; }
   .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
   .section-tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); background: var(--amber-glow); border: 1px solid var(--amber-border); padding: 3px 8px; border-radius: 3px; }
   .section-line { flex: 1; height: 1px; background: var(--border); }
@@ -260,16 +260,6 @@
         </div>
         <svg class="social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="https://x.com/himiwhimiw" target="_blank" class="social-row">
-        <div class="social-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </div>
-        <div class="social-info">
-          <div class="social-name">@himiwhimiw</div>
-          <div class="social-sub">Twitter / X</div>
-        </div>
-        <svg class="social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
       <a href="https://www.tiktok.com/@mungxbt" target="_blank" class="social-row">
         <div class="social-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.16 8.16 0 004.77 1.52V6.75a4.85 4.85 0 01-1-.06z"/></svg>
@@ -277,6 +267,16 @@
         <div class="social-info">
           <div class="social-name">@mungxbt</div>
           <div class="social-sub">TikTok</div>
+        </div>
+        <svg class="social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://x.com/himiwhimiw" target="_blank" class="social-row">
+        <div class="social-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <div class="social-info">
+          <div class="social-name">@himiwhimiw</div>
+          <div class="social-sub">Twitter / X</div>
         </div>
         <svg class="social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
