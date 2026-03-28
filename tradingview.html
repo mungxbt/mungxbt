@@ -395,8 +395,21 @@
         }
       }
       if (!mData) throw new Error('All MEXC proxies failed');
+      // Debug: log sample to console so we can inspect real field values
+      if (mData.symbols && mData.symbols.length > 0) {
+        console.log('MEXC sample symbol:', JSON.stringify(mData.symbols[0]));
+        const statuses = [...new Set(mData.symbols.map(s => s.status))];
+        console.log('MEXC statuses found:', statuses);
+      }
       spotMexcPairs = mData.symbols
-        .filter(s => s.status === 'ENABLED' && s.quoteAsset === 'USDT' && s.isSpotTradingAllowed)
+        .filter(s => {
+          const q = s.quoteAsset === 'USDT';
+          // isSpotTradingAllowed may not exist on MEXC — skip that check
+          // status can be 'ENABLED', '1', true, or missing depending on API version
+          const st = s.status;
+          const enabled = st === 'ENABLED' || st === 1 || st === '1' || st === true || st == null;
+          return q && enabled;
+        })
         .map(s => 'MEXC:' + s.symbol);
       document.getElementById('stat-spot-mexc').textContent = spotMexcPairs.length.toLocaleString();
 
