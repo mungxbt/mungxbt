@@ -620,40 +620,67 @@ function togglePanel(ticker) {
 }
 
 // ─── FLOAT SCREENER ─────────────────────────────────────────────
-const FLOAT_DATA = SAMPLE_DATA.reduce((acc, r) => {
-  if (!acc[r.ticker]) acc[r.ticker] = { ticker:r.ticker, company:r.company, sector:r.sector, mktcap:r.mktcap, holders:[] };
-  acc[r.ticker].holders.push(r);
-  return acc;
-}, {});
-
 function renderFloatTable() {
-  const floatF = document.getElementById('floatFilter').value;
+  // Gunakan HEATMAP_DATA jika sudah ada data real, fallback ke SAMPLE_DATA
+  const source = (window.HEATMAP_DATA && window.HEATMAP_DATA.length > 0)
+    ? window.HEATMAP_DATA
+    : null;
+
+  const floatF  = document.getElementById('floatFilter').value;
   const sectorF = document.getElementById('sectorFilter').value;
-  const sortF = document.getElementById('sortFloat').value;
-  let rows = Object.values(FLOAT_DATA).map(d => {
-    const totalHeld = d.holders.reduce((s,r)=>s+r.pct,0);
-    const freeFloat = Math.max(0, 100 - totalHeld);
-    const topHolder = d.holders.sort((a,b)=>b.pct-a.pct)[0];
-    return { ...d, totalHeld, freeFloat, topHolder };
-  });
+  const sortF   = document.getElementById('sortFloat').value;
+
+  let rows;
+  if (source) {
+    // Data real dari ksei.json
+    rows = source.map(d => ({
+      ticker:    d.ticker,
+      company:   d.ticker,
+      sector:    d._sector || '',
+      mktcap:    d.mktcap,
+      freeFloat: d.float,
+      foreignPct:d.foreign,
+      topHolder: d._topType || '—',
+      topPct:    d._topPct  || 0,
+    }));
+  } else {
+    // Fallback: hitung dari SAMPLE_DATA
+    const byTicker = {};
+    SAMPLE_DATA.forEach(r => {
+      if (!byTicker[r.ticker]) byTicker[r.ticker] = { ticker:r.ticker, company:r.company, sector:r.sector, mktcap:r.mktcap, holders:[] };
+      byTicker[r.ticker].holders.push(r);
+    });
+    rows = Object.values(byTicker).map(d => {
+      const totalHeld = d.holders.reduce((s,r)=>s+r.pct, 0);
+      const top = d.holders.sort((a,b)=>b.pct-a.pct)[0] || {};
+      return { ...d, freeFloat: Math.max(0, 100-totalHeld), foreignPct: 0, topHolder: top.investor||'—', topPct: top.pct||0 };
+    });
+  }
+
   if (floatF === 'low') rows = rows.filter(r=>r.freeFloat < 15);
   else if (floatF === 'mid') rows = rows.filter(r=>r.freeFloat >= 15 && r.freeFloat <= 50);
   else if (floatF === 'high') rows = rows.filter(r=>r.freeFloat > 50);
-  if (sectorF !== 'all') rows = rows.filter(r=>r.sector===sectorF);
+  if (sectorF !== 'all') rows = rows.filter(r=>r.sector === sectorF);
   if (sortF === 'float-asc') rows.sort((a,b)=>a.freeFloat-b.freeFloat);
   else if (sortF === 'float-desc') rows.sort((a,b)=>b.freeFloat-a.freeFloat);
-  else rows.sort((a,b)=>b.mktcap-a.mktcap);
+  else rows.sort((a,b)=>(b.mktcap||0)-(a.mktcap||0));
+
   const tbody = document.getElementById('floatTableBody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Tidak ada data — load ksei.json dulu</td></tr>`;
+    return;
+  }
   tbody.innerHTML = rows.map(r => {
-    const risk = r.freeFloat < 5 ? '⚠️ Very Low' : r.freeFloat < 15 ? '🔴 Low' : r.freeFloat < 50 ? '🟡 Mid' : '🟢 High';
-    const riskClass = r.freeFloat < 5 ? 'float-risk-low' : r.freeFloat < 15 ? 'float-risk-low' : r.freeFloat < 50 ? 'float-risk-mid' : 'float-risk-high';
+    const ff = r.freeFloat || 0;
+    const risk = ff < 5 ? '⚠️ Very Low' : ff < 15 ? '🔴 Low' : ff < 50 ? '🟡 Mid' : '🟢 High';
+    const riskClass = ff < 15 ? 'float-risk-low' : ff < 50 ? 'float-risk-mid' : 'float-risk-high';
+    const ffColor = ff < 15 ? 'var(--red)' : ff < 50 ? 'var(--amber)' : 'var(--green)';
     return `<tr>
       <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--amber)">${r.ticker}</td>
       <td style="color:var(--text2);font-size:0.78rem">${r.company}</td>
-      <td><span class="badge badge-CP">${r.sector}</span></td>
-      <td style="font-size:0.78rem;color:var(--text2);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.topHolder.investor}</td>
-      <td style="font-family:'DM Mono',monospace;color:var(--amber)">${r.topHolder.pct.toFixed(1)}%</td>
-      <td style="font-family:'DM Mono',monospace;font-weight:600;color:${r.freeFloat<15?'var(--red)':r.freeFloat<50?'var(--amber)':'var(--green)'}">${r.freeFloat.toFixed(2)}%</td>
+      <td>${r.sector ? `<span class="badge badge-CP">${r.sector}</span>` : '—'}</td>
+      <td style="font-family:'DM Mono',monospace;color:var(--red);font-size:0.78rem">${r.foreignPct?.toFixed(1)||'—'}% asing</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600;color:${ffColor}">${ff.toFixed(2)}%</td>
       <td class="${riskClass}" style="font-size:0.75rem">${risk}</td>
     </tr>`;
   }).join('');
@@ -765,39 +792,80 @@ async function loadData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
 
-    SAMPLE_DATA = json.records || [];
-    DATA_META = { generated_at: json.generated_at, stats: json.stats || {} };
+    // Format baru dari scraper v2 — data agregat per ticker
+    const raw = json.records || [];
+    DATA_META = { generated_at: json.generated_at, data_date: json.data_date, stats: json.stats || {} };
 
-    // Update stats bar dari data real
+    // Convert ke format yang bisa dirender tabel:
+    // Tiap ticker jadi beberapa "baris" per tipe investor yang significant
+    SAMPLE_DATA = [];
+    const TYPE_LABEL = { IS:'Insurance', CP:'Corporate', PF:'Pension Fund',
+                         IB:'Inv. Bank', ID:'Individual', MF:'Mutual Fund',
+                         SC:'Securities', FD:'Foundation', OT:'Other' };
+
+    raw.forEach(r => {
+      const secNum = r.sec_num || 1;
+      // Lokal
+      ['IS','CP','PF','IB','ID','MF','SC','FD','OT'].forEach(t => {
+        const shares = (r.local[t] || 0) + (r.foreign[t] || 0);
+        if (shares === 0) return;
+        const pct = shares / secNum * 100;
+        if (pct < 0.5) return; // skip yang sangat kecil
+        SAMPLE_DATA.push({
+          ticker:   r.ticker,
+          company:  r.ticker, // nama perusahaan tidak ada di file agregat
+          investor: TYPE_LABEL[t] + ' (Agregat)',
+          type:     t,
+          lf:       r.local[t] >= r.foreign[t] ? 'L' : 'F',
+          shares:   shares,
+          pct:      +pct.toFixed(4),
+          sector:   r.sector || '',
+          mktcap:   r.price * secNum / 1e9,
+          // Simpan data lengkap untuk heatmap & screener
+          _raw: r,
+        });
+      });
+    });
+
+    // Update stats bar
     const s = DATA_META.stats;
-    document.getElementById('stat-tickers').textContent = (s.total_tickers || 0).toLocaleString();
-    document.getElementById('stat-investors').textContent = (s.total_investors || 0).toLocaleString();
-    document.getElementById('stat-local').textContent = (s.local_pct || 0) + '%';
-    document.getElementById('stat-foreign').textContent = (s.foreign_pct || 0) + '%';
+    document.getElementById('stat-tickers').textContent  = (s.total_tickers || raw.length).toLocaleString();
+    document.getElementById('stat-investors').textContent = '9 Tipe';
+    document.getElementById('stat-local').textContent    = (s.local_pct || 0) + '%';
+    document.getElementById('stat-foreign').textContent  = (s.foreign_pct || 0) + '%';
 
-    // Update timestamp di eyebrow
-    if (DATA_META.generated_at) {
-      const d = new Date(DATA_META.generated_at);
-      const label = d.toLocaleDateString('id-ID', { year:'numeric', month:'long' });
+    // Update timestamp
+    const dateLabel = DATA_META.data_date || DATA_META.generated_at?.slice(0,10) || '';
+    if (dateLabel) {
+      const d = new Date(dateLabel);
+      const label = isNaN(d) ? dateLabel : d.toLocaleDateString('id-ID', { year:'numeric', month:'long' });
       document.querySelector('.page-eyebrow').innerHTML =
         `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor" opacity="0.5"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
         KSEI · IDX Data · ${label}`;
     }
 
     dot.className = 'status-dot ready';
-    txt.textContent = `Data KSEI loaded — ${SAMPLE_DATA.length.toLocaleString()} records dari ${(DATA_META.stats.total_tickers||0)} tickers`;
+    txt.textContent = `Data KSEI loaded — ${raw.length.toLocaleString()} tickers · ${dateLabel}`;
 
     // Hapus info box demo mode
     const infoBox = document.querySelector('.info-box');
     if (infoBox) infoBox.remove();
 
+    // Feed HEATMAP_DATA dari data real
+    window.HEATMAP_DATA = raw.map(r => ({
+      ticker:  r.ticker,
+      foreign: r.foreign.pct,
+      float:   r.free_float,
+      change:  0, // tidak ada di file KSEI, perlu dari sumber lain
+      mktcap:  r.price * r.sec_num / 1e9,
+    }));
+
   } catch (err) {
     dot.className = 'status-dot error';
-    txt.textContent = 'Gagal load data/ksei.json — pastikan scraper sudah dijalankan';
+    txt.textContent = 'Gagal load data/ksei.json — jalankan scraper dulu';
     console.error('loadData error:', err);
   }
 
-  // Render semua tab dengan data yang ada (real atau kosong)
   applyFilters();
   renderFloatTable();
 }
