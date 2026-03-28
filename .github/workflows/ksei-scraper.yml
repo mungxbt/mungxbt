@@ -1,0 +1,53 @@
+name: KSEI Monthly Scraper
+
+on:
+  # Jalan otomatis tiap tanggal 6 jam 02:00 WIB (= 19:00 UTC)
+  # KSEI biasanya publish data ownership awal bulan
+  schedule:
+    - cron: "0 19 6 * *"
+
+  # Bisa juga trigger manual dari tab Actions di GitHub
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60   # maksimal 1 jam (955 tickers ~30-40 menit)
+
+    permissions:
+      contents: write     # perlu untuk git push data/ksei.json
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Check output
+        run: |
+          if [ ! -f data/ksei.json ]; then
+            echo "ERROR: data/ksei.json tidak ditemukan!"
+            exit 1
+          fi
+          SIZE=$(wc -c < data/ksei.json)
+          echo "ksei.json size: $SIZE bytes"
+          # Minimal 10KB — kalau lebih kecil berarti scraping gagal
+          if [ "$SIZE" -lt 10000 ]; then
+            echo "ERROR: File terlalu kecil, kemungkinan scraping gagal"
+            exit 1
+          fi
+
+      - name: Commit & push data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ksei.json
+          # Kalau tidak ada perubahan, jangan error
+          git diff --staged --quiet || git commit -m "chore: update KSEI data $(date +'%Y-%m')"
+          git push
