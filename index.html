@@ -402,7 +402,14 @@
 </footer>
 
 <script>
-  // Apply saved theme immediately
+  // Check URL param first (coming from subdomain), then localStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlTheme = urlParams.get('theme');
+  if (urlTheme) {
+    localStorage.setItem('theme', urlTheme);
+    // Clean URL without reload
+    window.history.replaceState({}, '', window.location.pathname);
+  }
   if (localStorage.getItem('theme') === 'light') {
     document.body.classList.add('light');
   }
