@@ -374,8 +374,18 @@
       document.getElementById('stat-spot-binance').textContent = spotBinancePairs.length.toLocaleString();
 
       txt.textContent = 'Fetching MEXC Spot...';
-      const mRes = await fetch('https://api.mexc.com/api/v3/exchangeInfo');
-      const mData = await mRes.json();
+      const MEXC_URL = 'https://api.mexc.com/api/v3/exchangeInfo';
+      const PROXY = 'https://api.allorigins.win/raw?url=';
+      let mData;
+      try {
+        const mResDirect = await fetch(MEXC_URL);
+        if (!mResDirect.ok) throw new Error('direct failed');
+        mData = await mResDirect.json();
+      } catch (_) {
+        txt.textContent = 'Fetching MEXC via proxy...';
+        const mResProxy = await fetch(PROXY + encodeURIComponent(MEXC_URL));
+        mData = await mResProxy.json();
+      }
       spotMexcPairs = mData.symbols
         .filter(s => s.status === 'ENABLED' && s.quoteAsset === 'USDT' && s.isSpotTradingAllowed)
         .map(s => 'MEXC:' + s.symbol);
