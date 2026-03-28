@@ -1,246 +1,293 @@
 """
-KSEI Ownership Scraper
-Scrape data kepemilikan saham >1% dari IDX public API
+KSEI Balance Position Scraper v2
+Download file resmi dari web.ksei.co.id dan parse langsung.
+Tidak ada scraping per-ticker — jauh lebih cepat dan tidak kena 403.
+
 Output: data/ksei.json
 """
 
 import json
-import time
 import os
 import re
-from datetime import datetime
+from datetime import datetime, date
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
-from urllib.parse import urlencode
 
-# ─── CONFIG ────────────────────────────────────────────────────────────────────
 OUTPUT_PATH = "data/ksei.json"
-DELAY_BETWEEN_REQUESTS = 1.2   # detik antar request (jangan terlalu cepat)
-MAX_RETRIES = 3
-TIMEOUT = 30
+TIMEOUT = 60
 
-# Endpoint IDX public (unofficial, sudah banyak dipakai komunitas)
-IDX_BASE = "https://www.idx.co.id"
+# ─── KSEI FILE URL ─────────────────────────────────────────────────────────────
+# Format URL: https://web.ksei.co.id/archive_download/holding_composition
+# File: Balancepos{YYYYMMDD}.txt — gw auto-detect tanggal terbaru
+
+BASE_URL = "https://web.ksei.co.id"
+ARCHIVE_PAGE = f"{BASE_URL}/archive_download/holding_composition"
+
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; KSEI-Scraper/1.0)",
-    "Accept": "application/json",
-    "Referer": "https://www.idx.co.id/",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Referer": BASE_URL,
 }
 
-# ─── UTILS ─────────────────────────────────────────────────────────────────────
-def fetch(url, retries=MAX_RETRIES):
-    for attempt in range(retries):
-        try:
-            req = Request(url, headers=HEADERS)
-            with urlopen(req, timeout=TIMEOUT) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except (HTTPError, URLError) as e:
-            print(f"  [!] Attempt {attempt+1}/{retries} failed: {e}")
-            if attempt < retries - 1:
-                time.sleep(2 ** attempt)  # exponential backoff
-    return None
+# ─── KOLOM FILE ────────────────────────────────────────────────────────────────
+# Date|Code|Type|Sec. Num|Price|
+# Local IS|Local CP|Local PF|Local IB|Local ID|Local MF|Local SC|Local FD|Local OT|Total|
+# Foreign IS|Foreign CP|Foreign PF|Foreign IB|Foreign ID|Foreign MF|Foreign SC|Foreign FD|Foreign OT|Total
+#
+# IS=Insurance, CP=Corporate, PF=Pension Fund, IB=Inv.Bank, ID=Individual
+# MF=Mutual Fund, SC=Securities, FD=Foundation, OT=Other
 
-def fmt_number(s):
-    """Bersihkan string angka dari IDX jadi int"""
-    if not s:
-        return 0
+COL_NAMES = [
+    "date","code","type","sec_num","price",
+    "l_is","l_cp","l_pf","l_ib","l_id","l_mf","l_sc","l_fd","l_ot","l_total",
+    "f_is","f_cp","f_pf","f_ib","f_id","f_mf","f_sc","f_fd","f_ot","f_total",
+]
+
+# ─── SEKTOR MAPPING (IDX sector codes) ─────────────────────────────────────────
+# Ini approximate — bisa diupdate dengan data lengkap dari IDX
+SECTOR_MAP = {
+    "BBCA":"Financial Services","BBRI":"Financial Services","BMRI":"Financial Services",
+    "BBNI":"Financial Services","BRIS":"Financial Services","BJTM":"Financial Services",
+    "TLKM":"Communication Services","EXCL":"Communication Services","ISAT":"Communication Services",
+    "ASII":"Consumer Cyclical","AALI":"Consumer Defensive","ICBP":"Consumer Defensive",
+    "INDF":"Consumer Defensive","MYOR":"Consumer Defensive","UNVR":"Consumer Defensive",
+    "ADRO":"Energy","PTBA":"Energy","ITMG":"Energy","INCO":"Basic Materials",
+    "ANTM":"Basic Materials","TINS":"Basic Materials","SMGR":"Basic Materials",
+    "PGAS":"Utilities","TLKM":"Communication Services",
+}
+
+def num(s):
+    try: return int(s.strip()) if s.strip() else 0
+    except: return 0
+
+# ─── STEP 1: Cari URL file terbaru ─────────────────────────────────────────────
+def find_latest_file_url():
+    """Scrape halaman arsip KSEI untuk dapat URL file terbaru"""
+    print("→ Mencari file terbaru di KSEI archive...")
     try:
-        return int(str(s).replace(",", "").replace(".", "").strip())
-    except:
-        return 0
+        req = Request(ARCHIVE_PAGE, headers=HEADERS)
+        with urlopen(req, timeout=TIMEOUT) as resp:
+            html = resp.read().decode("utf-8", errors="replace")
 
-# ─── STEP 1: Ambil semua ticker dari IDX ────────────────────────────────────────
-def get_all_tickers():
-    print("→ Fetching semua ticker dari IDX...")
-    url = f"{IDX_BASE}/primary/StockData/GetSecurities?start=0&length=9999&type=s"
-    data = fetch(url)
-    if not data or "data" not in data:
-        print("  [!] Gagal fetch ticker list")
-        return []
-    tickers = []
-    for item in data["data"]:
-        code = item.get("Code", "").strip()
-        name = item.get("Name", "").strip()
-        sector = item.get("Sector", "").strip()
-        if code:
-            tickers.append({"code": code, "name": name, "sector": sector})
-    print(f"  ✓ {len(tickers)} tickers ditemukan")
-    return tickers
+        # Cari semua link ke file Balancepos*.txt
+        pattern = r'href=["\']([^"\']*Balancepos\d+\.txt)["\']'
+        matches = re.findall(pattern, html, re.IGNORECASE)
 
-# ─── STEP 2: Ambil shareholders per ticker ─────────────────────────────────────
-def get_shareholders(ticker_code):
-    """Ambil pemegang saham >1% untuk satu ticker"""
-    url = (
-        f"{IDX_BASE}/primary/TradingData/GetStockHolder"
-        f"?StockCode={ticker_code}&start=0&length=100"
-    )
-    data = fetch(url)
-    if not data or "data" not in data:
-        return []
+        if not matches:
+            # Fallback: coba format URL langsung dengan tanggal bulan ini
+            today = date.today()
+            # Coba tanggal akhir bulan lalu (KSEI biasanya update awal bulan)
+            if today.month == 1:
+                last_month = date(today.year - 1, 12, 27)
+            else:
+                last_month = date(today.year, today.month - 1, 27)
+            fallback = f"{BASE_URL}/files/Balancepos{last_month.strftime('%Y%m%d')}.txt"
+            print(f"  [!] Tidak bisa parse halaman, mencoba fallback: {fallback}")
+            return fallback
 
-    holders = []
-    for row in data.get("data", []):
-        # Field names dari IDX API (bisa berubah, sudah di-handle fallback)
-        investor = (
-            row.get("HolderName") or
-            row.get("Holder") or
-            row.get("ShareholderName") or ""
-        ).strip().upper()
+        # Ambil yang terbaru (biasanya yang pertama atau terakhir)
+        urls = []
+        for m in matches:
+            url = m if m.startswith("http") else BASE_URL + m
+            urls.append(url)
 
-        pct_raw = row.get("Percentage") or row.get("Pct") or row.get("Portion") or 0
+        # Sort by tanggal dari nama file
+        def extract_date(url):
+            m = re.search(r'Balancepos(\d{8})\.txt', url, re.IGNORECASE)
+            return m.group(1) if m else "00000000"
+
+        urls.sort(key=extract_date, reverse=True)
+        latest = urls[0]
+        print(f"  ✓ File terbaru: {latest}")
+        return latest
+
+    except Exception as e:
+        print(f"  [!] Gagal parse archive page: {e}")
+        return None
+
+# ─── STEP 2: Download file ─────────────────────────────────────────────────────
+def download_file(url):
+    print(f"→ Downloading {url}...")
+    try:
+        req = Request(url, headers=HEADERS)
+        with urlopen(req, timeout=TIMEOUT) as resp:
+            content = resp.read().decode("utf-8", errors="replace")
+        lines = content.strip().splitlines()
+        print(f"  ✓ {len(lines)} baris didownload")
+        return lines
+    except Exception as e:
+        print(f"  [!] Download gagal: {e}")
+        return None
+
+# ─── STEP 3: Parse file ────────────────────────────────────────────────────────
+def parse_lines(lines):
+    """Parse pipe-delimited file KSEI jadi list of dict"""
+    records = []
+    header = None
+
+    for i, line in enumerate(lines):
+        line = line.strip()
+        if not line:
+            continue
+
+        parts = line.split("|")
+
+        # Skip header baris pertama
+        if i == 0 and parts[0].upper() == "DATE":
+            header = parts
+            continue
+
+        if len(parts) < 25:
+            continue
+
         try:
-            pct = float(str(pct_raw).replace(",", ".").replace("%", "").strip())
-        except:
-            pct = 0.0
+            ticker = parts[1].strip()
+            typ    = parts[2].strip()
+            if typ != "EQUITY":
+                continue  # skip non-equity (bonds, warrants, dll)
 
-        shares_raw = row.get("Shares") or row.get("SharesAmount") or 0
-        shares = fmt_number(shares_raw)
+            sec_num = num(parts[3])
+            price   = num(parts[4])
 
-        # Deteksi tipe investor dari nama
-        investor_type = classify_investor(investor)
-        is_foreign = classify_foreign(investor)
+            # Local breakdown
+            l_is = num(parts[5])
+            l_cp = num(parts[6])
+            l_pf = num(parts[7])
+            l_ib = num(parts[8])
+            l_id = num(parts[9])
+            l_mf = num(parts[10])
+            l_sc = num(parts[11])
+            l_fd = num(parts[12])
+            l_ot = num(parts[13])
+            l_total = num(parts[14])
 
-        if investor and pct >= 1.0:
-            holders.append({
-                "investor": investor,
-                "type": investor_type,
-                "lf": "F" if is_foreign else "L",
-                "shares": shares,
-                "pct": round(pct, 4),
+            # Foreign breakdown
+            f_is = num(parts[15])
+            f_cp = num(parts[16])
+            f_pf = num(parts[17])
+            f_ib = num(parts[18])
+            f_id = num(parts[19])
+            f_mf = num(parts[20])
+            f_sc = num(parts[21])
+            f_fd = num(parts[22])
+            f_ot = num(parts[23])
+            f_total = num(parts[24])
+
+            total_held = l_total + f_total
+            if sec_num == 0:
+                continue
+
+            local_pct  = round(l_total / sec_num * 100, 4)
+            foreign_pct= round(f_total / sec_num * 100, 4)
+            total_pct  = round(total_held / sec_num * 100, 4)
+            free_float = round(max(0, 100 - total_pct), 4)
+
+            records.append({
+                "ticker":      ticker,
+                "sec_num":     sec_num,
+                "price":       price,
+                "local": {
+                    "total":   l_total,
+                    "pct":     local_pct,
+                    "IS":      l_is,   # Insurance
+                    "CP":      l_cp,   # Corporate
+                    "PF":      l_pf,   # Pension Fund
+                    "IB":      l_ib,   # Investment Bank
+                    "ID":      l_id,   # Individual
+                    "MF":      l_mf,   # Mutual Fund
+                    "SC":      l_sc,   # Securities
+                    "FD":      l_fd,   # Foundation
+                    "OT":      l_ot,   # Other
+                },
+                "foreign": {
+                    "total":   f_total,
+                    "pct":     foreign_pct,
+                    "IS":      f_is,
+                    "CP":      f_cp,
+                    "PF":      f_pf,
+                    "IB":      f_ib,
+                    "ID":      f_id,
+                    "MF":      f_mf,
+                    "SC":      f_sc,
+                    "FD":      f_fd,
+                    "OT":      f_ot,
+                },
+                "total_pct":   total_pct,
+                "free_float":  free_float,
+                "sector":      SECTOR_MAP.get(ticker, ""),
             })
+        except Exception as e:
+            print(f"  [!] Skip baris {i}: {e}")
+            continue
 
-    # Sort by pct desc
-    holders.sort(key=lambda x: x["pct"], reverse=True)
-    return holders
+    return records
 
-# ─── CLASSIFIER ────────────────────────────────────────────────────────────────
-CORPORATE_KEYWORDS = ["PT ", "TBK", "LTD", "INC", "PLC", "CORP", "CO.", "GROUP",
-                       "FUND", "TRUST", "BANK", "HOLDING", "INVESTMENT", "VENTURES",
-                       "ENTERPRISES", "PARTNERS", "CAPITAL", "MANAGEMENT", "ASSET"]
-MUTUAL_FUND_KEYWORDS = ["REKSA DANA", "MUTUAL FUND", "DANA", "SCHRODERS", "MANULIFE",
-                         "DANAREKSA", "SUCORINVEST", "EMCO", "PANIN", "TRIMEGAH",
-                         "FIDELITY", "VANGUARD", "BLACKROCK", "HSBC AMANAH"]
-INV_BANK_KEYWORDS = ["SECURITIES", "SEKURITAS", "BROKERAGE", "UBS", "CREDIT SUISSE",
-                      "GOLDMAN", "MORGAN", "CITIBANK", "DEUTSCHE", "MERRILL",
-                      "UOB KAY HIAN", "CLSA", "MACQUARIE", "NOMURA"]
-FOREIGN_KEYWORDS = ["GOVERNMENT OF", "KINGDOM OF", "SINGAPORE", "NORWAY", "MALAYSIA",
-                     "JAPAN", "KOREA", "CHINA", "HONGKONG", "HONG KONG", "USA",
-                     "UNITED STATES", "AUSTRALIA", "UK ", "UNITED KINGDOM",
-                     "CAYMAN", "LUXEMBOURG", "NETHERLANDS", "SWITZERLAND",
-                     "JARDINE", "VALE ", "BANPU", "FIDELITY", "VANGUARD",
-                     "BLACKROCK", "SCHRODERS", "UBS", "CREDIT SUISSE",
-                     "GOLDMAN", "MORGAN STANLEY", "CITIBANK", "DEUTSCHE",
-                     "HSBC", "STANDARD CHARTERED", "DBS ", "OCBC", "UOB ",
-                     "MITSUI", "SUMITOMO", "TOYOTA", "LTD.", " INC.", " PLC",
-                     "UOB KAY HIAN", "CLSA", "MACQUARIE", "NOMURA",
-                     "GOVERNMENT OF THE KINGDOM", "BANK OF SINGAPORE"]
-
-def classify_investor(name):
-    n = name.upper()
-    for kw in MUTUAL_FUND_KEYWORDS:
-        if kw in n:
-            return "MF"
-    for kw in INV_BANK_KEYWORDS:
-        if kw in n:
-            return "IB"
-    for kw in CORPORATE_KEYWORDS:
-        if kw in n:
-            return "CP"
-    return "ID"  # default: individual
-
-def classify_foreign(name):
-    n = name.upper()
-    for kw in FOREIGN_KEYWORDS:
-        if kw in n:
-            return True
-    return False
-
-# ─── STEP 3: Hitung stats ───────────────────────────────────────────────────────
+# ─── STEP 4: Hitung stats ───────────────────────────────────────────────────────
 def compute_stats(records):
-    all_investors = set()
-    local_pct_sum = 0
-    foreign_pct_sum = 0
-    total_entries = 0
+    total_local  = sum(r["local"]["total"]   for r in records)
+    total_foreign= sum(r["foreign"]["total"] for r in records)
+    grand_total  = total_local + total_foreign or 1
 
+    # Distribusi tipe investor (lokal)
+    type_totals = {}
     for r in records:
-        all_investors.add(r["investor"])
-        if r["lf"] == "L":
-            local_pct_sum += r["pct"]
-        else:
-            foreign_pct_sum += r["pct"]
-        total_entries += 1
-
-    total = local_pct_sum + foreign_pct_sum
-    local_ratio = round(local_pct_sum / total * 100, 1) if total else 0
-    foreign_ratio = round(foreign_pct_sum / total * 100, 1) if total else 0
+        for t in ["IS","CP","PF","IB","ID","MF","SC","FD","OT"]:
+            type_totals[t] = type_totals.get(t, 0) + r["local"][t] + r["foreign"][t]
 
     return {
-        "total_investors": len(all_investors),
-        "local_pct": local_ratio,
-        "foreign_pct": foreign_ratio,
+        "total_tickers":  len(records),
+        "local_pct":      round(total_local  / grand_total * 100, 1),
+        "foreign_pct":    round(total_foreign/ grand_total * 100, 1),
+        "investor_types": type_totals,
     }
 
 # ─── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
     print("=" * 60)
-    print("KSEI Ownership Scraper")
+    print("KSEI Balance Position Scraper v2")
     print(f"Started: {datetime.now().isoformat()}")
     print("=" * 60)
 
-    # Buat output dir
     os.makedirs("data", exist_ok=True)
 
-    # 1. Ambil semua ticker
-    tickers = get_all_tickers()
-    if not tickers:
-        print("[ERROR] Tidak bisa fetch ticker list. Abort.")
+    # 1. Cari URL file terbaru
+    url = find_latest_file_url()
+    if not url:
+        print("[ERROR] Tidak bisa dapat URL file KSEI. Abort.")
+        # Tulis JSON error supaya check output tidak gagal karena file tidak ada
+        with open(OUTPUT_PATH, "w") as f:
+            json.dump({"error": "Cannot find file URL", "records": [], "stats": {}}, f)
         return
 
-    # 2. Per ticker, ambil shareholders
-    all_records = []
-    ticker_summary = {}
-    success = 0
-    failed = 0
+    # 2. Download
+    lines = download_file(url)
+    if not lines:
+        print("[ERROR] Download gagal. Abort.")
+        with open(OUTPUT_PATH, "w") as f:
+            json.dump({"error": "Download failed", "records": [], "stats": {}}, f)
+        return
 
-    for i, t in enumerate(tickers):
-        code = t["code"]
-        print(f"[{i+1}/{len(tickers)}] {code} — {t['name'][:40]}")
+    # 3. Parse
+    print("→ Parsing data...")
+    records = parse_lines(lines)
+    print(f"  ✓ {len(records)} ticker equity diparsing")
 
-        holders = get_shareholders(code)
-        if holders is None:
-            failed += 1
-            print(f"  [!] Skip (fetch failed)")
-        else:
-            for h in holders:
-                all_records.append({
-                    "ticker": code,
-                    "company": t["name"],
-                    "sector": t["sector"],
-                    **h
-                })
-            ticker_summary[code] = {
-                "name": t["name"],
-                "sector": t["sector"],
-                "holders": holders,
-            }
-            success += 1
-            if holders:
-                print(f"  ✓ {len(holders)} holders")
-            else:
-                print(f"  — no 1%+ holders")
+    # 4. Extract tanggal dari nama file
+    date_match = re.search(r'Balancepos(\d{8})\.txt', url, re.IGNORECASE)
+    file_date = date_match.group(1) if date_match else "unknown"
+    if file_date != "unknown":
+        file_date = f"{file_date[:4]}-{file_date[4:6]}-{file_date[6:8]}"
 
-        time.sleep(DELAY_BETWEEN_REQUESTS)
+    # 5. Stats
+    stats = compute_stats(records)
 
-    # 3. Stats
-    stats = compute_stats(all_records)
-    stats["total_tickers"] = success
-
-    # 4. Output JSON
+    # 6. Output
     output = {
-        "generated_at": datetime.now().isoformat(),
-        "stats": stats,
-        "records": all_records,
-        "tickers": ticker_summary,
+        "generated_at":  datetime.now().isoformat(),
+        "data_date":     file_date,
+        "source_url":    url,
+        "stats":         stats,
+        "records":       records,
     }
 
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
@@ -248,10 +295,10 @@ def main():
 
     size_kb = os.path.getsize(OUTPUT_PATH) / 1024
     print("\n" + "=" * 60)
-    print(f"✓ Done! {success} tickers scraped, {failed} failed")
-    print(f"✓ {len(all_records)} total holder records")
+    print(f"✓ Done! {len(records)} tickers")
+    print(f"✓ Data date: {file_date}")
+    print(f"✓ Local: {stats['local_pct']}% | Foreign: {stats['foreign_pct']}%")
     print(f"✓ Output: {OUTPUT_PATH} ({size_kb:.1f} KB)")
-    print(f"  Local: {stats['local_pct']}% | Foreign: {stats['foreign_pct']}%")
     print("=" * 60)
 
 if __name__ == "__main__":
