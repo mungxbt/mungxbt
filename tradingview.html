@@ -372,7 +372,8 @@
         .filter(s => s.status === 'TRADING' && s.quoteAsset === 'USDT' && s.isSpotTradingAllowed)
         .map(s => 'BINANCE:' + s.symbol);
       document.getElementById('stat-spot-binance').textContent = spotBinancePairs.length.toLocaleString();
-
+      document.getElementById('btnFutures').disabled = false;
+      document.getElementById('btnSpotBinance').disabled = false;
       txt.textContent = 'Fetching MEXC Spot...';
       const MEXC_URL = 'https://api.mexc.com/api/v3/exchangeInfo';
       const PROXIES = [
@@ -417,9 +418,8 @@
       updateDedupeInfo();
       dot.className = 'status-dot ready';
       txt.textContent = 'Data berhasil di-fetch dari Binance & MEXC. Siap download!';
-      ['btnFutures','btnSpotBinance','btnSpotMexc','btnSpotCombined'].forEach(id => {
-        document.getElementById(id).disabled = false;
-      });
+      document.getElementById('btnSpotMexc').disabled = false;
+      document.getElementById('btnSpotCombined').disabled = false;
     } catch (err) {
       dot.className = 'status-dot error';
       txt.textContent = 'Gagal fetch data. Cek koneksi internet dan refresh halaman.';
