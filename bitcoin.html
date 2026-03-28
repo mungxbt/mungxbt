@@ -10,23 +10,20 @@
   :root {
     --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e;
     --text: #f0ede8; --text2: #9a9690; --text3: #5a5754;
-    --amber: #EF9F27; --amber-dim: #BA7517;
-    --amber-glow: rgba(239,159,39,0.12); --amber-border: rgba(239,159,39,0.25);
+    --amber: #EF9F27; --amber-glow: rgba(239,159,39,0.12); --amber-border: rgba(239,159,39,0.25);
     --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
     --card: #141414; --green: #1D9E75; --green-bg: rgba(29,158,117,0.1); --green-border: rgba(29,158,117,0.25);
+    --red: #E24B4A; --red-bg: rgba(226,75,74,0.08); --red-border: rgba(226,75,74,0.25);
   }
   .light {
     --bg: #faf9f7; --bg2: #f2f0eb; --bg3: #e8e5de;
     --text: #1a1816; --text2: #6b6762; --text3: #a8a4a0;
-    --amber: #BA7517; --amber-dim: #854F0B;
-    --amber-glow: rgba(186,117,23,0.08); --amber-border: rgba(186,117,23,0.2);
+    --amber: #BA7517; --amber-glow: rgba(186,117,23,0.08); --amber-border: rgba(186,117,23,0.2);
     --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
     --card: #ffffff; --green: #0F6E56;
   }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
   body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
-
-  /* NAV */
   nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); }
   .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
@@ -37,40 +34,27 @@
   .theme-btn { width: 36px; height: 20px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; position: relative; transition: background 0.3s; }
   .theme-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--amber); border-radius: 50%; transition: transform 0.3s; }
   .light .theme-btn::after { transform: translateX(16px); }
-
-  /* LAYOUT */
   .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 240px 1fr; gap: 3rem; align-items: start; }
   @media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; } .sidebar { display: none; } .mob-menu-btn { display: flex !important; } }
-
-  /* SIDEBAR */
-  .sidebar { position: sticky; top: 72px; }
+  .sidebar { position: sticky; top: 72px; max-height: calc(100vh - 90px); overflow-y: auto; }
+  .sidebar::-webkit-scrollbar { width: 3px; } .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
   .sidebar-header { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; }
   .sidebar-progress { background: var(--border); border-radius: 4px; height: 3px; margin-bottom: 1.25rem; overflow: hidden; }
   .sidebar-progress-bar { height: 100%; background: var(--amber); border-radius: 4px; transition: width 0.4s ease; width: 0%; }
   .roadmap-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-  .roadmap-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; cursor: pointer; transition: background 0.2s, color 0.2s; border: 1px solid transparent; }
+  .roadmap-group-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); padding: 10px 10px 4px; }
+  .roadmap-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 6px; cursor: pointer; transition: background 0.2s; border: 1px solid transparent; }
   .roadmap-item:hover { background: var(--bg3); }
   .roadmap-item.active { background: var(--amber-glow); border-color: var(--amber-border); }
   .roadmap-item.done .rm-num { background: var(--green); color: white; border-color: var(--green); }
-  .roadmap-item.done .rm-label { color: var(--text3); text-decoration: line-through; }
-  .rm-num { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); flex-shrink: 0; transition: all 0.2s; }
+  .roadmap-item.done .rm-label { color: var(--text3); }
+  .rm-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); flex-shrink: 0; transition: all 0.2s; }
   .roadmap-item.active .rm-num { background: var(--amber); color: #0e0e0e; border-color: var(--amber); font-weight: 700; }
-  .rm-label { font-size: 0.78rem; color: var(--text2); line-height: 1.3; transition: color 0.2s; }
+  .rm-label { font-size: 0.75rem; color: var(--text2); line-height: 1.3; }
   .roadmap-item.active .rm-label { color: var(--amber); font-weight: 500; }
-
-  /* CONTENT */
-  .content-area {}
-  .content-header { margin-bottom: 2.5rem; }
-  .page-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow); padding: 5px 12px; border-radius: 4px; margin-bottom: 1.25rem; }
-  h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
-  h1 .accent { color: var(--amber); }
-  .intro-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; font-weight: 300; max-width: 540px; }
-
-  /* LESSON */
   .lesson { display: none; animation: fadeIn 0.3s ease; }
   .lesson.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
   .lesson-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
   .lesson h2 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.25rem; color: var(--text); }
   .lesson h2 .acc { color: var(--amber); }
@@ -78,46 +62,44 @@
   .lesson-body p { margin-bottom: 1rem; }
   .lesson-body strong { color: var(--text); font-weight: 500; }
   .lesson-body h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin: 1.75rem 0 0.6rem; }
-
-  /* CALLOUT BOX */
   .callout { background: var(--amber-glow); border: 1px solid var(--amber-border); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
-  .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+  .callout .ct { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+  .callout-red { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
+  .callout-red .ct { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--red); margin-bottom: 4px; }
   .callout-info { background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
-  .callout-info .callout-title { color: var(--text); }
-
-  /* ANALOGY CARD */
+  .callout-info .ct { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .callout-green { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
+  .callout-green .ct { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--green); margin-bottom: 4px; }
   .analogy { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; }
   .analogy-icon { font-size: 1.5rem; flex-shrink: 0; }
   .analogy-text { font-size: 0.85rem; color: var(--text2); line-height: 1.7; }
   .analogy-text strong { color: var(--text); }
-
-  /* KEY TERM */
-  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin: 1.25rem 0; }
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 1.25rem 0; }
   .term-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
   .term-word { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--amber); margin-bottom: 4px; }
   .term-def { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
-
-  /* STEP LIST */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin: 1.25rem 0; }
+  .timeline-item { display: grid; grid-template-columns: 90px 1fr; gap: 16px; position: relative; padding-bottom: 1.25rem; }
+  .timeline-left { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .timeline-era { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--amber); text-align: right; line-height: 1.4; }
+  .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); position: absolute; right: calc(100% - 95px); top: 2px; }
+  .timeline-content { padding-left: 8px; border-left: 1px solid var(--border2); }
+  .timeline-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .timeline-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.6; }
   .step-list { display: flex; flex-direction: column; gap: 12px; margin: 1.25rem 0; }
   .step-item { display: flex; gap: 14px; }
   .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #0e0e0e; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
   .step-content { font-size: 0.85rem; color: var(--text2); line-height: 1.7; padding-top: 4px; }
   .step-content strong { color: var(--text); }
-
-  /* NAV BUTTONS */
   .lesson-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
-  .btn-nav { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 10px 18px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; text-decoration: none; transition: all 0.2s; }
+  .btn-nav { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 10px 18px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.2s; }
   .btn-nav:hover { border-color: var(--amber-border); color: var(--amber); }
   .btn-nav--next { background: var(--amber); color: #0e0e0e; border-color: var(--amber); }
   .btn-nav--next:hover { opacity: 0.85; color: #0e0e0e; }
   .btn-nav--done { background: var(--green); color: white; border-color: var(--green); }
-  .btn-nav--done:hover { opacity: 0.85; color: white; }
-
-  /* MOBILE MENU */
   .mob-menu-btn { display: none; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border2); border-radius: 6px; padding: 8px 14px; font-size: 0.8rem; color: var(--text2); cursor: pointer; margin-bottom: 1.5rem; }
   .mob-sidebar { display: none; margin-bottom: 2rem; }
   .mob-sidebar.open { display: block; }
-
   footer { position: relative; z-index: 1; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
   .footer-left { font-size: 0.75rem; color: var(--text3); font-family: 'DM Mono', monospace; }
   .footer-links { display: flex; gap: 1.5rem; }
@@ -126,325 +108,470 @@
 </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="index.html">mungxbt<span>.</span>site</a>
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="projects.html">Projects</a></li>
+      <li><a href="bitcoin.html" class="active">Bitcoin Area</a></li>
     </ul>
     <button class="theme-btn" id="themeBtn"></button>
   </div>
 </nav>
 
 <div class="wrapper">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">Roadmap Belajar</div>
     <div class="sidebar-progress"><div class="sidebar-progress-bar" id="progressBar"></div></div>
     <ul class="roadmap-list" id="roadmapList">
-      <li class="roadmap-item active" data-lesson="0" onclick="goTo(0)">
-        <span class="rm-num">1</span>
-        <span class="rm-label">Apa itu Bitcoin?</span>
-      </li>
-      <li class="roadmap-item" data-lesson="1" onclick="goTo(1)">
-        <span class="rm-num">2</span>
-        <span class="rm-label">Blockchain — Cara Kerjanya</span>
-      </li>
-      <li class="roadmap-item" data-lesson="2" onclick="goTo(2)">
-        <span class="rm-num">3</span>
-        <span class="rm-label">Wallet & Private Key</span>
-      </li>
-      <li class="roadmap-item" data-lesson="3" onclick="goTo(3)">
-        <span class="rm-num">4</span>
-        <span class="rm-label">Cara Beli Bitcoin</span>
-      </li>
-      <li class="roadmap-item" data-lesson="4" onclick="goTo(4)">
-        <span class="rm-num">5</span>
-        <span class="rm-label">Cara Simpan Bitcoin dengan Aman</span>
-      </li>
-      <li class="roadmap-item" data-lesson="5" onclick="goTo(5)">
-        <span class="rm-num">6</span>
-        <span class="rm-label">Bitcoin vs Altcoin</span>
-      </li>
-      <li class="roadmap-item" data-lesson="6" onclick="goTo(6)">
-        <span class="rm-num">7</span>
-        <span class="rm-label">Risiko & Kesalahan Pemula</span>
-      </li>
-      <li class="roadmap-item" data-lesson="7" onclick="goTo(7)">
-        <span class="rm-num">8</span>
-        <span class="rm-label">Langkah Selanjutnya</span>
-      </li>
+      <li class="roadmap-group-label">Sejarah Uang</li>
+      <li class="roadmap-item active" onclick="goTo(0)"><span class="rm-num">1</span><span class="rm-label">Dari Barter ke Emas</span></li>
+      <li class="roadmap-item" onclick="goTo(1)"><span class="rm-num">2</span><span class="rm-label">Mata Uang Kuat Sebelum USD</span></li>
+      <li class="roadmap-item" onclick="goTo(2)"><span class="rm-num">3</span><span class="rm-label">Nixon Shock 1971</span></li>
+      <li class="roadmap-item" onclick="goTo(3)"><span class="rm-num">4</span><span class="rm-label">USD: Vampir Mata Uang Dunia</span></li>
+      <li class="roadmap-item" onclick="goTo(4)"><span class="rm-num">5</span><span class="rm-label">Inflasi & Uang dari Angin</span></li>
+      <li class="roadmap-item" onclick="goTo(5)"><span class="rm-num">6</span><span class="rm-label">Siapa yang Diuntungkan?</span></li>
+      <li class="roadmap-group-label" style="margin-top:8px;">Memahami Bitcoin</li>
+      <li class="roadmap-item" onclick="goTo(6)"><span class="rm-num">7</span><span class="rm-label">Apa itu Bitcoin?</span></li>
+      <li class="roadmap-item" onclick="goTo(7)"><span class="rm-num">8</span><span class="rm-label">Blockchain — Cara Kerjanya</span></li>
+      <li class="roadmap-item" onclick="goTo(8)"><span class="rm-num">9</span><span class="rm-label">Wallet & Private Key</span></li>
+      <li class="roadmap-item" onclick="goTo(9)"><span class="rm-num">10</span><span class="rm-label">Cara Beli Bitcoin</span></li>
+      <li class="roadmap-item" onclick="goTo(10)"><span class="rm-num">11</span><span class="rm-label">Cara Simpan dengan Aman</span></li>
+      <li class="roadmap-item" onclick="goTo(11)"><span class="rm-num">12</span><span class="rm-label">Bitcoin vs Altcoin</span></li>
+      <li class="roadmap-item" onclick="goTo(12)"><span class="rm-num">13</span><span class="rm-label">Risiko & Kesalahan Pemula</span></li>
+      <li class="roadmap-item" onclick="goTo(13)"><span class="rm-num">14</span><span class="rm-label">Langkah Selanjutnya</span></li>
     </ul>
   </aside>
 
-  <!-- CONTENT -->
   <main class="content-area">
-
     <button class="mob-menu-btn" onclick="toggleMob()">☰ Roadmap Belajar</button>
     <div class="mob-sidebar" id="mobSidebar">
-      <ul class="roadmap-list" id="roadmapMob">
-        <li class="roadmap-item active" onclick="goTo(0);toggleMob()"><span class="rm-num">1</span><span class="rm-label">Apa itu Bitcoin?</span></li>
-        <li class="roadmap-item" onclick="goTo(1);toggleMob()"><span class="rm-num">2</span><span class="rm-label">Blockchain — Cara Kerjanya</span></li>
-        <li class="roadmap-item" onclick="goTo(2);toggleMob()"><span class="rm-num">3</span><span class="rm-label">Wallet & Private Key</span></li>
-        <li class="roadmap-item" onclick="goTo(3);toggleMob()"><span class="rm-num">4</span><span class="rm-label">Cara Beli Bitcoin</span></li>
-        <li class="roadmap-item" onclick="goTo(4);toggleMob()"><span class="rm-num">5</span><span class="rm-label">Cara Simpan Bitcoin dengan Aman</span></li>
-        <li class="roadmap-item" onclick="goTo(5);toggleMob()"><span class="rm-num">6</span><span class="rm-label">Bitcoin vs Altcoin</span></li>
-        <li class="roadmap-item" onclick="goTo(6);toggleMob()"><span class="rm-num">7</span><span class="rm-label">Risiko & Kesalahan Pemula</span></li>
-        <li class="roadmap-item" onclick="goTo(7);toggleMob()"><span class="rm-num">8</span><span class="rm-label">Langkah Selanjutnya</span></li>
+      <ul class="roadmap-list">
+        <li class="roadmap-group-label">Sejarah Uang</li>
+        <li class="roadmap-item active" onclick="goTo(0);toggleMob()"><span class="rm-num">1</span><span class="rm-label">Dari Barter ke Emas</span></li>
+        <li class="roadmap-item" onclick="goTo(1);toggleMob()"><span class="rm-num">2</span><span class="rm-label">Mata Uang Kuat Sebelum USD</span></li>
+        <li class="roadmap-item" onclick="goTo(2);toggleMob()"><span class="rm-num">3</span><span class="rm-label">Nixon Shock 1971</span></li>
+        <li class="roadmap-item" onclick="goTo(3);toggleMob()"><span class="rm-num">4</span><span class="rm-label">USD: Vampir Mata Uang Dunia</span></li>
+        <li class="roadmap-item" onclick="goTo(4);toggleMob()"><span class="rm-num">5</span><span class="rm-label">Inflasi & Uang dari Angin</span></li>
+        <li class="roadmap-item" onclick="goTo(5);toggleMob()"><span class="rm-num">6</span><span class="rm-label">Siapa yang Diuntungkan?</span></li>
+        <li class="roadmap-group-label" style="margin-top:8px;">Memahami Bitcoin</li>
+        <li class="roadmap-item" onclick="goTo(6);toggleMob()"><span class="rm-num">7</span><span class="rm-label">Apa itu Bitcoin?</span></li>
+        <li class="roadmap-item" onclick="goTo(7);toggleMob()"><span class="rm-num">8</span><span class="rm-label">Blockchain</span></li>
+        <li class="roadmap-item" onclick="goTo(8);toggleMob()"><span class="rm-num">9</span><span class="rm-label">Wallet & Private Key</span></li>
+        <li class="roadmap-item" onclick="goTo(9);toggleMob()"><span class="rm-num">10</span><span class="rm-label">Cara Beli</span></li>
+        <li class="roadmap-item" onclick="goTo(10);toggleMob()"><span class="rm-num">11</span><span class="rm-label">Cara Simpan Aman</span></li>
+        <li class="roadmap-item" onclick="goTo(11);toggleMob()"><span class="rm-num">12</span><span class="rm-label">BTC vs Altcoin</span></li>
+        <li class="roadmap-item" onclick="goTo(12);toggleMob()"><span class="rm-num">13</span><span class="rm-label">Risiko & Kesalahan</span></li>
+        <li class="roadmap-item" onclick="goTo(13);toggleMob()"><span class="rm-num">14</span><span class="rm-label">Langkah Selanjutnya</span></li>
       </ul>
     </div>
 
-    <!-- LESSON 0 -->
+    <!-- BAB 1 -->
     <div class="lesson active" id="lesson-0">
-      <div class="lesson-eyebrow">Bab 1 dari 8</div>
+      <div class="lesson-eyebrow">Bab 1 dari 14 · Sejarah Uang</div>
+      <h2>Dari Barter <span class="acc">ke Emas</span></h2>
+      <div class="lesson-body">
+        <p>Sebelum bisa benar-benar paham Bitcoin, lo harus paham satu hal dulu: <strong>uang itu bukan sesuatu yang alami — uang adalah teknologi yang diciptakan manusia.</strong> Dan seperti semua teknologi, uang terus berevolusi. Tapi setiap evolusi membawa kompromi baru.</p>
+        <h3>Era Barter — Tukar Langsung</h3>
+        <p>Ribuan tahun lalu, manusia bertransaksi langsung: lo punya ayam, gw punya jagung, kita tukar. Simpel. Tapi sistem ini punya masalah fatal — <strong>"double coincidence of wants"</strong>: lo harus ketemu orang yang punya persis apa yang lo mau, dan dia harus mau persis apa yang lo punya, di waktu yang sama.</p>
+        <div class="analogy">
+          <span class="analogy-icon">🐔</span>
+          <div class="analogy-text"><strong>Contoh masalah barter:</strong> Lo dokter mau beli roti. Tukang rotinya sehat — tidak butuh dokter sekarang. Deal gagal. Lo mau beli sepatu tapi cuma punya sapi — sapi terlalu mahal dan tidak bisa "dikembalikan". Barter tidak scalable.</div>
+        </div>
+        <h3>Era Komoditas — Garam, Cangkang, Manik-manik</h3>
+        <p>Manusia mulai pakai <strong>barang yang semua orang butuhkan</strong> sebagai alat tukar: garam (dari sini kata "salary" berasal), cangkang kerang di Asia dan Afrika, biji kakao di Mesoamerika. Lebih baik dari barter, tapi masalahnya: bisa rusak, sulit dibawa, tidak seragam.</p>
+        <h3>Era Emas & Perak — Solusi Terbaik Selama 5.000 Tahun</h3>
+        <p>Akhirnya manusia menemukan solusi hampir sempurna: <strong>logam mulia.</strong> Emas dan perak menjadi uang dominan hampir di seluruh peradaban karena sifatnya yang unik:</p>
+        <div class="term-grid">
+          <div class="term-card"><div class="term-word">Langka</div><div class="term-def">Tidak bisa dicetak — harus ditambang dari bumi dengan susah payah.</div></div>
+          <div class="term-card"><div class="term-word">Tahan Lama</div><div class="term-def">Tidak busuk, tidak berkarat. Emas 3.000 tahun lalu masih emas hari ini.</div></div>
+          <div class="term-card"><div class="term-word">Mudah Dibagi</div><div class="term-def">Bisa dipotong dan ditimbang sesuai nilai transaksi.</div></div>
+          <div class="term-card"><div class="term-word">Seragam</div><div class="term-def">1 gram emas di China sama nilainya dengan 1 gram emas di Roma.</div></div>
+          <div class="term-card"><div class="term-word">Sulit Dipalsukan</div><div class="term-def">Perlu alat khusus untuk mendeteksi emas palsu vs asli.</div></div>
+          <div class="term-card"><div class="term-word">Tanpa Penerbit</div><div class="term-def">Tidak ada raja atau pemerintah yang bisa "mencetak" emas baru sesuka hati.</div></div>
+        </div>
+        <div class="callout">
+          <div class="ct">💡 Kenapa ini penting untuk memahami Bitcoin?</div>
+          Bitcoin dirancang memiliki semua sifat emas — tapi dalam bentuk digital. Bahkan lebih baik: lebih mudah dibawa, lebih mudah diverifikasi, dan supply-nya lebih terprediksi dari emas.
+        </div>
+      </div>
+      <div class="lesson-nav"><span></span><button class="btn-nav btn-nav--next" onclick="goTo(1)">Selanjutnya: Mata Uang Kuat Sebelum USD →</button></div>
+    </div>
+
+    <!-- BAB 2 -->
+    <div class="lesson" id="lesson-1">
+      <div class="lesson-eyebrow">Bab 2 dari 14 · Sejarah Uang</div>
+      <h2>Mata Uang Kuat <span class="acc">Sebelum USD</span></h2>
+      <div class="lesson-body">
+        <p>USD tidak selalu jadi mata uang cadangan dunia. Sebelum dia, ada beberapa mata uang yang pernah mendominasi perdagangan global — dan semuanya pada akhirnya jatuh. <strong>Ini bukan kebetulan, ini pola.</strong></p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">600–300 SM</span></div>
+            <div class="timeline-content"><div class="timeline-title">Koin Lydia & Drachma Yunani</div><div class="timeline-desc">Lydia (kini Turki) pertama mencetak koin standar dari elektrum (campuran emas-perak). Drachma Athena kemudian mendominasi perdagangan Mediterania berabad-abad — dipercaya sampai beredar di luar Yunani.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">200 SM – 400 M</span></div>
+            <div class="timeline-content"><div class="timeline-title">Denarius Roma</div><div class="timeline-desc">Di puncaknya, Denarius adalah mata uang paling kuat di dunia — dari Inggris sampai Mesopotamia. Roma mulai "clipping": memangkas tepi koin dan mengganti dengan logam murah. Ini inflasi pertama dalam sejarah. Roma runtuh, Denarius ikut mati.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">700–1000 M</span></div>
+            <div class="timeline-content"><div class="timeline-title">Dinar Emas Islam</div><div class="timeline-desc">Di masa kejayaan Kekhalifahan Islam, Dinar emas menjadi mata uang perdagangan dari Spanyol hingga India. Stabil berabad-abad karena backing emas murni yang konsisten.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">1400–1700 M</span></div>
+            <div class="timeline-content"><div class="timeline-title">Florin & Ducat — Era Italia</div><div class="timeline-desc">Florence dan Venice jadi pusat keuangan dunia. Florin dan Ducat emas adalah "dollar"-nya abad pertengahan — diterima di seluruh Eropa dan rute perdagangan Asia.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">1600–1800 M</span></div>
+            <div class="timeline-content"><div class="timeline-title">Real de a Ocho Spanyol (Pieces of Eight)</div><div class="timeline-desc">Perak dari tambang Bolivia membuat Spanyol super power dunia. "Pieces of Eight" adalah mata uang perdagangan global pertama yang benar-benar universal — dipakai di Eropa, Asia, dan Amerika sekaligus.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">1800–1914 M</span></div>
+            <div class="timeline-content"><div class="timeline-title">Pound Sterling Inggris</div><div class="timeline-desc">Di puncak Imperium Britania, Pound adalah mata uang cadangan dunia. Lebih dari 60% perdagangan global dalam Pound. Dua Perang Dunia menghabisi dominasi ini — Inggris bangkrut, USD mengambil alih.</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><span class="timeline-era">1944–Sekarang</span></div>
+            <div class="timeline-content"><div class="timeline-title">US Dollar</div><div class="timeline-desc">Bretton Woods Agreement 1944 menetapkan USD sebagai mata uang cadangan dunia, di-backing emas dengan rasio $35/troy ounce. Semua mata uang lain dipeg ke USD. Amerika jadi bankir dunia.</div></div>
+          </div>
+        </div>
+        <div class="callout-red">
+          <div class="ct">⚠️ Pola yang selalu berulang</div>
+          Setiap mata uang dominan akhirnya jatuh — biasanya karena penguasanya mulai mencetak lebih banyak uang untuk membiayai perang, utang, atau kemewahan. <strong>Rata-rata mata uang cadangan dunia bertahan sekitar 100 tahun.</strong> USD sudah berjalan lebih dari 80 tahun sejak Bretton Woods.
+        </div>
+      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(0)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(2)">Selanjutnya: Nixon Shock →</button></div>
+    </div>
+
+    <!-- BAB 3 -->
+    <div class="lesson" id="lesson-2">
+      <div class="lesson-eyebrow">Bab 3 dari 14 · Sejarah Uang</div>
+      <h2>Nixon Shock — <span class="acc">Hari Dunia Berubah</span></h2>
+      <div class="lesson-body">
+        <p>Tanggal <strong>15 Agustus 1971</strong> adalah salah satu hari terpenting dalam sejarah keuangan manusia — tapi hampir tidak ada yang tau. Malam itu, Presiden Nixon tampil di TV dan mengumumkan sesuatu yang mengubah segalanya.</p>
+        <div class="callout-info">
+          <div class="ct">📺 Konteks: Sistem Bretton Woods (1944–1971)</div>
+          Setelah WWII, dunia sepakat: USD di-backing emas dengan rasio tetap $35 per troy ounce. Semua negara menyimpan USD sebagai cadangan dan bisa menukar USD ke emas ke AS kapanpun. Ini yang membuat USD dipercaya — ada emas di baliknya.
+        </div>
+        <h3>Masalah mulai muncul</h3>
+        <p>Amerika membiayai Perang Vietnam dan program sosial "Great Society" dengan <strong>mencetak lebih banyak dollar dari cadangan emas yang mereka punya.</strong> Negara-negara Eropa mulai curiga dan menukar dollar mereka dengan emas sungguhan. Prancis bahkan mengirim kapal perang untuk mengambil emas mereka dari Fort Knox.</p>
+        <p>Amerika sadar: jika ini terus, cadangan emas mereka akan habis. Pilihan mereka: potong pengeluaran (politiknya sulit) atau putus hubungan dollar dari emas.</p>
+        <h3>15 Agustus 1971 — Nixon Shock</h3>
+        <p>Nixon memilih opsi kedua. Dalam pidato 15 menit, dia mengumumkan <strong>"temporary suspension"</strong> konvertibilitas dollar ke emas. "Temporary" itu tidak pernah dicabut sampai sekarang — sudah 50+ tahun.</p>
+        <div class="callout-red">
+          <div class="ct">💥 Apa artinya untuk kita semua?</div>
+          Sejak 1971, <strong>tidak ada satu pun mata uang di dunia yang di-backing oleh apapun yang nyata.</strong> USD, Rupiah, Euro, Yen — semua adalah "fiat money" — nilainya hanya berdasarkan kepercayaan dan dekrit pemerintah. Pemerintah bisa mencetak sebanyak apapun yang mereka mau, kapanpun.
+        </div>
+        <h3>Apa yang terjadi setelah 1971?</h3>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Harga semua aset meledak.</strong> Rumah, saham, emas — semua naik bukan karena lebih bernilai, tapi karena dollar melemah.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Kesenjangan kaya-miskin melebar drastis.</strong> Yang punya aset makin kaya. Yang punya tabungan tunai makin miskin secara riil.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Daya beli stagnan.</strong> Upah secara nominal naik, tapi secara riil (setelah inflasi) hampir tidak bergerak selama 50 tahun.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Utang global meledak.</strong> Tanpa disiplin emas, semua negara bebas berutang lebih banyak — dan mereka melakukannya.</div></div>
+        </div>
+        <div class="analogy">
+          <span class="analogy-icon">🏦</span>
+          <div class="analogy-text"><strong>Analoginya:</strong> Bayangkan lo deposit uang di bank, bank berjanji bisa lo ambil kapanpun. Tiba-tiba bank bilang: "Janji itu dibatalkan. Uang lo tetap ada tapi tidak bisa lo tukar ke apapun yang konkret." Itulah yang Nixon lakukan — tapi untuk seluruh dunia sekaligus.</div>
+        </div>
+      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(1)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(3)">Selanjutnya: USD sebagai Vampir →</button></div>
+    </div>
+
+    <!-- BAB 4 -->
+    <div class="lesson" id="lesson-3">
+      <div class="lesson-eyebrow">Bab 4 dari 14 · Sejarah Uang</div>
+      <h2>USD: <span class="acc">Vampir Mata Uang Dunia</span></h2>
+      <div class="lesson-body">
+        <p>Setelah lepas dari emas, Amerika butuh cara baru untuk memastikan dollar tetap dibutuhkan dunia. Solusinya jenius — dan brutal. Ini yang disebut <strong>Petrodollar System.</strong></p>
+        <h3>Petrodollar — Kesepakatan yang Mengikat Dunia</h3>
+        <p>1974: Amerika membuat kesepakatan dengan Arab Saudi. Intinya: <strong>semua penjualan minyak dunia harus menggunakan USD.</strong> Imbalan: perlindungan militer Amerika untuk keluarga kerajaan Saudi.</p>
+        <p>Dampaknya: karena semua negara butuh minyak, semua negara <strong>harus punya cadangan USD.</strong> Dollar tidak lagi di-backing emas — tapi di-backing energi. Semua negara di dunia jadi pembeli dollar paksa.</p>
+        <h3>Bagaimana USD "Menghisap" Mata Uang Lain</h3>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Amerika cetak dollar</strong> dan ekspor ke dunia sebagai pembayaran impor — mereka dapat barang nyata, dunia dapat kertas.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Negara lain wajib simpan dollar</strong> sebagai cadangan devisa untuk bisa beli minyak dan bayar utang internasional.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Ketika Fed naikkan bunga</strong>, dollar menguat — utang negara berkembang yang dalam USD meledak nilainya, krisis mata uang terjadi.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Negara berkembang terpaksa naikkan bunga juga</strong> untuk jaga nilai mata uang — bahkan kalau ekonomi mereka tidak butuh itu.</div></div>
+        </div>
+        <h3>Dampak ke Rupiah — Kasus Nyata</h3>
+        <div class="callout-red">
+          <div class="ct">🇮🇩 Rupiah vs Dollar: 1971–2024</div>
+          <strong>1971:</strong> 1 USD = Rp 378<br>
+          <strong>1997 (Krisis Asia):</strong> 1 USD = Rp 15.000 — Rupiah hancur 97% dalam hitungan bulan<br>
+          <strong>2024:</strong> 1 USD = sekitar Rp 16.000<br><br>
+          Artinya: Rp 1.000.000 yang nenek lo simpan di 1971 — secara daya beli terhadap dollar — sekarang nilainya cuma sekitar <strong>Rp 23.000.</strong> 97% nilai hilang dalam 53 tahun.
+        </div>
+        <h3>Krisis 1997-1998: Ketika Contagion Menyerang</h3>
+        <p>Thailand devaluasi Baht Juli 1997. Investor asing panik dan tarik modal dari seluruh Asia sekaligus. Rupiah, Ringgit, Won — semua jatuh bersama. Bukan karena ekonomi Indonesia jelek sendiri, tapi karena <strong>semua utang dalam dollar, dan dollar tiba-tiba sulit didapat.</strong></p>
+        <p>IMF datang dengan "bantuan" — tapi syaratnya: potong subsidi, naikkan bunga, jual aset negara. Rakyat yang menanggung, bukan yang bikin utang.</p>
+        <div class="callout-info">
+          <div class="ct">💡 "Exorbitant Privilege"</div>
+          Ekonom Prancis menyebutnya "hak istimewa yang luar biasa": AS bisa cetak uang yang semua orang butuhkan, dan ekspor inflasi mereka ke seluruh dunia. Negara lain yang menanggung konsekuensi kebijakan moneter Amerika.
+        </div>
+      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(2)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(4)">Selanjutnya: Inflasi & Uang dari Angin →</button></div>
+    </div>
+
+    <!-- BAB 5 -->
+    <div class="lesson" id="lesson-4">
+      <div class="lesson-eyebrow">Bab 5 dari 14 · Sejarah Uang</div>
+      <h2>Inflasi & Uang <span class="acc">Dicetak dari Angin</span></h2>
+      <div class="lesson-body">
+        <p>Kita sering dengar kata "inflasi" tapi jarang benar-benar paham apa yang terjadi di baliknya. Mari bongkar sampai ke akarnya.</p>
+        <h3>Uang Modern Diciptakan dari Hutang</h3>
+        <p>Ini yang bikin banyak orang syok pertama kali dengar: <strong>hampir semua uang yang beredar hari ini tidak dicetak oleh pemerintah — tapi diciptakan oleh bank komersial setiap kali mereka memberikan pinjaman.</strong></p>
+        <div class="analogy">
+          <span class="analogy-icon">🏛️</span>
+          <div class="analogy-text"><strong>Bagaimana uang baru tercipta:</strong> Lo minta KPR Rp 500 juta ke bank. Bank tidak mengambil uang dari nasabah lain — bank mengetik angka "Rp 500.000.000" di rekening lo. Uang itu baru saja diciptakan dari nol. Saat lo bayar cicilan, uang itu "kembali ke nol". <strong>Uang modern adalah utang yang sedang berjalan.</strong></div>
+        </div>
+        <h3>Fractional Reserve Banking — Sihir Berlipat Ganda</h3>
+        <p>Bank hanya diwajibkan menyimpan sebagian kecil dari deposit sebagai cadangan. Sisanya bisa dipinjamkan. Uang yang dipinjamkan lalu didepositkan lagi di bank lain, yang lalu dipinjamkan lagi, dst.</p>
+        <div class="callout-red">
+          <div class="ct">💥 Efek Pengganda yang Mencengangkan</div>
+          Deposit awal Rp 1.000.000 bisa menghasilkan hingga Rp 10.000.000–20.000.000 uang baru yang beredar di sistem melalui proses ini. Uang "tercipta" dari udara — dan setiap kreasi uang baru mengencerkan nilai uang yang sudah ada di tangan lo.
+        </div>
+        <h3>Quantitative Easing — Cetak Lebih Besar Lagi</h3>
+        <p>2008: Krisis finansial global. Fed melakukan <strong>Quantitative Easing (QE)</strong> — membeli obligasi dengan uang yang diciptakan dari nol secara digital. Triliunan dollar tercipta.</p>
+        <p>2020: COVID. Fed dan bank sentral seluruh dunia mencetak lebih banyak dalam hitungan bulan daripada dekade sebelumnya. <strong>Money supply USD naik 40% dalam 2 tahun.</strong></p>
+        <div class="term-grid">
+          <div class="term-card"><div class="term-word">Inflasi Moneter</div><div class="term-def">Jumlah uang yang beredar bertambah. Ini penyebab sebenarnya inflasi harga.</div></div>
+          <div class="term-card"><div class="term-word">Inflasi Harga</div><div class="term-def">Harga barang naik — ini yang kita rasakan saat belanja. Ini gejala, bukan penyebab.</div></div>
+          <div class="term-card"><div class="term-word">Inflasi Aset</div><div class="term-def">Harga saham dan properti naik lebih cepat — menguntungkan yang kaya lebih dulu.</div></div>
+          <div class="term-card"><div class="term-word">Daya Beli</div><div class="term-def">Berapa banyak barang yang bisa lo beli. Inflasi = daya beli turun setiap tahun.</div></div>
+        </div>
+        <div class="callout">
+          <div class="ct">📉 "Tabungan" yang Sebenarnya Berkurang</div>
+          Bunga tabungan bank sekitar 2-3% per tahun. Inflasi 5%+ per tahun. Uang lo di tabungan secara riil <strong>berkurang 2-3% per tahun</strong> — bahkan kalau angkanya di buku tabungan kelihatan naik.
+        </div>
+      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(3)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(5)">Selanjutnya: Siapa yang Diuntungkan? →</button></div>
+    </div>
+
+    <!-- BAB 6 -->
+    <div class="lesson" id="lesson-5">
+      <div class="lesson-eyebrow">Bab 6 dari 14 · Sejarah Uang</div>
+      <h2>Siapa yang <span class="acc">Diuntungkan?</span></h2>
+      <div class="lesson-body">
+        <p>Inflasi tidak menyerang semua orang sama rata. Ada mekanisme yang secara sistematis <strong>mentransfer kekayaan dari yang miskin ke yang kaya</strong> — dan hampir tidak ada yang menyadarinya.</p>
+        <h3>Efek Cantillon — Siapa yang Dapat Uang Baru Duluan</h3>
+        <p>Ekonom abad ke-18 Richard Cantillon mengamati: <strong>uang baru tidak menyebar ke semua orang secara merata.</strong> Yang pertama menerima uang baru mendapat keuntungan penuh sebelum harga naik. Yang terakhir menerimanya sudah menghadapi harga yang lebih tinggi.</p>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Bank sentral cetak uang</strong> → mengalir ke bank-bank besar dulu lewat pembelian obligasi.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Bank besar</strong> pakai uang murah ini beli aset — harga aset naik sebelum inflasi terasa di ekonomi riil.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Korporasi besar</strong> dapat kredit murah → ekspansi, buyback saham → pemegang saham (yang kaya) untung.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Buruh dan kelas menengah</strong> baru merasakan dampaknya — dalam bentuk harga bahan makanan dan sewa yang makin mahal.</div></div>
+        </div>
+        <div class="callout-red">
+          <div class="ct">📊 Data yang Bikin Sakit Kepala</div>
+          1971–2024: Produktivitas pekerja AS naik ~270%. Upah riil naik ~15%. Harga rumah naik >2000%. Indeks saham naik >8000%. <strong>Siapa yang untung? Yang punya aset. Siapa yang rugi? Yang hanya punya uang dan tenaga kerja.</strong>
+        </div>
+        <h3>Yang Diuntungkan vs Yang Dirugikan</h3>
+        <div class="term-grid">
+          <div class="term-card"><div class="term-word">✅ Pemerintah</div><div class="term-def">Punya utang besar? Inflasi mengikis nilai riil utang. Bayar utang lama dengan uang yang lebih murah.</div></div>
+          <div class="term-card"><div class="term-word">✅ Debitur Kaya</div><div class="term-def">Ambil utang beli aset → aset naik karena inflasi, nilai riil utang stagnan.</div></div>
+          <div class="term-card"><div class="term-word">✅ Pemilik Aset Riil</div><div class="term-def">Tanah, gedung, komoditas — nilainya ikut naik bersama inflasi.</div></div>
+          <div class="term-card"><div class="term-word">❌ Penabung Tunai</div><div class="term-def">Simpan uang di deposito rendah bunga — nilai riilnya terkikis setiap tahun.</div></div>
+          <div class="term-card"><div class="term-word">❌ Pekerja Bergaji Tetap</div><div class="term-def">Kenaikan gaji sering tidak secepat inflasi. Daya beli riil berkurang.</div></div>
+          <div class="term-card"><div class="term-word">❌ Negara Berkembang</div><div class="term-def">Inflasi AS di-ekspor ke seluruh dunia lewat sistem petrodollar.</div></div>
+        </div>
+        <div class="callout-green">
+          <div class="ct">✅ Ini bukan konspirasi — ini sistem</div>
+          Ini adalah <strong>output logis dari sistem moneter fiat yang kita punya.</strong> Masalahnya bukan orangnya — masalahnya adalah aturan mainnya. Dan Bitcoin menawarkan aturan main yang berbeda.
+        </div>
+      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(4)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(6)">Selanjutnya: Apa itu Bitcoin? →</button></div>
+    </div>
+
+    <!-- BAB 7 -->
+    <div class="lesson" id="lesson-6">
+      <div class="lesson-eyebrow">Bab 7 dari 14 · Memahami Bitcoin</div>
       <h2>Apa itu <span class="acc">Bitcoin?</span></h2>
       <div class="lesson-body">
-        <p>Bitcoin adalah <strong>uang digital yang tidak dikontrol oleh siapapun</strong> — bukan bank, bukan pemerintah, bukan perusahaan. Bitcoin diciptakan pada tahun 2009 oleh seseorang (atau sekelompok orang) dengan nama samaran <strong>Satoshi Nakamoto</strong>.</p>
-
+        <p>Sekarang setelah lo paham masalahnya — uang fiat yang bisa dicetak sesuka hati, inflasi yang mengikis tabungan, sistem yang menguntungkan yang kaya — <strong>Bitcoin hadir sebagai jawaban.</strong></p>
+        <p>Bitcoin adalah <strong>uang digital yang tidak dikontrol oleh siapapun</strong> — bukan bank, bukan pemerintah, bukan perusahaan. Diciptakan 2009 oleh seseorang dengan nama samaran <strong>Satoshi Nakamoto,</strong> tepat setahun setelah krisis finansial 2008.</p>
         <div class="analogy">
           <span class="analogy-icon">💡</span>
-          <div class="analogy-text"><strong>Analogi sederhana:</strong> Bayangkan uang tunai yang bisa lo kirim ke siapapun di seluruh dunia, kapanpun, tanpa perlu izin bank, tanpa rekening, dan tanpa biaya mahal. Itulah ide dasarnya Bitcoin.</div>
+          <div class="analogy-text"><strong>Kenapa 2009?</strong> Satoshi melihat krisis 2008 sebagai bukti nyata kegagalan sistem keuangan terpusat. Di blok pertama Bitcoin (Genesis Block), dia menyematkan headline koran: "Chancellor on brink of second bailout for banks." Ini bukan kebetulan.</div>
         </div>
-
-        <h3>Kenapa Bitcoin ada?</h3>
-        <p>Bitcoin lahir dari krisis keuangan global 2008. Satoshi melihat masalah besar: <strong>kita terlalu bergantung pada bank dan pemerintah</strong> untuk menyimpan dan mengirim uang. Bank bisa bangkrut, pemerintah bisa cetak uang sesuka hati (yang bikin inflasi), dan transaksi antarnegara butuh waktu berhari-hari dengan biaya mahal.</p>
-        <p>Bitcoin hadir sebagai alternatif: sistem keuangan yang <strong>transparan, terdesentralisasi, dan tidak bisa dimanipulasi</strong>.</p>
-
-        <h3>Fakta penting Bitcoin</h3>
+        <h3>Bagaimana Bitcoin menjawab masalah fiat?</h3>
         <div class="term-grid">
-          <div class="term-card"><div class="term-word">Jumlah Maksimal</div><div class="term-def">Hanya ada 21 juta Bitcoin yang bisa pernah ada. Tidak bisa ditambah.</div></div>
-          <div class="term-card"><div class="term-word">Desentralisasi</div><div class="term-def">Tidak ada yang "memiliki" Bitcoin. Dijalankan oleh ribuan komputer di seluruh dunia.</div></div>
-          <div class="term-card"><div class="term-word">Transparan</div><div class="term-def">Semua transaksi bisa dilihat publik, tapi identitas pengirim anonim.</div></div>
-          <div class="term-card"><div class="term-word">Irreversible</div><div class="term-def">Transaksi yang sudah terkirim tidak bisa dibatalkan.</div></div>
+          <div class="term-card"><div class="term-word">Supply Terbatas</div><div class="term-def">Hanya 21 juta Bitcoin yang bisa pernah ada. Tidak ada yang bisa ubah ini.</div></div>
+          <div class="term-card"><div class="term-word">Tanpa Bank Sentral</div><div class="term-def">Tidak ada Fed atau BI yang bisa "mencetak" Bitcoin baru sesuka hati.</div></div>
+          <div class="term-card"><div class="term-word">Transparan</div><div class="term-def">Semua transaksi bisa diverifikasi publik. Tidak ada akuntansi tersembunyi.</div></div>
+          <div class="term-card"><div class="term-word">Borderless</div><div class="term-def">Kirim ke siapapun di seluruh dunia, kapanpun, tanpa izin bank atau pemerintah.</div></div>
         </div>
-
         <div class="callout">
-          <div class="callout-title">⚠️ Penting dipahami</div>
-          Bitcoin bukan investasi yang dijamin untung. Harganya sangat volatil — bisa naik 50% atau turun 50% dalam hitungan bulan. Pahami dulu sebelum beli.
+          <div class="ct">⚠️ Tapi perlu dipahami</div>
+          Bitcoin bukan investasi yang dijamin untung. Harganya sangat volatil. Pahami dulu filosofinya sebelum beli — bukan sebaliknya.
         </div>
       </div>
-      <div class="lesson-nav">
-        <span></span>
-        <button class="btn-nav btn-nav--next" onclick="goTo(1)">Selanjutnya: Blockchain →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(5)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(7)">Selanjutnya: Blockchain →</button></div>
     </div>
 
-    <!-- LESSON 1 -->
-    <div class="lesson" id="lesson-1">
-      <div class="lesson-eyebrow">Bab 2 dari 8</div>
+    <!-- BAB 8 -->
+    <div class="lesson" id="lesson-7">
+      <div class="lesson-eyebrow">Bab 8 dari 14 · Memahami Bitcoin</div>
       <h2>Blockchain — <span class="acc">Cara Kerjanya</span></h2>
       <div class="lesson-body">
-        <p>Blockchain adalah teknologi di balik Bitcoin. Sederhananya, blockchain adalah <strong>buku catatan transaksi raksasa yang dibagikan ke ribuan komputer sekaligus</strong> — dan tidak ada yang bisa mengubah atau menghapus catatannya.</p>
-
+        <p>Blockchain adalah teknologi di balik Bitcoin — <strong>buku catatan transaksi raksasa yang dibagikan ke ribuan komputer sekaligus</strong> dan tidak bisa diubah siapapun.</p>
         <div class="analogy">
           <span class="analogy-icon">📒</span>
-          <div class="analogy-text"><strong>Analogi:</strong> Bayangkan sebuah buku kas yang dicopy persis ke 10.000 orang di seluruh dunia. Kalau ada yang mau curang dan mengubah catatannya, semua orang lain akan tau karena salinan mereka berbeda. Itulah blockchain.</div>
+          <div class="analogy-text"><strong>Analogi:</strong> Buku kas yang dicopy persis ke 10.000 orang di seluruh dunia. Kalau ada yang mau curang, semua orang lain akan tau karena salinan mereka berbeda. Itulah blockchain.</div>
         </div>
-
         <h3>Cara kerja sederhana</h3>
         <div class="step-list">
-          <div class="step-item"><div class="step-num">1</div><div class="step-content">Lo kirim Bitcoin ke teman. Transaksi ini <strong>disiarkan ke seluruh jaringan</strong>.</div></div>
-          <div class="step-item"><div class="step-num">2</div><div class="step-content">Ribuan komputer (disebut <strong>node</strong>) memverifikasi bahwa lo punya Bitcoin yang lo klaim.</div></div>
-          <div class="step-item"><div class="step-num">3</div><div class="step-content">Transaksi lo dikelompokkan bersama transaksi lain ke dalam sebuah <strong>"blok"</strong>.</div></div>
-          <div class="step-item"><div class="step-num">4</div><div class="step-content">Blok tersebut ditambahkan ke <strong>"rantai"</strong> blok sebelumnya — inilah blockchain.</div></div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-content">Lo kirim Bitcoin ke teman. Transaksi <strong>disiarkan ke seluruh jaringan.</strong></div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content">Ribuan komputer (<strong>node</strong>) memverifikasi bahwa lo punya Bitcoin yang lo klaim.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content">Transaksi dikelompokkan ke dalam sebuah <strong>"blok".</strong></div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content">Blok ditambahkan ke <strong>"rantai"</strong> blok sebelumnya — inilah blockchain.</div></div>
           <div class="step-item"><div class="step-num">5</div><div class="step-content">Transaksi selesai. <strong>Tidak bisa diubah atau dihapus</strong> oleh siapapun.</div></div>
         </div>
-
         <div class="callout-info">
-          <div class="callout-title">💡 Kenapa ini revolusioner?</div>
-          Selama ini kita butuh "perantara" (bank, notaris, dll) untuk memverifikasi transaksi. Blockchain menghilangkan perantara — verifikasi dilakukan oleh matematika dan jaringan komputer, bukan manusia.
+          <div class="ct">💡 Kenapa ini revolusioner?</div>
+          Selama ini kita butuh perantara (bank, notaris) untuk memverifikasi transaksi. Blockchain menghilangkan perantara — verifikasi dilakukan oleh matematika dan jaringan, bukan manusia atau institusi.
         </div>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(0)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(2)">Selanjutnya: Wallet →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(6)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(8)">Selanjutnya: Wallet & Private Key →</button></div>
     </div>
 
-    <!-- LESSON 2 -->
-    <div class="lesson" id="lesson-2">
-      <div class="lesson-eyebrow">Bab 3 dari 8</div>
+    <!-- BAB 9 -->
+    <div class="lesson" id="lesson-8">
+      <div class="lesson-eyebrow">Bab 9 dari 14 · Memahami Bitcoin</div>
       <h2>Wallet & <span class="acc">Private Key</span></h2>
       <div class="lesson-body">
-        <p>Wallet Bitcoin bukan seperti dompet fisik. <strong>Wallet tidak menyimpan Bitcoin</strong> — Bitcoin lo sebenarnya ada di blockchain. Wallet menyimpan <strong>kunci akses</strong> ke Bitcoin lo.</p>
-
-        <h3>Tiga konsep kunci</h3>
+        <p>Wallet Bitcoin tidak menyimpan Bitcoin — <strong>wallet menyimpan kunci akses</strong> ke Bitcoin lo yang ada di blockchain.</p>
         <div class="term-grid">
           <div class="term-card"><div class="term-word">Public Key / Address</div><div class="term-def">Seperti nomor rekening — boleh lo kasih ke siapapun yang mau kirim Bitcoin ke lo.</div></div>
           <div class="term-card"><div class="term-word">Private Key</div><div class="term-def">Seperti PIN ATM tapi jauh lebih kritis. Siapapun yang punya ini bisa ambil semua Bitcoin lo.</div></div>
-          <div class="term-card"><div class="term-word">Seed Phrase</div><div class="term-def">12-24 kata yang bisa memulihkan wallet lo. Ini SATU-SATUNYA backup yang lo butuhkan.</div></div>
+          <div class="term-card"><div class="term-word">Seed Phrase</div><div class="term-def">12-24 kata untuk memulihkan wallet. Ini SATU-SATUNYA backup yang lo butuhkan.</div></div>
         </div>
-
-        <div class="callout">
-          <div class="callout-title">🚨 ATURAN EMAS — Jangan sampai lupa</div>
-          <strong>JANGAN PERNAH</strong> kasih private key atau seed phrase ke siapapun. Tidak ada exchange, support, atau siapapun yang perlu tau ini. Kalau ada yang minta, itu pasti scammer.
+        <div class="callout-red">
+          <div class="ct">🚨 ATURAN EMAS</div>
+          <strong>JANGAN PERNAH</strong> kasih private key atau seed phrase ke siapapun. Tidak ada support, exchange, atau siapapun yang perlu tau ini. Kalau ada yang minta, itu pasti scammer.
         </div>
-
-        <h3>Jenis-jenis wallet</h3>
+        <h3>Jenis wallet</h3>
         <div class="step-list">
-          <div class="step-item"><div class="step-num" style="background:var(--green)">✓</div><div class="step-content"><strong>Hardware Wallet (Ledger, Trezor)</strong> — Paling aman. Fisik seperti flashdisk, private key tidak pernah menyentuh internet. Untuk jumlah besar.</div></div>
-          <div class="step-item"><div class="step-num" style="background:var(--amber)">~</div><div class="step-content"><strong>Software Wallet (Metamask, Trust Wallet)</strong> — Mudah dipakai, cukup aman untuk jumlah kecil. Private key di HP/laptop lo.</div></div>
-          <div class="step-item"><div class="step-num" style="background:var(--text3)">!</div><div class="step-content"><strong>Exchange Wallet (Indodax, Tokocrypto)</strong> — Paling mudah tapi lo tidak pegang private key. Motto: "Not your keys, not your coins."</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--green)">✓</div><div class="step-content"><strong>Hardware Wallet (Ledger, Trezor)</strong> — Paling aman. Private key tidak pernah online. Untuk jumlah besar.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--amber)">~</div><div class="step-content"><strong>Software Wallet (Trust Wallet, Metamask)</strong> — Mudah dipakai, cukup aman untuk jumlah kecil.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--text3)">!</div><div class="step-content"><strong>Exchange Wallet (Indodax, Pintu)</strong> — Paling mudah tapi lo tidak pegang private key. "Not your keys, not your coins."</div></div>
         </div>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(1)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(3)">Selanjutnya: Cara Beli →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(7)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(9)">Selanjutnya: Cara Beli →</button></div>
     </div>
 
-    <!-- LESSON 3 -->
-    <div class="lesson" id="lesson-3">
-      <div class="lesson-eyebrow">Bab 4 dari 8</div>
+    <!-- BAB 10 -->
+    <div class="lesson" id="lesson-9">
+      <div class="lesson-eyebrow">Bab 10 dari 14 · Memahami Bitcoin</div>
       <h2>Cara Beli <span class="acc">Bitcoin</span></h2>
       <div class="lesson-body">
-        <p>Beli Bitcoin di Indonesia sekarang sangat mudah. Lo tidak perlu beli 1 Bitcoin penuh — lo bisa beli mulai dari <strong>Rp 10.000 saja</strong>.</p>
-
-        <h3>Exchange terpercaya di Indonesia</h3>
+        <p>Beli Bitcoin di Indonesia sangat mudah. Lo bisa mulai dari <strong>Rp 10.000 saja.</strong></p>
         <div class="term-grid">
-          <div class="term-card"><div class="term-word">Indodax</div><div class="term-def">Exchange lokal terbesar. Sudah terdaftar OJK. Cocok untuk pemula.</div></div>
-          <div class="term-card"><div class="term-word">Tokocrypto</div><div class="term-def">Exchange lokal, terafiliasi Binance. Interface lebih modern.</div></div>
-          <div class="term-card"><div class="term-word">Pintu</div><div class="term-def">Aplikasi yang simpel banget, cocok banget untuk pemula pertama kali.</div></div>
-          <div class="term-card"><div class="term-word">Binance</div><div class="term-def">Exchange global terbesar. Lebih lengkap tapi agak kompleks untuk pemula.</div></div>
+          <div class="term-card"><div class="term-word">Indodax</div><div class="term-def">Exchange lokal terbesar. Terdaftar OJK. Cocok untuk pemula.</div></div>
+          <div class="term-card"><div class="term-word">Tokocrypto</div><div class="term-def">Terafiliasi Binance. Interface lebih modern.</div></div>
+          <div class="term-card"><div class="term-word">Pintu</div><div class="term-def">Paling simpel, cocok banget untuk pertama kali beli.</div></div>
+          <div class="term-card"><div class="term-word">Binance</div><div class="term-def">Exchange global terbesar. Lebih lengkap tapi agak kompleks.</div></div>
         </div>
-
-        <h3>Langkah beli Bitcoin (contoh di Pintu/Indodax)</h3>
+        <h3>Langkah beli</h3>
         <div class="step-list">
-          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Download app</strong> dan daftar akun. Butuh email dan nomor HP.</div></div>
-          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Verifikasi KYC</strong> — upload KTP dan selfie. Proses 10-30 menit. Ini wajib sesuai regulasi.</div></div>
-          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Deposit Rupiah</strong> via transfer bank, QRIS, atau m-banking. Biasanya instan.</div></div>
-          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Cari Bitcoin (BTC)</strong> dan pilih jumlah yang mau lo beli. Mulai dari Rp 10.000 sudah bisa.</div></div>
-          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Konfirmasi pembelian.</strong> Selesai — Bitcoin lo sudah masuk ke akun exchange.</div></div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Download app</strong> dan daftar akun.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Verifikasi KYC</strong> — upload KTP dan selfie. Wajib sesuai regulasi.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Deposit Rupiah</strong> via transfer bank atau QRIS.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Beli Bitcoin (BTC)</strong> mulai Rp 10.000.</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Konfirmasi.</strong> Selesai.</div></div>
         </div>
-
         <div class="callout-info">
-          <div class="callout-title">💡 DCA — Strategi paling aman untuk pemula</div>
-          Dollar Cost Averaging (DCA): beli rutin dalam jumlah kecil setiap bulan, terlepas dari harga. Misal Rp 100.000/bulan. Strategi ini mengurangi risiko beli di harga puncak.
+          <div class="ct">💡 DCA — Strategi terbaik untuk pemula</div>
+          Dollar Cost Averaging: beli rutin jumlah kecil setiap bulan terlepas dari harga. Misal Rp 100.000/bulan. Mengurangi risiko beli di harga puncak.
         </div>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(2)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(4)">Selanjutnya: Cara Simpan →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(8)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(10)">Selanjutnya: Cara Simpan Aman →</button></div>
     </div>
 
-    <!-- LESSON 4 -->
-    <div class="lesson" id="lesson-4">
-      <div class="lesson-eyebrow">Bab 5 dari 8</div>
+    <!-- BAB 11 -->
+    <div class="lesson" id="lesson-10">
+      <div class="lesson-eyebrow">Bab 11 dari 14 · Memahami Bitcoin</div>
       <h2>Cara Simpan Bitcoin <span class="acc">dengan Aman</span></h2>
       <div class="lesson-body">
-        <p>Beli Bitcoin itu mudah. Tapi <strong>menyimpannya dengan aman adalah skill yang lebih penting</strong>. Banyak orang kehilangan Bitcoin bukan karena diretas, tapi karena ceroboh dengan seed phrase-nya.</p>
-
-        <h3>Aturan dasar keamanan</h3>
+        <p>Beli Bitcoin itu mudah. <strong>Menyimpannya dengan aman adalah skill yang lebih penting.</strong></p>
         <div class="step-list">
-          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Tulis seed phrase di kertas fisik</strong> — jangan di notes HP, jangan di Google Docs, jangan di screenshot. Kertas, di tempat aman.</div></div>
-          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Jangan simpan di satu tempat.</strong> Buat 2 salinan kertas di tempat berbeda (misal rumah + rumah orang tua).</div></div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Tulis seed phrase di kertas fisik</strong> — jangan di notes HP atau Google Docs.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Buat 2 salinan</strong> di tempat berbeda (misal rumah + rumah orang tua).</div></div>
           <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Aktifkan 2FA</strong> di semua akun exchange. Pakai Google Authenticator, bukan SMS.</div></div>
           <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Gunakan email khusus</strong> untuk crypto yang berbeda dari email sehari-hari.</div></div>
-          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Jangan pamer</strong> berapa banyak Bitcoin yang lo punya. Social engineering adalah serangan paling umum.</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Jangan pamer</strong> berapa banyak Bitcoin yang lo punya.</div></div>
         </div>
-
-        <div class="callout">
-          <div class="callout-title">⚠️ Waspada scam yang paling umum</div>
-          Admin palsu di Telegram/WhatsApp yang minta seed phrase, website phishing yang mirip Indodax/Pintu, "giveaway" Bitcoin yang minta lo kirim dulu, dan link dari orang tidak dikenal.
+        <div class="callout-red">
+          <div class="ct">⚠️ Scam paling umum</div>
+          Admin palsu di Telegram minta seed phrase, website phishing mirip Indodax/Pintu, "giveaway" Bitcoin yang minta lo kirim dulu, link dari orang tidak dikenal.
         </div>
-
-        <h3>Kapan harus pindah ke hardware wallet?</h3>
-        <p>Kalau nilai Bitcoin lo sudah di atas <strong>Rp 5-10 juta</strong>, pertimbangkan beli hardware wallet seperti <strong>Ledger Nano S Plus</strong> (sekitar Rp 800rb-1jt). Investasi kecil untuk keamanan yang jauh lebih besar.</p>
+        <p>Kalau nilai Bitcoin lo sudah di atas <strong>Rp 5-10 juta,</strong> pertimbangkan hardware wallet seperti <strong>Ledger Nano S Plus</strong> (~Rp 800rb-1jt). Investasi kecil untuk keamanan jauh lebih besar.</p>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(3)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(5)">Selanjutnya: BTC vs Altcoin →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(9)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(11)">Selanjutnya: BTC vs Altcoin →</button></div>
     </div>
 
-    <!-- LESSON 5 -->
-    <div class="lesson" id="lesson-5">
-      <div class="lesson-eyebrow">Bab 6 dari 8</div>
+    <!-- BAB 12 -->
+    <div class="lesson" id="lesson-11">
+      <div class="lesson-eyebrow">Bab 12 dari 14 · Memahami Bitcoin</div>
       <h2>Bitcoin vs <span class="acc">Altcoin</span></h2>
       <div class="lesson-body">
-        <p>Selain Bitcoin, ada ribuan cryptocurrency lain yang disebut <strong>Altcoin</strong> (alternative coin). Masing-masing punya tujuan, teknologi, dan risiko yang berbeda.</p>
-
+        <p>Selain Bitcoin, ada ribuan cryptocurrency lain yang disebut <strong>Altcoin.</strong> Masing-masing punya tujuan dan risiko berbeda.</p>
         <h3>Bitcoin — "Digital Gold"</h3>
-        <p>Bitcoin adalah yang pertama dan paling desentralisasi. Fokusnya simpel: <strong>penyimpan nilai yang aman dan tidak bisa dimanipulasi</strong>. Tidak ada fitur smart contract atau DeFi yang kompleks. Karena ini justru dianggap kelebihannya — sederhana dan battle-tested selama 15+ tahun.</p>
-
-        <h3>Altcoin populer dan perbedaannya</h3>
+        <p>Pertama dan paling desentralisasi. Fokusnya: <strong>penyimpan nilai yang aman dan tidak bisa dimanipulasi.</strong> Battle-tested 15+ tahun.</p>
         <div class="term-grid">
-          <div class="term-card"><div class="term-word">Ethereum (ETH)</div><div class="term-def">Platform smart contract. Fondasi DeFi, NFT, dan sebagian besar Web3. "Programmable blockchain."</div></div>
-          <div class="term-card"><div class="term-word">Solana (SOL)</div><div class="term-def">Blockchain cepat dan murah. Kompetitor Ethereum untuk DeFi dan NFT.</div></div>
-          <div class="term-card"><div class="term-word">Stablecoin (USDT/USDC)</div><div class="term-def">Nilainya 1:1 dengan USD. Digunakan untuk parkir profit atau trading tanpa risiko volatilitas.</div></div>
-          <div class="term-card"><div class="term-word">Meme Coin (DOGE, dll)</div><div class="term-def">Sangat spekulatif, harga digerakkan hype. High risk, high reward — atau high loss.</div></div>
+          <div class="term-card"><div class="term-word">Ethereum (ETH)</div><div class="term-def">Platform smart contract. Fondasi DeFi, NFT, dan Web3.</div></div>
+          <div class="term-card"><div class="term-word">Solana (SOL)</div><div class="term-def">Blockchain cepat dan murah. Kompetitor Ethereum.</div></div>
+          <div class="term-card"><div class="term-word">Stablecoin (USDT/USDC)</div><div class="term-def">1:1 dengan USD. Untuk parkir profit tanpa volatilitas.</div></div>
+          <div class="term-card"><div class="term-word">Meme Coin</div><div class="term-def">Sangat spekulatif, digerakkan hype. High risk, high reward — atau high loss.</div></div>
         </div>
-
         <div class="callout-info">
-          <div class="callout-title">💡 Saran untuk pemula</div>
-          Mulai dari Bitcoin dan/atau Ethereum dulu. Keduanya paling liquid, paling banyak diteliti, dan risikonya relatif lebih terukur dibanding altcoin kecil. Altcoin lain eksplorasi kalau sudah paham dasarnya.
+          <div class="ct">💡 Saran untuk pemula</div>
+          Mulai dari Bitcoin dan/atau Ethereum dulu. Keduanya paling liquid dan risikonya relatif lebih terukur dibanding altcoin kecil.
         </div>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(4)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(6)">Selanjutnya: Risiko & Kesalahan →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(10)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(12)">Selanjutnya: Risiko & Kesalahan →</button></div>
     </div>
 
-    <!-- LESSON 6 -->
-    <div class="lesson" id="lesson-6">
-      <div class="lesson-eyebrow">Bab 7 dari 8</div>
+    <!-- BAB 13 -->
+    <div class="lesson" id="lesson-12">
+      <div class="lesson-eyebrow">Bab 13 dari 14 · Memahami Bitcoin</div>
       <h2>Risiko & <span class="acc">Kesalahan Pemula</span></h2>
       <div class="lesson-body">
-        <p>Crypto adalah salah satu aset dengan potensi keuntungan dan kerugian terbesar. <strong>Banyak pemula kehilangan uang bukan karena pasar, tapi karena kesalahan yang bisa dihindari.</strong></p>
-
-        <h3>Kesalahan paling umum</h3>
+        <p><strong>Banyak pemula kehilangan uang bukan karena pasar, tapi karena kesalahan yang bisa dihindari.</strong></p>
         <div class="step-list">
-          <div class="step-item"><div class="step-num" style="background:#E24B4A">✕</div><div class="step-content"><strong>FOMO (Fear Of Missing Out)</strong> — Beli pas harga sudah naik tinggi karena takut ketinggalan. Ini cara paling umum rugi.</div></div>
-          <div class="step-item"><div class="step-num" style="background:#E24B4A">✕</div><div class="step-content"><strong>Invest uang yang tidak sanggup hilang</strong> — Crypto harus pakai uang dingin (uang yang kalau hilang pun hidup lo oke). Jangan pakai uang belanja, cicilan, atau pinjaman.</div></div>
-          <div class="step-item"><div class="step-num" style="background:#E24B4A">✕</div><div class="step-content"><strong>Percaya "sinyal" dari grup random</strong> — Grup Telegram/WA yang jual sinyal berbayar hampir semuanya scam atau pump & dump.</div></div>
-          <div class="step-item"><div class="step-num" style="background:#E24B4A">✕</div><div class="step-content"><strong>Tidak diversifikasi</strong> — All-in ke satu altcoin kecil yang "katanya" mau 100x adalah judi, bukan investasi.</div></div>
-          <div class="step-item"><div class="step-num" style="background:#E24B4A">✕</div><div class="step-content"><strong>Panik sell saat turun</strong> — Harga turun bukan berarti harus langsung jual. Volatilitas adalah normal di crypto.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--red)">✕</div><div class="step-content"><strong>FOMO</strong> — Beli pas harga sudah naik tinggi karena takut ketinggalan. Cara paling umum rugi.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--red)">✕</div><div class="step-content"><strong>Invest uang yang tidak sanggup hilang</strong> — Gunakan uang dingin. Jangan pakai uang belanja atau pinjaman.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--red)">✕</div><div class="step-content"><strong>Percaya "sinyal" dari grup random</strong> — Hampir semuanya scam atau pump & dump.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--red)">✕</div><div class="step-content"><strong>All-in ke satu altcoin kecil</strong> — Ini judi, bukan investasi.</div></div>
+          <div class="step-item"><div class="step-num" style="background:var(--red)">✕</div><div class="step-content"><strong>Panik sell saat turun</strong> — Volatilitas adalah normal di crypto.</div></div>
         </div>
-
-        <div class="callout">
-          <div class="callout-title">🛡️ Prinsip dasar yang harus dipegang</div>
-          Hanya invest jumlah yang lo ikhlas kehilangan 100%. Lakukan riset sendiri (DYOR — Do Your Own Research). Jangan percaya hype tanpa dasar. Dan yang paling penting: <strong>pahami apa yang lo beli sebelum beli.</strong>
+        <div class="callout-red">
+          <div class="ct">🛡️ Prinsip dasar</div>
+          Hanya invest jumlah yang lo ikhlas kehilangan 100%. DYOR (Do Your Own Research). Pahami apa yang lo beli sebelum beli.
         </div>
       </div>
-      <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(5)">← Sebelumnya</button>
-        <button class="btn-nav btn-nav--next" onclick="goTo(7)">Selanjutnya: Langkah Lanjutan →</button>
-      </div>
+      <div class="lesson-nav"><button class="btn-nav" onclick="goTo(11)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(13)">Selanjutnya: Langkah Selanjutnya →</button></div>
     </div>
 
-    <!-- LESSON 7 -->
-    <div class="lesson" id="lesson-7">
-      <div class="lesson-eyebrow">Bab 8 dari 8</div>
+    <!-- BAB 14 -->
+    <div class="lesson" id="lesson-13">
+      <div class="lesson-eyebrow">Bab 14 dari 14 · Memahami Bitcoin</div>
       <h2>Langkah <span class="acc">Selanjutnya</span></h2>
       <div class="lesson-body">
-        <p>Selamat! Lo sudah melewati fondasi dasar Bitcoin dan crypto. Tapi perjalanan ini baru mulai. Berikut langkah konkret yang bisa lo ambil setelah ini.</p>
-
-        <h3>Action plan untuk pemula</h3>
+        <p>Selamat — lo sudah melewati semua materi dari sejarah uang sampai cara aman pegang Bitcoin. Perjalanan ini baru mulai.</p>
         <div class="step-list">
-          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Buka akun di Pintu atau Indodax</strong> — verifikasi KYC, deposit kecil (Rp 50-100rb), dan coba beli Bitcoin pertama lo.</div></div>
-          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Download Trust Wallet</strong> — pelajari cara transfer Bitcoin dari exchange ke wallet pribadi lo.</div></div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Buka akun di Pintu atau Indodax</strong> — verifikasi KYC, coba beli Bitcoin pertama mulai Rp 50-100rb.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Download Trust Wallet</strong> — pelajari cara transfer dari exchange ke wallet pribadi.</div></div>
           <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Set DCA rutin</strong> — tentukan jumlah yang mau lo beli tiap bulan. Konsisten lebih penting dari timing.</div></div>
-          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Ikuti sumber edukasi terpercaya</strong> — hindari influencer yang hanya promo. Fokus ke yang edukasi.</div></div>
-          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Join @simpulcrypto</strong> — komunitas crypto Indonesia di Telegram. Diskusi, airdrop alpha, dan update Web3 setiap hari.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Baca Bitcoin Whitepaper</strong> — dokumen asli Satoshi, hanya 9 halaman. bitcoin.org/bitcoin.pdf</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Join @simpulcrypto</strong> — komunitas crypto Indonesia, diskusi airdrop, DePIN, dan Web3 setiap hari.</div></div>
         </div>
-
-        <div class="callout-info">
-          <div class="callout-title">📚 Sumber belajar lanjutan</div>
-          <strong>Bitcoin Whitepaper</strong> — dokumen asli dari Satoshi Nakamoto (bitcoin.org/bitcoin.pdf) · <strong>Investopedia Crypto</strong> — referensi istilah crypto · <strong>CoinGecko</strong> — tracking harga dan data market
-        </div>
-
-        <div class="callout">
-          <div class="callout-title">✅ Lo sudah belajar:</div>
-          Apa itu Bitcoin · Cara kerja Blockchain · Wallet & Private Key · Cara Beli · Cara Simpan Aman · Bitcoin vs Altcoin · Risiko & Kesalahan Pemula
+        <div class="callout-green">
+          <div class="ct">✅ Lo sudah belajar:</div>
+          Sejarah uang dari barter ke fiat · Mata uang kuat sebelum USD · Nixon Shock 1971 · Petrodollar & dampaknya ke Rupiah · Inflasi & pencetakan uang · Siapa yang untung & rugi · Apa itu Bitcoin & Blockchain · Wallet & Private Key · Cara beli & simpan aman · BTC vs Altcoin · Risiko pemula
         </div>
       </div>
       <div class="lesson-nav">
-        <button class="btn-nav" onclick="goTo(6)">← Sebelumnya</button>
+        <button class="btn-nav" onclick="goTo(12)">← Sebelumnya</button>
         <button class="btn-nav btn-nav--done" onclick="markAllDone()">✓ Selesai!</button>
       </div>
     </div>
@@ -462,18 +589,14 @@
 
 <script>
   let current = 0;
-  const total = 8;
+  const total = 14;
   const done = new Set();
 
   function goTo(n) {
-    // hide current
     document.getElementById('lesson-' + current).classList.remove('active');
-    // mark previous as done
     done.add(current);
     current = n;
-    // show new
     document.getElementById('lesson-' + n).classList.add('active');
-    // scroll to top of content
     document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
     updateSidebar();
   }
@@ -485,30 +608,25 @@
       if (i === current) el.classList.add('active');
       else if (done.has(i)) el.classList.add('done');
     });
-    // progress bar
-    const pct = Math.round((done.size / total) * 100);
-    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressBar').style.width = Math.round((done.size / total) * 100) + '%';
   }
 
   function markAllDone() {
     for (let i = 0; i < total; i++) done.add(i);
     updateSidebar();
     document.getElementById('progressBar').style.width = '100%';
-    alert('🎉 Selamat! Lo udah selesai semua materi dasar Bitcoin. Next: join @simpulcrypto untuk lanjut belajar!');
+    alert('Selamat! Lo udah selesai semua materi. Next: join @simpulcrypto untuk lanjut belajar!');
   }
 
   function toggleMob() {
     document.getElementById('mobSidebar').classList.toggle('open');
   }
 
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
   document.getElementById('themeBtn').addEventListener('click', function() {
     document.body.classList.toggle('light');
     localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
   });
-
-  if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light');
-  }
 </script>
 </body>
 </html>
