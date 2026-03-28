@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradingView Watchlist Generator – mungxbt.site</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e;
+    --text: #f0ede8; --text2: #9a9690; --text3: #5a5754;
+    --amber: #EF9F27; --amber-dim: #BA7517;
+    --amber-glow: rgba(239,159,39,0.12); --amber-border: rgba(239,159,39,0.25);
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --card: #141414; --green: #1D9E75; --green-bg: rgba(29,158,117,0.1); --green-border: rgba(29,158,117,0.25);
+    --red: #E24B4A; --red-bg: rgba(226,75,74,0.1); --red-border: rgba(226,75,74,0.25);
+  }
+  .light {
+    --bg: #faf9f7; --bg2: #f2f0eb; --bg3: #e8e5de;
+    --text: #1a1816; --text2: #6b6762; --text3: #a8a4a0;
+    --amber: #BA7517; --amber-dim: #854F0B;
+    --amber-glow: rgba(186,117,23,0.08); --amber-border: rgba(186,117,23,0.2);
+    --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
+    --card: #ffffff; --green: #0F6E56; --green-bg: rgba(15,110,86,0.08); --green-border: rgba(15,110,86,0.2);
+    --red: #C0392B; --red-bg: rgba(192,57,43,0.08); --red-border: rgba(192,57,43,0.2);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--amber); }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--text2); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--amber); }
+  .theme-btn { width: 36px; height: 20px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; position: relative; transition: background 0.3s; }
+  .theme-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--amber); border-radius: 50%; transition: transform 0.3s; }
+  .light .theme-btn::after { transform: translateX(16px); }
+
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+  .page-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow); padding: 5px 12px; border-radius: 4px; margin-bottom: 1.5rem; }
+  h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+  h1 .accent { color: var(--amber); }
+  .page-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; margin-bottom: 3rem; font-weight: 300; max-width: 560px; }
+
+  /* MARKET SELECTOR */
+  .market-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2rem; }
+  .market-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; user-select: none; }
+  .market-card:hover { border-color: var(--border2); }
+  .market-card.selected { border-color: var(--amber-border); background: var(--amber-glow); }
+  .market-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .market-label { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+  .market-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  .market-card.selected .market-check { background: var(--amber); border-color: var(--amber); }
+  .market-check svg { opacity: 0; transition: opacity 0.2s; }
+  .market-card.selected .market-check svg { opacity: 1; }
+  .market-desc { font-size: 0.78rem; color: var(--text2); }
+  .market-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; }
+  .badge-futures { background: var(--amber-glow); color: var(--amber); border: 1px solid var(--amber-border); }
+  .badge-spot { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 2rem; }
+  .stat { background: var(--card); padding: 1rem 1.25rem; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--amber); letter-spacing: -0.02em; }
+  .stat-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+  /* STATUS BAR */
+  .status-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 0.78rem; color: var(--text2); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
+  .status-dot.ready { background: var(--green); }
+  .status-dot.error { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* DOWNLOAD BUTTONS */
+  .download-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2rem; }
+  .btn-download-main { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--amber); color: #0e0e0e; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 14px 24px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; transition: opacity 0.2s, transform 0.1s; width: 100%; }
+  .btn-download-main:hover { opacity: 0.85; }
+  .btn-download-main:active { transform: scale(0.98); }
+  .btn-download-main:disabled { opacity: 0.4; cursor: not-allowed; }
+  .download-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn-download-sub { display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 11px 18px; border-radius: 8px; border: 1px solid var(--border2); cursor: pointer; transition: all 0.2s; }
+  .btn-download-sub:hover { border-color: var(--amber-border); color: var(--amber); }
+  .btn-download-sub:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* HOW TO USE */
+  .how-to { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+  .how-to-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+  .how-to-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--amber); color: #0e0e0e; font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-text { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+  .step-text strong { color: var(--text); font-weight: 500; }
+  .step-text code { font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--bg3); padding: 1px 6px; border-radius: 3px; color: var(--amber); }
+
+  /* FORMAT INFO */
+  .format-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 3rem; }
+  .format-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; }
+  .format-title { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+  .format-example { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--amber); }
+  .format-note { font-size: 0.72rem; color: var(--text3); margin-top: 4px; }
+
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--border); max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-left { font-size: 0.75rem; color: var(--text3); font-family: 'DM Mono', monospace; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.75rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--amber); }
+
+  @media (max-width: 480px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.7rem; }
+    .page { padding: 2.5rem 1rem 4rem; }
+    .market-selector { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; }
+    .download-row { grid-template-columns: 1fr; }
+    .format-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">mungxbt<span>.</span>site</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+    </ul>
+    <button class="theme-btn" id="themeBtn"></button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-eyebrow">Binance → TradingView</div>
+  <h1>Watchlist<span class="accent">.</span></h1>
+  <p class="page-sub">Generate file watchlist TradingView dari semua pair aktif di Binance. Pilih Spot, Futures, atau keduanya — download langsung, selalu up-to-date.</p>
+
+  <div style="display:flex;align-items:flex-start;gap:10px;background:rgba(239,159,39,0.08);border:1px solid rgba(239,159,39,0.25);border-radius:8px;padding:12px 16px;margin-bottom:2rem;">
+    <span style="font-size:1rem;flex-shrink:0;">⚠️</span>
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--amber);margin-bottom:3px;">Requires TradingView Paid Plan</div>
+      <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">TradingView versi <strong style="color:var(--text);">Free</strong> hanya support <strong style="color:var(--text);">30 symbols</strong> per watchlist. Untuk import ratusan/ribuan pair, lo butuh minimal plan <strong style="color:var(--text);">Essential</strong> ke atas. <a href="https://www.tradingview.com/pricing/?share_your_love=KucingCuan107" target="_blank" style="color:var(--amber);text-decoration:none;">Upgrade TradingView →</a></div>
+    </div>
+  </div>
+
+  <!-- MARKET SELECTOR -->
+  <div class="market-selector">
+    <div class="market-card selected" id="card-futures" onclick="toggleMarket('futures')">
+      <div class="market-card-top">
+        <div>
+          <span class="market-badge badge-futures">Futures</span>
+          <div class="market-label" style="margin-top:6px;">USDT Perpetual</div>
+        </div>
+        <div class="market-check" id="check-futures">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e0e0e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="market-desc">Semua pair futures USDT-M aktif di Binance. Format: <code style="font-family:monospace;font-size:0.75em;background:var(--bg3);padding:1px 5px;border-radius:3px;">BINANCE:BTCUSDT.P</code></div>
+    </div>
+    <div class="market-card selected" id="card-spot" onclick="toggleMarket('spot')">
+      <div class="market-card-top">
+        <div>
+          <span class="market-badge badge-spot">Spot</span>
+          <div class="market-label" style="margin-top:6px;">USDT Spot</div>
+        </div>
+        <div class="market-check" id="check-spot">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e0e0e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="market-desc">Semua pair spot USDT aktif di Binance. Format: <code style="font-family:monospace;font-size:0.75em;background:var(--bg3);padding:1px 5px;border-radius:3px;">BINANCE:BTCUSDT</code></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num" id="stat-futures">—</div>
+      <div class="stat-label">Futures Pairs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-spot">—</div>
+      <div class="stat-label">Spot Pairs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-total">—</div>
+      <div class="stat-label">Total Selected</div>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <div class="status-dot loading" id="statusDot"></div>
+    <span id="statusText">Fetching data dari Binance API...</span>
+  </div>
+
+  <!-- DOWNLOAD -->
+  <div class="download-area">
+    <button class="btn-download-main" id="btnAll" onclick="downloadWatchlist('both')" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Watchlist (Spot + Futures)
+    </button>
+    <div class="download-row">
+      <button class="btn-download-sub" id="btnFutures" onclick="downloadWatchlist('futures')" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Futures Only
+      </button>
+      <button class="btn-download-sub" id="btnSpot" onclick="downloadWatchlist('spot')" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Spot Only
+      </button>
+    </div>
+  </div>
+
+  <!-- HOW TO USE -->
+  <div class="how-to">
+    <div class="how-to-title">Cara Import ke TradingView</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Download file watchlist di atas, simpan di komputer lo.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Buka <strong>TradingView</strong>, klik nama watchlist yang aktif di panel kiri.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Pilih <strong>Import list...</strong> dari menu dropdown yang muncul.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">Pilih file <code>.txt</code> yang udah lo download. Watchlist langsung ter-update.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMAT INFO -->
+  <div class="format-grid">
+    <div class="format-card">
+      <div class="format-title">Format Futures</div>
+      <div class="format-example">BINANCE:BTCUSDT.P</div>
+      <div class="format-note">Suffix <code style="font-family:monospace;font-size:0.72em;">.P</code> = perpetual futures di TradingView</div>
+    </div>
+    <div class="format-card">
+      <div class="format-title">Format Spot</div>
+      <div class="format-example">BINANCE:BTCUSDT</div>
+      <div class="format-note">Tanpa suffix = spot market di TradingView</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-left">© 2026 mungxbt.site</div>
+  <div class="footer-links">
+    <a href="https://t.me/mungxbt" target="_blank">Telegram</a>
+    <a href="https://x.com/himiwhimiw" target="_blank">Twitter / X</a>
+  </div>
+</footer>
+
+<script>
+  // Theme
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  });
+
+  // State
+  let futuresPairs = [];
+  let spotPairs = [];
+  let marketSelected = { futures: true, spot: true };
+
+  function toggleMarket(type) {
+    marketSelected[type] = !marketSelected[type];
+    document.getElementById('card-' + type).classList.toggle('selected', marketSelected[type]);
+    updateTotalStat();
+  }
+
+  function updateTotalStat() {
+    let total = 0;
+    if (marketSelected.futures) total += futuresPairs.length;
+    if (marketSelected.spot) total += spotPairs.length;
+    document.getElementById('stat-total').textContent = total > 0 ? total.toLocaleString() : '—';
+  }
+
+  async function fetchData() {
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+
+    try {
+      // Fetch futures
+      txt.textContent = 'Fetching Binance Futures...';
+      const fRes = await fetch('https://fapi.binance.com/fapi/v1/exchangeInfo');
+      const fData = await fRes.json();
+      futuresPairs = fData.symbols
+        .filter(s => s.status === 'TRADING' && s.contractType === 'PERPETUAL' && s.quoteAsset === 'USDT')
+        .map(s => 'BINANCE:' + s.symbol + '.P');
+
+      document.getElementById('stat-futures').textContent = futuresPairs.length.toLocaleString();
+
+      // Fetch spot
+      txt.textContent = 'Fetching Binance Spot...';
+      const sRes = await fetch('https://api.binance.com/api/v3/exchangeInfo');
+      const sData = await sRes.json();
+      spotPairs = sData.symbols
+        .filter(s => s.status === 'TRADING' && s.quoteAsset === 'USDT' && s.isSpotTradingAllowed)
+        .map(s => 'BINANCE:' + s.symbol);
+
+      document.getElementById('stat-spot').textContent = spotPairs.length.toLocaleString();
+
+      updateTotalStat();
+
+      // Ready
+      dot.className = 'status-dot ready';
+      txt.textContent = 'Data berhasil di-fetch dari Binance API. Siap download!';
+
+      document.getElementById('btnAll').disabled = false;
+      document.getElementById('btnFutures').disabled = false;
+      document.getElementById('btnSpot').disabled = false;
+
+    } catch (err) {
+      dot.className = 'status-dot error';
+      txt.textContent = 'Gagal fetch data. Cek koneksi internet dan refresh halaman.';
+      console.error(err);
+    }
+  }
+
+  function downloadWatchlist(type) {
+    let pairs = [];
+    let filename = '';
+    const date = new Date().toISOString().slice(0, 10);
+
+    if (type === 'both') {
+      if (marketSelected.futures) pairs = pairs.concat(futuresPairs);
+      if (marketSelected.spot) pairs = pairs.concat(spotPairs);
+      // Remove duplicates (pairs that exist in both)
+      pairs = [...new Set(pairs)];
+      filename = 'mungxbt-watchlist-' + date + '.txt';
+    } else if (type === 'futures') {
+      pairs = futuresPairs;
+      filename = 'mungxbt-futures-' + date + '.txt';
+    } else {
+      pairs = spotPairs;
+      filename = 'mungxbt-spot-' + date + '.txt';
+    }
+
+    if (pairs.length === 0) {
+      alert('Tidak ada pair yang dipilih.');
+      return;
+    }
+
+    const content = pairs.join(',');
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Init
+  fetchData();
+</script>
+</body>
+</html>
