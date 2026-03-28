@@ -6,234 +6,194 @@
 <title>KSEI Ownership – mungxbt.site</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e;
-    --text: #f0ede8; --text2: #9a9690; --text3: #5a5754;
-    --amber: #EF9F27; --amber-dim: #BA7517;
-    --amber-glow: rgba(239,159,39,0.12); --amber-border: rgba(239,159,39,0.25);
-    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-    --card: #141414; --green: #1D9E75; --green-bg: rgba(29,158,117,0.1); --green-border: rgba(29,158,117,0.25);
-    --red: #E24B4A; --red-bg: rgba(226,75,74,0.1); --red-border: rgba(226,75,74,0.25);
-    --purple: #8B5CF6; --purple-bg: rgba(139,92,246,0.1); --purple-border: rgba(139,92,246,0.25);
-    --blue: #3B82F6; --blue-bg: rgba(59,130,246,0.1); --blue-border: rgba(59,130,246,0.25);
-  }
-  .light {
-    --bg: #faf9f7; --bg2: #f2f0eb; --bg3: #e8e5de;
-    --text: #1a1816; --text2: #6b6762; --text3: #a8a4a0;
-    --amber: #BA7517; --amber-glow: rgba(186,117,23,0.08); --amber-border: rgba(186,117,23,0.2);
-    --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
-    --card: #ffffff; --green: #0F6E56; --green-bg: rgba(15,110,86,0.08); --green-border: rgba(15,110,86,0.2);
-    --red: #C0392B; --red-bg: rgba(192,57,43,0.08); --red-border: rgba(192,57,43,0.2);
-    --purple: #6D28D9; --purple-bg: rgba(109,40,217,0.08); --purple-border: rgba(109,40,217,0.2);
-    --blue: #1D4ED8; --blue-bg: rgba(29,78,216,0.08); --blue-border: rgba(29,78,216,0.2);
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e0e;--bg2:#161616;--bg3:#1e1e1e;
+  --text:#f0ede8;--text2:#9a9690;--text3:#5a5754;
+  --amber:#EF9F27;--amber-glow:rgba(239,159,39,0.12);--amber-border:rgba(239,159,39,0.25);
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --card:#141414;
+  --green:#1D9E75;--green-bg:rgba(29,158,117,0.1);--green-border:rgba(29,158,117,0.25);
+  --red:#E24B4A;--red-bg:rgba(226,75,74,0.1);--red-border:rgba(226,75,74,0.25);
+  --blue:#3B82F6;--blue-bg:rgba(59,130,246,0.1);--blue-border:rgba(59,130,246,0.25);
+  --purple:#8B5CF6;--purple-bg:rgba(139,92,246,0.1);--purple-border:rgba(139,92,246,0.25);
+}
+.light{
+  --bg:#faf9f7;--bg2:#f2f0eb;--bg3:#e8e5de;
+  --text:#1a1816;--text2:#6b6762;--text3:#a8a4a0;
+  --amber:#BA7517;--amber-glow:rgba(186,117,23,0.08);--amber-border:rgba(186,117,23,0.2);
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);
+  --card:#ffffff;
+  --green:#0F6E56;--green-bg:rgba(15,110,86,0.08);--green-border:rgba(15,110,86,0.2);
+  --red:#C0392B;--red-bg:rgba(192,57,43,0.08);--red-border:rgba(192,57,43,0.2);
+  --blue:#1D4ED8;--blue-bg:rgba(29,78,216,0.08);--blue-border:rgba(29,78,216,0.2);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
 
-  /* NAV */
-  nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); }
-  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
-  .nav-logo span { color: var(--amber); }
-  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
-  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-  .nav-links a { font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--text2); text-decoration: none; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--amber); }
-  .theme-btn { width: 36px; height: 20px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; position: relative; transition: background 0.3s; }
-  .theme-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--amber); border-radius: 50%; transition: transform 0.3s; }
-  .light .theme-btn::after { transform: translateX(16px); }
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-.02em;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--amber)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--text2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--amber)}
+.theme-btn{width:36px;height:20px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;cursor:pointer;position:relative;transition:background .3s}
+.theme-btn::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--amber);border-radius:50%;transition:transform .3s}
+.light .theme-btn::after{transform:translateX(16px)}
 
-  /* LAYOUT */
-  .page { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 4rem 2rem 6rem; }
-  .page-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow); padding: 5px 12px; border-radius: 4px; margin-bottom: 1.5rem; }
-  h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
-  h1 .accent { color: var(--amber); }
-  .page-sub { font-size: 0.95rem; color: var(--text2); line-height: 1.7; margin-bottom: 2rem; font-weight: 300; max-width: 580px; }
+/* LAYOUT */
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-border);background:var(--amber-glow);padding:5px 12px;border-radius:4px;margin-bottom:1.5rem}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1;letter-spacing:-.03em;margin-bottom:.75rem}
+h1 .accent{color:var(--amber)}
+.page-sub{font-size:.95rem;color:var(--text2);line-height:1.7;margin-bottom:2rem;font-weight:300;max-width:580px}
+.section-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  /* SECTION LABEL */
-  .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
+.stat{background:var(--card);padding:1rem 1.25rem}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:var(--amber);letter-spacing:-.02em}
+.stat-num.g{color:var(--green)}.stat-num.r{color:var(--red)}.stat-num.b{color:var(--blue)}
+.stat-label{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
 
-  /* STATS ROW */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
-  .stat { background: var(--card); padding: 1rem 1.25rem; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--amber); letter-spacing: -0.02em; }
-  .stat-num.c-green { color: var(--green); }
-  .stat-num.c-red { color: var(--red); }
-  .stat-num.c-purple { color: var(--purple); }
-  .stat-num.c-blue { color: var(--blue); }
-  .stat-label { font-size: 0.68rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+/* STATUS */
+.status-bar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.78rem;color:var(--text2)}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot.loading{background:var(--amber);animation:pulse 1s infinite}
+.dot.ready{background:var(--green)}
+.dot.error{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* SEARCH */
-  .search-wrap { position: relative; margin-bottom: 1.5rem; }
-  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
-  .search-input { width: 100%; background: var(--card); border: 1px solid var(--border2); border-radius: 10px; padding: 13px 14px 13px 44px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--text); outline: none; transition: border-color 0.2s; }
-  .search-input::placeholder { color: var(--text3); }
-  .search-input:focus { border-color: var(--amber-border); box-shadow: 0 0 0 3px var(--amber-glow); }
-  .search-hint { font-size: 0.75rem; color: var(--text3); margin-top: 6px; }
-  .search-hint span { color: var(--amber); font-family: 'DM Mono', monospace; }
+/* TABS */
+.tabs{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin-bottom:1.5rem;background:var(--bg3)}
+.tab{flex:1;padding:9px 16px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border:none;background:transparent;cursor:pointer;transition:all .2s}
+.tab.active{background:var(--card);color:var(--amber);border-bottom:2px solid var(--amber)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
-  /* FILTER CHIPS */
-  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .chip { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 4px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.2s; }
-  .chip:hover { border-color: var(--amber-border); color: var(--amber); }
-  .chip.active { background: var(--amber-glow); border-color: var(--amber-border); color: var(--amber); }
-  .chip.active-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
-  .chip.active-red { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:.75rem}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
+.search-input{width:100%;background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:13px 14px 13px 44px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);outline:none;transition:border-color .2s}
+.search-input::placeholder{color:var(--text3)}
+.search-input:focus{border-color:var(--amber-border);box-shadow:0 0 0 3px var(--amber-glow)}
+.search-hint{font-size:.75rem;color:var(--text3);margin-bottom:1rem}
+.search-hint span{color:var(--amber);font-family:'DM Mono',monospace}
 
-  /* STATUS BAR */
-  .status-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 0.78rem; color: var(--text2); }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .status-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
-  .status-dot.ready { background: var(--green); }
-  .status-dot.error { background: var(--red); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* FILTER CHIPS */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.chip{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s}
+.chip:hover{border-color:var(--amber-border);color:var(--amber)}
+.chip.active{background:var(--amber-glow);border-color:var(--amber-border);color:var(--amber)}
 
-  /* TABLE */
-  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-  .table-header { display: grid; grid-template-columns: 90px 1fr 110px 90px 100px 110px; gap: 0; border-bottom: 1px solid var(--border); }
-  .table-header .th { padding: 10px 14px; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); cursor: pointer; user-select: none; transition: color 0.2s; }
-  .table-header .th:hover { color: var(--amber); }
-  .table-header .th.sorted { color: var(--amber); }
-  .table-row { display: grid; grid-template-columns: 90px 1fr 110px 90px 100px 110px; gap: 0; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-  .table-row:last-child { border-bottom: none; }
-  .table-row:hover { background: var(--bg3); }
-  .td { padding: 12px 14px; font-size: 0.82rem; display: flex; align-items: center; }
-  .td-ticker { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--amber); font-size: 0.85rem; }
-  .td-investor { color: var(--text); font-size: 0.8rem; }
-  .td-type { }
-  .td-lf { }
-  .td-shares { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text2); }
-  .td-pct { font-family: 'DM Mono', monospace; font-weight: 500; }
-  .pct-bar-wrap { width: 100%; display: flex; align-items: center; gap: 8px; }
-  .pct-bar { height: 3px; border-radius: 2px; background: var(--border2); flex: 1; overflow: hidden; }
-  .pct-bar-fill { height: 100%; background: var(--amber); border-radius: 2px; transition: width 0.4s; }
-  .pct-bar-fill.green { background: var(--green); }
-  .pct-bar-fill.red { background: var(--red); }
-  .pct-val { font-family: 'DM Mono', monospace; font-size: 0.75rem; min-width: 42px; text-align: right; }
+/* TICKER GRID */
+.ticker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:1.5rem}
+.ticker-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.ticker-card:hover{border-color:var(--amber-border)}
+.ticker-card.open{border-color:var(--amber-border)}
+.tc-header{padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.tc-left{display:flex;align-items:center;gap:10px}
+.tc-code{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--amber)}
+.tc-ff{font-family:'DM Mono',monospace;font-size:.72rem;padding:2px 8px;border-radius:3px}
+.ff-low{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.ff-mid{background:var(--amber-glow);color:var(--amber);border:1px solid var(--amber-border)}
+.ff-high{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.tc-right{display:flex;align-items:center;gap:8px}
+.tc-foreign{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--red)}
+.tc-chev{color:var(--text3);transition:transform .2s;font-size:.75rem}
+.ticker-card.open .tc-chev{transform:rotate(180deg)}
+.tc-body{display:none;padding:0 1.25rem 1rem;border-top:1px solid var(--border)}
+.ticker-card.open .tc-body{display:block}
 
-  /* BADGES */
-  .badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; }
-  .badge-CP { background: var(--amber-glow); color: var(--amber); border: 1px solid var(--amber-border); }
-  .badge-ID { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
-  .badge-MF { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-  .badge-IB { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
-  .badge-L { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-  .badge-F { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+/* LF BAR */
+.lf-bar-wrap{padding:.75rem 0;display:flex;flex-direction:column;gap:5px}
+.lf-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2)}
+.lf-track{width:100%;height:5px;border-radius:3px;background:var(--red-bg);overflow:hidden}
+.lf-fill{height:100%;background:var(--green);border-radius:3px;transition:width .5s}
 
-  /* EMPTY STATE */
-  .empty-state { padding: 4rem 2rem; text-align: center; color: var(--text3); }
-  .empty-state-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text2); }
-  .empty-state-sub { font-size: 0.82rem; }
+/* TYPE BREAKDOWN */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:.75rem}
+.type-cell{background:var(--bg3);border-radius:6px;padding:6px 8px}
+.type-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase}
+.type-val{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;margin-top:2px}
+.type-sub{font-size:.65rem;color:var(--text3);margin-top:1px}
 
-  /* OWNERSHIP PANEL - per ticker */
-  .ticker-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-  .ticker-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
-  .ticker-panel-header:hover { background: var(--bg3); }
-  .ticker-panel-title { display: flex; align-items: center; gap: 12px; }
-  .ticker-code { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--amber); }
-  .ticker-name { font-size: 0.8rem; color: var(--text2); }
-  .ticker-meta { display: flex; align-items: center; gap: 8px; }
-  .ticker-chevron { color: var(--text3); transition: transform 0.2s; }
-  .ticker-panel.open .ticker-chevron { transform: rotate(180deg); }
-  .ticker-panel-body { display: none; }
-  .ticker-panel.open .ticker-panel-body { display: block; }
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:10px 0;font-size:.78rem;color:var(--text2)}
+.page-btns{display:flex;gap:4px;flex-wrap:wrap}
+.page-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-size:.78rem;transition:all .2s}
+.page-btn:hover,.page-btn.active{border-color:var(--amber-border);color:var(--amber);background:var(--amber-glow)}
+.page-btn:disabled{opacity:.3;cursor:not-allowed}
 
-  /* LOCAL vs FOREIGN bar */
-  .lf-bar-wrap { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
-  .lf-bar-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text2); }
-  .lf-bar-labels span { display: flex; align-items: center; gap: 6px; }
-  .lf-bar-labels .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .lf-bar-track { width: 100%; height: 6px; border-radius: 3px; background: var(--red-bg); border: 1px solid var(--red-border); overflow: hidden; }
-  .lf-bar-local { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.5s; }
+/* SCREENER TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.5rem}
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{padding:10px 14px;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.ftable th:hover{color:var(--amber)}
+.ftable td{padding:11px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
+.ftable tr:last-child td{border-bottom:none}
+.ftable tr:hover td{background:var(--bg3)}
 
-  /* NETWORK GRAPH */
-  .graph-container { width: 100%; height: 420px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; position: relative; }
-  .graph-label { position: absolute; top: 14px; left: 14px; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
-  svg.graph { width: 100%; height: 100%; }
-  .graph-tooltip { position: absolute; background: var(--bg2); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; font-size: 0.75rem; color: var(--text); pointer-events: none; opacity: 0; transition: opacity 0.15s; white-space: nowrap; }
-  .graph-legend { display: flex; gap: 16px; padding: 0 1.25rem 1rem; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text2); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+/* SCREENER FILTERS */
+.screener-filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.sel-wrap{position:relative}
+.sel-wrap select{width:100%;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--text);outline:none;appearance:none;cursor:pointer}
+.sel-wrap::after{content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:.75rem}
 
-  /* HEATMAP */
-  .heatmap-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-  .heatmap-controls { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
-  .heatmap-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; }
-  .heatmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 2px; padding: 12px; }
-  .heatmap-cell { border-radius: 6px; padding: 8px 6px; display: flex; flex-direction: column; gap: 3px; cursor: pointer; transition: transform 0.15s, filter 0.15s; min-height: 60px; }
-  .heatmap-cell:hover { transform: scale(1.04); filter: brightness(1.15); }
-  .heatmap-cell-ticker { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; }
-  .heatmap-cell-pct { font-family: 'DM Mono', monospace; font-size: 0.65rem; }
-  .cell-vbull { background: rgba(29,158,117,0.4); color: #1D9E75; }
-  .cell-bull { background: rgba(29,158,117,0.2); color: #1D9E75; }
-  .cell-flat { background: var(--bg3); color: var(--text3); }
-  .cell-bear { background: rgba(226,75,74,0.2); color: #E24B4A; }
-  .cell-vbear { background: rgba(226,75,74,0.4); color: #E24B4A; }
+/* HEATMAP */
+.heatmap-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.5rem}
+.heatmap-controls{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.heatmap-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem}
+.heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:2px;padding:10px}
+.hm-cell{border-radius:6px;padding:7px 6px;cursor:pointer;transition:transform .15s,filter .15s;min-height:52px;display:flex;flex-direction:column;gap:2px}
+.hm-cell:hover{transform:scale(1.05);filter:brightness(1.2)}
+.hm-ticker{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700}
+.hm-val{font-family:'DM Mono',monospace;font-size:.62rem}
+.c-vbull{background:rgba(29,158,117,.45);color:#1D9E75}
+.c-bull{background:rgba(29,158,117,.2);color:#1D9E75}
+.c-flat{background:var(--bg3);color:var(--text3)}
+.c-bear{background:rgba(226,75,74,.2);color:#E24B4A}
+.c-vbear{background:rgba(226,75,74,.45);color:#E24B4A}
+.legend-row{display:flex;gap:14px;padding:0 1.25rem 1rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--text2)}
+.legend-dot{width:9px;height:9px;border-radius:50%}
 
-  /* CONGLOMERATE MAP */
-  .cong-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
-  .cong-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.2s; }
-  .cong-card:hover { border-color: var(--amber-border); }
-  .cong-card.active { border-color: var(--amber-border); background: var(--amber-glow); }
-  .cong-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
-  .cong-tickers { display: flex; flex-wrap: wrap; gap: 5px; }
-  .cong-ticker-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 2px 8px; border-radius: 3px; background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); }
-  .cong-count { font-size: 0.72rem; color: var(--text3); margin-top: 8px; }
+/* CONGLOMERATE */
+.cong-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.cong-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;cursor:pointer;transition:border-color .2s}
+.cong-card:hover,.cong-card.active{border-color:var(--amber-border);background:var(--amber-glow)}
+.cong-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:6px}
+.cong-tickers{display:flex;flex-wrap:wrap;gap:5px}
+.cong-tag{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:3px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
+.cong-count{font-size:.72rem;color:var(--text3);margin-top:8px}
+.cong-detail{margin-top:1rem}
 
-  /* SCREENER */
-  .screener-filters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
-  .select-wrap { position: relative; }
-  .select-wrap select { width: 100%; background: var(--card); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; appearance: none; cursor: pointer; }
-  .select-wrap::after { content: '▾'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; font-size: 0.75rem; }
+/* CONGLOMERATE TABLE */
+.cong-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.cong-row{display:grid;grid-template-columns:80px 1fr 80px 80px 90px;border-bottom:1px solid var(--border);transition:background .15s}
+.cong-row:last-child{border-bottom:none}
+.cong-row:hover{background:var(--bg3)}
+.cong-row.head{background:var(--bg2)}
+.cong-cell{padding:9px 12px;font-size:.78rem;display:flex;align-items:center}
+.cong-cell.mono{font-family:'DM Mono',monospace;font-size:.72rem}
 
-  /* BUTTONS */
-  .btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--amber); color: #0e0e0e; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 14px 24px; border-radius: 8px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.1s; width: 100%; }
-  .btn-primary:hover { opacity: 0.85; }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-secondary { display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border2); cursor: pointer; transition: all 0.2s; }
-  .btn-secondary:hover { border-color: var(--amber-border); color: var(--amber); }
+/* EMPTY */
+.empty{padding:3rem 2rem;text-align:center;color:var(--text3)}
+.empty strong{display:block;font-family:'Syne',sans-serif;font-size:1rem;color:var(--text2);margin-bottom:.5rem}
 
-  /* TABS */
-  .tabs { display: flex; gap: 0; border: 1px solid var(--border2); border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; background: var(--bg3); }
-  .tab { flex: 1; padding: 9px 16px; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); border: none; background: transparent; cursor: pointer; transition: all 0.2s; }
-  .tab.active { background: var(--card); color: var(--amber); border-bottom: 2px solid var(--amber); }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  /* PAGINATION */
-  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; font-size: 0.78rem; color: var(--text2); }
-  .page-btns { display: flex; gap: 4px; }
-  .page-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-size: 0.78rem; transition: all 0.2s; }
-  .page-btn:hover, .page-btn.active { border-color: var(--amber-border); color: var(--amber); background: var(--amber-glow); }
-  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  /* INFO BOX */
-  .info-box { display: flex; align-items: flex-start; gap: 10px; background: var(--amber-glow); border: 1px solid var(--amber-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 2rem; }
-  .info-text { font-size: 0.78rem; color: var(--text2); line-height: 1.6; }
-  .info-text strong { color: var(--text); }
-  .info-text a { color: var(--amber); text-decoration: none; }
-
-  /* FLOAT SCREENER TABLE */
-  .float-table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
-  .float-table { width: 100%; border-collapse: collapse; }
-  .float-table th { padding: 10px 14px; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); text-align: left; border-bottom: 1px solid var(--border); cursor: pointer; }
-  .float-table th:hover { color: var(--amber); }
-  .float-table td { padding: 11px 14px; font-size: 0.82rem; border-bottom: 1px solid var(--border); }
-  .float-table tr:last-child td { border-bottom: none; }
-  .float-table tr:hover td { background: var(--bg3); }
-  .float-risk-low { color: var(--red); }
-  .float-risk-mid { color: var(--amber); }
-  .float-risk-high { color: var(--green); }
-
-  @media (max-width: 640px) {
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    .table-header, .table-row { grid-template-columns: 80px 1fr 80px 70px; }
-    .th:nth-child(5), .th:nth-child(6), .td:nth-child(5), .td:nth-child(6) { display: none; }
-    .screener-filters { grid-template-columns: 1fr; }
-    .cong-grid { grid-template-columns: 1fr; }
-    .market-grid-2 { grid-template-columns: 1fr; }
-  }
+@media(max-width:640px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .ticker-grid{grid-template-columns:1fr}
+  .screener-filters{grid-template-columns:1fr}
+  .cong-grid{grid-template-columns:1fr}
+  .cong-row{grid-template-columns:70px 1fr 70px 80px}
+  .cong-row .cong-cell:nth-child(4){display:none}
+  .type-grid{grid-template-columns:repeat(3,1fr)}
+  .tabs{overflow-x:auto}
+}
 </style>
 </head>
 <body>
@@ -249,143 +209,114 @@
 </nav>
 
 <div class="page">
-  <div class="page-eyebrow">
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor" opacity="0.5"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
-    KSEI · IDX Data · Updated Monthly
+  <div class="eyebrow" id="eyebrow">
+    <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor" opacity=".5"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
+    KSEI · IDX Data · Memuat...
   </div>
   <h1>Ownership<br><span class="accent">Intelligence.</span></h1>
-  <p class="page-sub">Data kepemilikan saham IDX dari KSEI — semua pemegang >1% per ticker. Cari investor, mapping konglomerat, screening free float.</p>
+  <p class="page-sub">Data kepemilikan saham IDX dari KSEI — breakdown lokal/asing per tipe investor untuk semua ticker. Float screener, heatmap, conglomerate map.</p>
 
-  <div class="info-box">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="7" stroke="#EF9F27" stroke-width="1.5"/><path d="M8 7v5M8 5v1" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/></svg>
-    <div class="info-text"><strong>Demo Mode</strong> — Data ini adalah sample. Untuk data live dari KSEI, sambungkan scraper ke <a href="https://www.idx.co.id" target="_blank">idx.co.id</a> endpoint <code style="font-family:'DM Mono',monospace;font-size:0.72rem;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber)">/TradingData/GetStockHolder</code> dan feed ke backend kamu.</div>
-  </div>
-
-  <!-- STATS -->
   <div class="section-label">Market Overview</div>
   <div class="stats-row">
-    <div class="stat"><div class="stat-num" id="stat-tickers">955</div><div class="stat-label">Tickers</div></div>
-    <div class="stat"><div class="stat-num c-green" id="stat-investors">5,270</div><div class="stat-label">Investors</div></div>
-    <div class="stat"><div class="stat-num c-blue" id="stat-local">57.3%</div><div class="stat-label">Local</div></div>
-    <div class="stat"><div class="stat-num c-red" id="stat-foreign">42.7%</div><div class="stat-label">Foreign</div></div>
+    <div class="stat"><div class="stat-num" id="st-tickers">—</div><div class="stat-label">Tickers</div></div>
+    <div class="stat"><div class="stat-num g" id="st-local">—</div><div class="stat-label">Kepemilikan Lokal</div></div>
+    <div class="stat"><div class="stat-num r" id="st-foreign">—</div><div class="stat-label">Kepemilikan Asing</div></div>
+    <div class="stat"><div class="stat-num b" id="st-date">—</div><div class="stat-label">Data Per</div></div>
   </div>
 
-  <!-- TABS -->
+  <div class="status-bar">
+    <div class="dot loading" id="statusDot"></div>
+    <span id="statusText">Memuat data KSEI...</span>
+  </div>
+
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('search')">🔍 Search</button>
+    <button class="tab active" onclick="switchTab('search')">🔍 Ticker</button>
     <button class="tab" onclick="switchTab('screener')">📊 Float Screener</button>
-    <button class="tab" onclick="switchTab('conglomerate')">🏢 Conglomerate</button>
+    <button class="tab" onclick="switchTab('conglomerate')">🏢 Konglomerat</button>
     <button class="tab" onclick="switchTab('heatmap')">🗺️ Heatmap</button>
   </div>
 
-  <!-- SEARCH TAB -->
+  <!-- TICKER TAB -->
   <div class="tab-panel active" id="tab-search">
     <div class="search-wrap">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <input class="search-input" id="searchInput" type="text" placeholder="Cari ticker (BBCA) atau investor (Lo Kheng Hong)..." oninput="onSearch()">
+      <input class="search-input" id="searchInput" type="text" placeholder="Cari ticker... (BBCA, TLKM, BBRI)" oninput="onSearch()">
     </div>
-    <div class="search-hint">Contoh: <span>BBCA</span>, <span>LO KHENG HONG</span>, <span>GOVT OF NORWAY</span>, <span>DANANTARA</span></div>
+    <div class="search-hint">Contoh: <span>BBCA</span> · <span>ADRO</span> · <span>AMMN</span> · <span>DCII</span></div>
 
-    <div class="filter-row" style="margin-top:1rem">
-      <button class="chip active" onclick="toggleFilter(this,'all')">Semua</button>
-      <button class="chip" onclick="toggleFilter(this,'CP')">🏢 Corporate</button>
-      <button class="chip" onclick="toggleFilter(this,'ID')">👤 Individual</button>
-      <button class="chip" onclick="toggleFilter(this,'MF')">📈 Mutual Fund</button>
-      <button class="chip" onclick="toggleFilter(this,'IB')">🏦 Inv. Bank</button>
-      <button class="chip active-green" onclick="toggleFilter(this,'L')" id="chip-L">🇮🇩 Lokal</button>
-      <button class="chip active-red" onclick="toggleFilter(this,'F')" id="chip-F">🌏 Asing</button>
+    <div class="filter-row">
+      <button class="chip active" onclick="setSort(this,'ff-asc')">Float ↑</button>
+      <button class="chip" onclick="setSort(this,'ff-desc')">Float ↓</button>
+      <button class="chip" onclick="setSort(this,'foreign-desc')">Asing ↓</button>
+      <button class="chip" onclick="setSort(this,'foreign-asc')">Asing ↑</button>
+      <button class="chip" onclick="setSort(this,'ticker-asc')">A–Z</button>
     </div>
 
-    <div class="status-bar" style="margin-top:1rem">
-      <div class="status-dot ready" id="statusDot"></div>
-      <span id="statusText">Sample data loaded — 6 records ditampilkan</span>
-    </div>
-
-    <!-- TABLE -->
-    <div class="table-wrap">
-      <div class="table-header">
-        <div class="th sorted" onclick="sortTable('ticker')">Ticker ↕</div>
-        <div class="th" onclick="sortTable('investor')">Investor</div>
-        <div class="th" onclick="sortTable('type')">Tipe</div>
-        <div class="th" onclick="sortTable('lf')">L/F</div>
-        <div class="th" onclick="sortTable('shares')">Shares</div>
-        <div class="th sorted" onclick="sortTable('pct')">% Kepemilikan ↕</div>
-      </div>
-      <div id="tableBody"></div>
-    </div>
+    <div id="tickerGrid" class="ticker-grid"></div>
     <div class="pagination">
-      <span id="pageInfo" style="font-size:0.78rem;color:var(--text3)"></span>
+      <span id="pageInfo"></span>
       <div class="page-btns" id="pageBtns"></div>
-    </div>
-
-    <!-- TICKER DETAIL PANELS -->
-    <div style="margin-top:1.5rem">
-      <div class="section-label">Detail Per Ticker</div>
-      <div id="tickerPanels"></div>
     </div>
   </div>
 
   <!-- FLOAT SCREENER TAB -->
   <div class="tab-panel" id="tab-screener">
     <div class="screener-filters">
-      <div class="select-wrap">
-        <select id="floatFilter" onchange="renderFloatTable()">
+      <div class="sel-wrap">
+        <select id="ffFilter" onchange="renderScreener()">
           <option value="all">Semua Float</option>
           <option value="low">Low Float (&lt;15%)</option>
-          <option value="mid">Mid Float (15-50%)</option>
+          <option value="mid">Mid Float (15–50%)</option>
           <option value="high">High Float (&gt;50%)</option>
         </select>
       </div>
-      <div class="select-wrap">
-        <select id="sectorFilter" onchange="renderFloatTable()">
-          <option value="all">Semua Sektor</option>
-          <option value="BANKING">Banking</option>
-          <option value="ENERGY">Energy</option>
-          <option value="CONSUMER">Consumer</option>
-          <option value="PROPERTY">Property</option>
-          <option value="INFRA">Infrastruktur</option>
+      <div class="sel-wrap">
+        <select id="lfFilter" onchange="renderScreener()">
+          <option value="all">Semua L/F</option>
+          <option value="foreign-high">Asing Dominan (&gt;30%)</option>
+          <option value="local-high">Lokal Dominan (&gt;70%)</option>
         </select>
       </div>
-      <div class="select-wrap">
-        <select id="sortFloat" onchange="renderFloatTable()">
-          <option value="float-asc">Float ↑ Terendah</option>
-          <option value="float-desc">Float ↓ Tertinggi</option>
-          <option value="mktcap-desc">Market Cap ↓</option>
+      <div class="sel-wrap">
+        <select id="sortScreener" onchange="renderScreener()">
+          <option value="ff-asc">Float ↑ Terendah</option>
+          <option value="ff-desc">Float ↓ Tertinggi</option>
+          <option value="foreign-desc">Asing ↓</option>
+          <option value="ticker-asc">Ticker A–Z</option>
         </select>
       </div>
     </div>
-    <div class="float-table-wrap">
-      <table class="float-table">
+    <div class="table-wrap">
+      <table class="ftable">
         <thead>
           <tr>
             <th>Ticker</th>
-            <th>Perusahaan</th>
-            <th>Sektor</th>
-            <th>Top Holder</th>
-            <th>% Held</th>
+            <th>Lokal %</th>
+            <th>Asing %</th>
             <th>Est. Free Float</th>
+            <th>Top Tipe Lokal</th>
+            <th>Top Tipe Asing</th>
             <th>Risk</th>
           </tr>
         </thead>
-        <tbody id="floatTableBody"></tbody>
+        <tbody id="screenerBody"></tbody>
       </table>
     </div>
   </div>
 
   <!-- CONGLOMERATE TAB -->
   <div class="tab-panel" id="tab-conglomerate">
-    <p class="page-sub" style="margin-bottom:1.5rem">Klik grup konglomerat untuk lihat semua saham yang mereka kontrol.</p>
+    <p class="page-sub" style="margin-bottom:1.5rem">Klik grup untuk lihat breakdown ownership tiap ticker dalam konglomerat.</p>
     <div class="cong-grid" id="congGrid"></div>
-    <div id="congDetail" style="display:none">
-      <div class="section-label" id="congDetailLabel">Detail Grup</div>
-      <div class="table-wrap">
-        <div class="table-header">
-          <div class="th">Ticker</div>
-          <div class="th">Perusahaan</div>
-          <div class="th">Investor</div>
-          <div class="th">Tipe</div>
-          <div class="th">L/F</div>
-          <div class="th">%</div>
+    <div class="cong-detail" id="congDetail" style="display:none">
+      <div class="section-label" id="congDetailLabel">Detail</div>
+      <div class="cong-table-wrap">
+        <div class="cong-row head">
+          <div class="cong-cell">Ticker</div>
+          <div class="cong-cell">Lokal %</div>
+          <div class="cong-cell">Asing %</div>
+          <div class="cong-cell">Free Float</div>
+          <div class="cong-cell">Total Saham</div>
         </div>
         <div id="congDetailBody"></div>
       </div>
@@ -396,480 +327,356 @@
   <div class="tab-panel" id="tab-heatmap">
     <div class="heatmap-wrap">
       <div class="heatmap-controls">
-        <div class="heatmap-title">IDX Market — Foreign Ownership Heatmap</div>
-        <div style="display:flex;gap:8px">
-          <button class="chip active" onclick="switchHeatmap(this,'foreign')">% Asing</button>
-          <button class="chip" onclick="switchHeatmap(this,'float')">Free Float</button>
-          <button class="chip" onclick="switchHeatmap(this,'change')">Chg %</button>
+        <div class="heatmap-title">IDX Market Heatmap</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip active" onclick="setHeatmap(this,'foreign')">% Asing</button>
+          <button class="chip" onclick="setHeatmap(this,'float')">Free Float</button>
+          <button class="chip" onclick="setHeatmap(this,'local')">% Lokal</button>
         </div>
       </div>
-      <div class="heatmap-grid" id="heatmapGrid"></div>
+      <div class="heatmap-grid" id="hmGrid"></div>
     </div>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;padding:0 0 1rem">
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(226,75,74,0.6)"></div> &gt;50% Asing / Sangat Bear</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(226,75,74,0.3)"></div> 30-50% / Bear</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--bg3)"></div> Flat</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(29,158,117,0.3)"></div> Bull</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(29,158,117,0.6)"></div> &lt;10% Asing / Sangat Bull</div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(29,158,117,.5)"></div>Sangat rendah / Bullish</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(29,158,117,.25)"></div>Rendah</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--bg3)"></div>Tengah</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(226,75,74,.25)"></div>Tinggi</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(226,75,74,.5)"></div>Sangat tinggi / Bearish</div>
     </div>
   </div>
-
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
-// ─── DATA (loaded from data/ksei.json) ─────────────────────────
-let SAMPLE_DATA = [];
-let DATA_META = { generated_at: null, stats: {} };
+// ─── STATE ──────────────────────────────────────────────────────
+let DATA = [];           // raw records dari ksei.json
+let filtered = [];       // setelah search/sort
+let currentPage = 1;
+const PAGE = 20;
+let sortMode = 'ff-asc';
+let hmMode = 'foreign';
+
+const TYPE_FULL = {IS:'Insurance',CP:'Corporate',PF:'Pension Fund',IB:'Inv.Bank',ID:'Individual',MF:'Mutual Fund',SC:'Securities',FD:'Foundation',OT:'Other'};
+const TYPES = ['CP','ID','MF','IS','PF','IB','SC','FD','OT'];
 
 const CONGLOMERATES = [
-  { name:'Danantara / Negara', tickers:['BBRI','TLKM','BMRI','GIAA','PGAS','PTBA','ADHI','WIKA','WTON','KAEF','INAF','SMBR'], color:'amber' },
-  { name:'Salim Group', tickers:['LSIP','IFII','ICBP','INDF','SIMP','MYOR','ITMG','BSDE','DILD'], color:'green' },
-  { name:'Djarum / BCA Group', tickers:['BBCA','BBIA','KOPI','MAPI','HERO','CARS'], color:'blue' },
-  { name:'Jardine Group', tickers:['ASII','UNTR','AALI','HMSP','RALS'], color:'purple' },
-  { name:'Vale / Asing Mining', tickers:['INCO','ANTM','TINS','MDKA'], color:'red' },
-  { name:'Sinar Mas Group', tickers:['SMGR','FPNI','DSSA','PNIN','LPKR','BSDE'], color:'amber' },
+  {name:'Danantara / Negara',     tickers:['BBRI','TLKM','BMRI','BBNI','GIAA','PGAS','PTBA','ADHI','WIKA','WTON','KAEF','ANTM','TINS']},
+  {name:'Djarum / BCA Group',     tickers:['BBCA','MAPI','MAPS','KOPI','CARS','BBIA']},
+  {name:'Salim Group',            tickers:['LSIP','ICBP','INDF','SIMP','IFII','BSDE']},
+  {name:'Jardine / Astra Group',  tickers:['ASII','UNTR','AALI','HMSP','RALS','TURI']},
+  {name:'Prajogo Pangestu',       tickers:['BREN','TPIA','CUAN','BRPT','CTBN']},
+  {name:'Sinar Mas Group',        tickers:['SMGR','FPNI','DSSA','PNIN','LPKR','BSDE','INKP','TKIM']},
+  {name:'Bakrie Group',           tickers:['BUMI','BNBR','ELTY','VIVA','UNSP','BTEL']},
+  {name:'MNC / Hary Tanoe',       tickers:['BHIT','MNCN','BMTR','RCTI','KBLV']},
 ];
 
-// ─── STATE ─────────────────────────────────────────────────────
-let filteredData = [...SAMPLE_DATA];
-let activeFilters = { type:'all', lf: ['L','F'] };
-let currentPage = 1;
-const PAGE_SIZE = 8;
-let sortKey = 'pct', sortDir = -1;
-let heatmapMode = 'foreign';
+// ─── UTILS ──────────────────────────────────────────────────────
+function fmt(n){
+  if(n>=1e12) return (n/1e12).toFixed(2)+'T';
+  if(n>=1e9)  return (n/1e9).toFixed(2)+'B';
+  if(n>=1e6)  return (n/1e6).toFixed(1)+'M';
+  return n?.toLocaleString()||'0';
+}
+function topType(obj){
+  return TYPES.reduce((a,t)=>(obj[t]||0)>(obj[a]||0)?t:a, TYPES[0]);
+}
+function ffClass(ff){
+  return ff<10?'ff-low':ff<40?'ff-mid':'ff-high';
+}
+function ffRisk(ff){
+  return ff<5?'⚠️ Very Low':ff<15?'🔴 Low':ff<50?'🟡 Mid':'🟢 High';
+}
 
-// ─── UTILS ─────────────────────────────────────────────────────
-function fmt(n) {
-  if (n >= 1e9) return (n/1e9).toFixed(2)+'B';
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  return n.toLocaleString();
+// ─── LOAD DATA ──────────────────────────────────────────────────
+async function loadData(){
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  try {
+    const res = await fetch('data/ksei.json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json = await res.json();
+
+    DATA = (json.records||[]).filter(r=>r.ticker && r.sec_num>0);
+    const s = json.stats||{};
+    const dd = json.data_date||'';
+
+    document.getElementById('st-tickers').textContent = DATA.length.toLocaleString();
+    document.getElementById('st-local').textContent   = (s.local_pct||0)+'%';
+    document.getElementById('st-foreign').textContent = (s.foreign_pct||0)+'%';
+    document.getElementById('st-date').textContent    = dd||'—';
+    document.getElementById('eyebrow').innerHTML =
+      `<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor" opacity=".5"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
+      KSEI · IDX Data · ${dd}`;
+
+    dot.className='dot ready';
+    txt.textContent=`${DATA.length.toLocaleString()} tickers loaded · Data per ${dd}`;
+
+    applySearch();
+    renderScreener();
+    renderConglomerate();
+
+  } catch(e){
+    dot.className='dot error';
+    txt.textContent='Gagal load data/ksei.json';
+    console.error(e);
+  }
 }
 
 // ─── TABS ───────────────────────────────────────────────────────
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.remove('active'));
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['search','screener','conglomerate','heatmap'];
+    t.classList.toggle('active', ids[i]===id);
+  });
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  const tabs = document.querySelectorAll('.tab');
-  const map = ['search','screener','conglomerate','heatmap'];
-  tabs[map.indexOf(id)].classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
-  if (id === 'heatmap') renderHeatmap();
-  if (id === 'conglomerate') renderConglomerate();
-  if (id === 'screener') renderFloatTable();
+  if(id==='heatmap') renderHeatmap();
 }
 
-// ─── SEARCH + FILTER ────────────────────────────────────────────
-function onSearch() {
-  applyFilters();
-}
+// ─── SEARCH + SORT ──────────────────────────────────────────────
+function onSearch(){ currentPage=1; applySearch(); }
 
-function toggleFilter(btn, val) {
-  const allChips = document.querySelectorAll('.filter-row .chip');
-  if (val === 'all') {
-    allChips.forEach(c => c.classList.remove('active','active-green','active-red'));
-    btn.classList.add('active');
-    activeFilters.type = 'all';
-    activeFilters.lf = ['L','F'];
-  } else if (val === 'L') {
-    btn.classList.toggle('active-green');
-    if (btn.classList.contains('active-green')) {
-      if (!activeFilters.lf.includes('L')) activeFilters.lf.push('L');
-    } else {
-      activeFilters.lf = activeFilters.lf.filter(x=>x!=='L');
-    }
-  } else if (val === 'F') {
-    btn.classList.toggle('active-red');
-    if (btn.classList.contains('active-red')) {
-      if (!activeFilters.lf.includes('F')) activeFilters.lf.push('F');
-    } else {
-      activeFilters.lf = activeFilters.lf.filter(x=>x!=='F');
-    }
-  } else {
-    allChips.forEach(c => { if(!['L','F'].includes(c.textContent.trim().split(' ').pop())) c.classList.remove('active'); });
-    if (activeFilters.type === val) { activeFilters.type = 'all'; btn.classList.remove('active'); }
-    else { activeFilters.type = val; btn.classList.add('active'); }
-  }
-  applyFilters();
-}
-
-function applyFilters() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  filteredData = SAMPLE_DATA.filter(row => {
-    const matchQ = !q || row.ticker.toLowerCase().includes(q) || row.investor.toLowerCase().includes(q) || row.company.toLowerCase().includes(q);
-    const matchType = activeFilters.type === 'all' || row.type === activeFilters.type;
-    const matchLF = activeFilters.lf.length === 0 || activeFilters.lf.includes(row.lf);
-    return matchQ && matchType && matchLF;
-  });
+function setSort(btn, mode){
+  document.querySelectorAll('.filter-row .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  sortMode = mode;
   currentPage = 1;
-  sortData();
-  renderTable();
-  renderTickerPanels();
+  applySearch();
 }
 
-// ─── SORT ───────────────────────────────────────────────────────
-function sortTable(key) {
-  if (sortKey === key) sortDir *= -1;
-  else { sortKey = key; sortDir = -1; }
-  sortData();
-  renderTable();
-}
-function sortData() {
-  filteredData.sort((a,b) => {
-    let va = a[sortKey], vb = b[sortKey];
-    if (typeof va === 'string') va = va.toLowerCase();
-    if (typeof vb === 'string') vb = vb.toLowerCase();
-    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+function applySearch(){
+  const q = document.getElementById('searchInput').value.trim().toUpperCase();
+  filtered = q ? DATA.filter(r=>r.ticker.includes(q)) : [...DATA];
+
+  // Sort
+  filtered.sort((a,b)=>{
+    if(sortMode==='ff-asc')       return a.free_float - b.free_float;
+    if(sortMode==='ff-desc')      return b.free_float - a.free_float;
+    if(sortMode==='foreign-desc') return b.foreign.pct - a.foreign.pct;
+    if(sortMode==='foreign-asc')  return a.foreign.pct - b.foreign.pct;
+    if(sortMode==='ticker-asc')   return a.ticker.localeCompare(b.ticker);
+    return 0;
   });
+
+  renderGrid();
 }
 
-// ─── TABLE RENDER ───────────────────────────────────────────────
-function renderTable() {
-  const body = document.getElementById('tableBody');
-  const start = (currentPage-1)*PAGE_SIZE, end = start+PAGE_SIZE;
-  const page = filteredData.slice(start, end);
-  if (!page.length) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-state-title">Tidak ada data</div><div class="empty-state-sub">Coba ubah filter atau kata kunci pencarian</div></div>`;
-    document.getElementById('pageInfo').textContent = '0 results';
-    document.getElementById('pageBtns').innerHTML = '';
+function renderGrid(){
+  const grid = document.getElementById('tickerGrid');
+  const start = (currentPage-1)*PAGE;
+  const page  = filtered.slice(start, start+PAGE);
+
+  if(!page.length){
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><strong>Ticker tidak ditemukan</strong>Coba cari ticker lain</div>`;
+    document.getElementById('pageInfo').textContent='';
+    document.getElementById('pageBtns').innerHTML='';
     return;
   }
-  body.innerHTML = page.map(row => `
-    <div class="table-row">
-      <div class="td td-ticker">${row.ticker}</div>
-      <div class="td td-investor">${row.investor}</div>
-      <div class="td td-type"><span class="badge badge-${row.type}">${row.type}</span></div>
-      <div class="td td-lf"><span class="badge badge-${row.lf}">${row.lf}</span></div>
-      <div class="td td-shares">${fmt(row.shares)}</div>
-      <div class="td" style="flex-direction:column;align-items:stretch;gap:4px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div class="pct-bar" style="flex:1;margin-right:8px"><div class="pct-bar-fill${row.lf==='F'?' red':''}" style="width:${Math.min(row.pct*1.5,100)}%"></div></div>
-          <span class="pct-val" style="color:${row.lf==='F'?'var(--red)':row.pct>50?'var(--amber)':'var(--green)'}">${row.pct.toFixed(2)}%</span>
+
+  grid.innerHTML = page.map(r=>{
+    const lp = r.local.pct||0;
+    const fp = r.foreign.pct||0;
+    const ff = r.free_float||0;
+    const localTotal  = r.local.total||0;
+    const foreignTotal= r.foreign.total||0;
+    const grand = localTotal+foreignTotal||1;
+    const localBarW = Math.round(localTotal/grand*100);
+    const tl = topType(r.local);
+    const tf = topType(r.foreign);
+
+    return `<div class="ticker-card" id="tc-${r.ticker}" onclick="toggleCard('${r.ticker}')">
+      <div class="tc-header">
+        <div class="tc-left">
+          <span class="tc-code">${r.ticker}</span>
+          <span class="tc-ff ${ffClass(ff)}">${ff.toFixed(1)}% float</span>
+        </div>
+        <div class="tc-right">
+          <span class="tc-foreign">${fp.toFixed(1)}% asing</span>
+          <span class="tc-chev">▼</span>
         </div>
       </div>
-    </div>
-  `).join('');
-  const total = filteredData.length, totalPages = Math.ceil(total/PAGE_SIZE);
-  document.getElementById('pageInfo').textContent = `${start+1}–${Math.min(end,total)} dari ${total} records`;
-  const pb = document.getElementById('pageBtns');
-  pb.innerHTML = `
-    <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage<=1?'disabled':''}>‹</button>
-    ${Array.from({length:totalPages},(_,i)=>`<button class="page-btn ${i+1===currentPage?'active':''}" onclick="goPage(${i+1})">${i+1}</button>`).join('')}
-    <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}>›</button>
-  `;
-}
-
-function goPage(p) {
-  const total = Math.ceil(filteredData.length/PAGE_SIZE);
-  if (p < 1 || p > total) return;
-  currentPage = p;
-  renderTable();
-}
-
-// ─── TICKER PANELS ──────────────────────────────────────────────
-function renderTickerPanels() {
-  const tickers = [...new Set(filteredData.map(r=>r.ticker))].slice(0,5);
-  const container = document.getElementById('tickerPanels');
-  container.innerHTML = tickers.map(ticker => {
-    const rows = filteredData.filter(r=>r.ticker===ticker);
-    const total = rows.reduce((s,r)=>s+r.pct,0);
-    const localPct = rows.filter(r=>r.lf==='L').reduce((s,r)=>s+r.pct,0);
-    const foreignPct = rows.filter(r=>r.lf==='F').reduce((s,r)=>s+r.pct,0);
-    const localTotal = localPct + foreignPct || 1;
-    return `
-    <div class="ticker-panel" id="panel-${ticker}">
-      <div class="ticker-panel-header" onclick="togglePanel('${ticker}')">
-        <div class="ticker-panel-title">
-          <span class="ticker-code">${ticker}</span>
-          <span class="ticker-name">${rows[0].company}</span>
-          <span class="badge badge-${rows[0].sector||'CP'}">${rows[0].sector||''}</span>
-        </div>
-        <div class="ticker-meta">
-          <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text2)">${rows.length} holders</span>
-          <svg class="ticker-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </div>
-      </div>
-      <div class="ticker-panel-body">
+      <div class="tc-body">
         <div class="lf-bar-wrap">
-          <div class="lf-bar-labels">
-            <span><div class="dot" style="background:var(--green)"></div>Lokal ${localPct.toFixed(1)}%</span>
-            <span>Asing ${foreignPct.toFixed(1)}% <div class="dot" style="background:var(--red)"></div></span>
+          <div class="lf-labels">
+            <span style="color:var(--green)">🇮🇩 Lokal ${lp.toFixed(2)}%</span>
+            <span style="color:var(--red)">Asing ${fp.toFixed(2)}% 🌏</span>
           </div>
-          <div class="lf-bar-track">
-            <div class="lf-bar-local" style="width:${(localPct/localTotal*100).toFixed(1)}%"></div>
+          <div class="lf-track"><div class="lf-fill" style="width:${localBarW}%"></div></div>
+          <div style="font-size:.68rem;color:var(--text3);text-align:center;margin-top:3px">
+            Total tercatat: ${(lp+fp).toFixed(2)}% · Free float est. ~${ff.toFixed(2)}%
           </div>
-          <div style="font-size:0.72rem;color:var(--text3);text-align:center;margin-top:4px">Total disclosed: ${total.toFixed(2)}% · Free float est. ~${(100-total).toFixed(1)}%</div>
         </div>
-        <div>
-          ${rows.map(r=>`
-          <div class="table-row" style="grid-template-columns:1fr 110px 90px 100px 110px">
-            <div class="td td-investor">${r.investor}</div>
-            <div class="td"><span class="badge badge-${r.type}">${r.type}</span></div>
-            <div class="td"><span class="badge badge-${r.lf}">${r.lf}</span></div>
-            <div class="td td-shares">${fmt(r.shares)}</div>
-            <div class="td" style="color:${r.lf==='F'?'var(--red)':'var(--green)'};font-family:'DM Mono',monospace;font-weight:600">${r.pct.toFixed(2)}%</div>
-          </div>`).join('')}
+        <div class="type-grid">
+          ${TYPES.filter(t=>(r.local[t]||0)+(r.foreign[t]||0)>0).slice(0,6).map(t=>{
+            const shares = (r.local[t]||0)+(r.foreign[t]||0);
+            const pct = shares/r.sec_num*100;
+            const lshares = r.local[t]||0;
+            const fshares = r.foreign[t]||0;
+            const isLocal = lshares >= fshares;
+            return `<div class="type-cell">
+              <div class="type-label">${t} · ${TYPE_FULL[t]}</div>
+              <div class="type-val" style="color:${isLocal?'var(--green)':'var(--red)'}">${pct.toFixed(2)}%</div>
+              <div class="type-sub">${isLocal?'🇮🇩':'🌏'} ${fmt(shares)}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--text3);font-family:'DM Mono',monospace">
+          ${fmt(r.sec_num)} total saham · Price Rp${r.price?.toLocaleString()||'—'}
         </div>
       </div>
     </div>`;
   }).join('');
-}
 
-function togglePanel(ticker) {
-  document.getElementById('panel-'+ticker).classList.toggle('open');
-}
-
-// ─── FLOAT SCREENER ─────────────────────────────────────────────
-function renderFloatTable() {
-  // Gunakan HEATMAP_DATA jika sudah ada data real, fallback ke SAMPLE_DATA
-  const source = (window.HEATMAP_DATA && window.HEATMAP_DATA.length > 0)
-    ? window.HEATMAP_DATA
-    : null;
-
-  const floatF  = document.getElementById('floatFilter').value;
-  const sectorF = document.getElementById('sectorFilter').value;
-  const sortF   = document.getElementById('sortFloat').value;
-
-  let rows;
-  if (source) {
-    // Data real dari ksei.json
-    rows = source.map(d => ({
-      ticker:    d.ticker,
-      company:   d.ticker,
-      sector:    d._sector || '',
-      mktcap:    d.mktcap,
-      freeFloat: d.float,
-      foreignPct:d.foreign,
-      topHolder: d._topType || '—',
-      topPct:    d._topPct  || 0,
-    }));
+  // Pagination
+  const total = filtered.length;
+  const totalPages = Math.ceil(total/PAGE);
+  document.getElementById('pageInfo').textContent=`${start+1}–${Math.min(start+PAGE,total)} dari ${total.toLocaleString()} ticker`;
+  const pb = document.getElementById('pageBtns');
+  const maxShow = 8;
+  let pages = [];
+  if(totalPages<=maxShow){
+    pages = Array.from({length:totalPages},(_,i)=>i+1);
   } else {
-    // Fallback: hitung dari SAMPLE_DATA
-    const byTicker = {};
-    SAMPLE_DATA.forEach(r => {
-      if (!byTicker[r.ticker]) byTicker[r.ticker] = { ticker:r.ticker, company:r.company, sector:r.sector, mktcap:r.mktcap, holders:[] };
-      byTicker[r.ticker].holders.push(r);
-    });
-    rows = Object.values(byTicker).map(d => {
-      const totalHeld = d.holders.reduce((s,r)=>s+r.pct, 0);
-      const top = d.holders.sort((a,b)=>b.pct-a.pct)[0] || {};
-      return { ...d, freeFloat: Math.max(0, 100-totalHeld), foreignPct: 0, topHolder: top.investor||'—', topPct: top.pct||0 };
-    });
+    pages = [1];
+    let s2 = Math.max(2,currentPage-2), e2 = Math.min(totalPages-1,currentPage+2);
+    if(s2>2) pages.push('...');
+    for(let i=s2;i<=e2;i++) pages.push(i);
+    if(e2<totalPages-1) pages.push('...');
+    pages.push(totalPages);
   }
+  pb.innerHTML =
+    `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage<=1?'disabled':''}>‹</button>`+
+    pages.map(p=>p==='...'
+      ? `<span style="padding:0 4px;color:var(--text3)">…</span>`
+      : `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`
+    ).join('')+
+    `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}>›</button>`;
+}
 
-  if (floatF === 'low') rows = rows.filter(r=>r.freeFloat < 15);
-  else if (floatF === 'mid') rows = rows.filter(r=>r.freeFloat >= 15 && r.freeFloat <= 50);
-  else if (floatF === 'high') rows = rows.filter(r=>r.freeFloat > 50);
-  if (sectorF !== 'all') rows = rows.filter(r=>r.sector === sectorF);
-  if (sortF === 'float-asc') rows.sort((a,b)=>a.freeFloat-b.freeFloat);
-  else if (sortF === 'float-desc') rows.sort((a,b)=>b.freeFloat-a.freeFloat);
-  else rows.sort((a,b)=>(b.mktcap||0)-(a.mktcap||0));
+function goPage(p){
+  const total=Math.ceil(filtered.length/PAGE);
+  if(p<1||p>total) return;
+  currentPage=p; renderGrid();
+}
 
-  const tbody = document.getElementById('floatTableBody');
-  if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Tidak ada data — load ksei.json dulu</td></tr>`;
+function toggleCard(ticker){
+  const el=document.getElementById('tc-'+ticker);
+  el.classList.toggle('open');
+}
+
+// ─── SCREENER ───────────────────────────────────────────────────
+function renderScreener(){
+  const ffF  = document.getElementById('ffFilter').value;
+  const lfF  = document.getElementById('lfFilter').value;
+  const sortF= document.getElementById('sortScreener').value;
+
+  let rows = [...DATA];
+  if(ffF==='low')  rows=rows.filter(r=>r.free_float<15);
+  else if(ffF==='mid')  rows=rows.filter(r=>r.free_float>=15&&r.free_float<=50);
+  else if(ffF==='high') rows=rows.filter(r=>r.free_float>50);
+  if(lfF==='foreign-high') rows=rows.filter(r=>r.foreign.pct>30);
+  else if(lfF==='local-high') rows=rows.filter(r=>r.local.pct>70);
+
+  rows.sort((a,b)=>{
+    if(sortF==='ff-asc')       return a.free_float-b.free_float;
+    if(sortF==='ff-desc')      return b.free_float-a.free_float;
+    if(sortF==='foreign-desc') return b.foreign.pct-a.foreign.pct;
+    if(sortF==='ticker-asc')   return a.ticker.localeCompare(b.ticker);
+    return 0;
+  });
+
+  const tbody = document.getElementById('screenerBody');
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">Tidak ada data</td></tr>`;
     return;
   }
-  tbody.innerHTML = rows.map(r => {
-    const ff = r.freeFloat || 0;
-    const risk = ff < 5 ? '⚠️ Very Low' : ff < 15 ? '🔴 Low' : ff < 50 ? '🟡 Mid' : '🟢 High';
-    const riskClass = ff < 15 ? 'float-risk-low' : ff < 50 ? 'float-risk-mid' : 'float-risk-high';
-    const ffColor = ff < 15 ? 'var(--red)' : ff < 50 ? 'var(--amber)' : 'var(--green)';
+  tbody.innerHTML = rows.slice(0,200).map(r=>{
+    const ff=r.free_float||0;
+    const ffCol = ff<15?'var(--red)':ff<50?'var(--amber)':'var(--green)';
+    const tl = topType(r.local);
+    const tf = topType(r.foreign);
     return `<tr>
       <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--amber)">${r.ticker}</td>
-      <td style="color:var(--text2);font-size:0.78rem">${r.company}</td>
-      <td>${r.sector ? `<span class="badge badge-CP">${r.sector}</span>` : '—'}</td>
-      <td style="font-family:'DM Mono',monospace;color:var(--red);font-size:0.78rem">${r.foreignPct?.toFixed(1)||'—'}% asing</td>
-      <td style="font-family:'DM Mono',monospace;font-weight:600;color:${ffColor}">${ff.toFixed(2)}%</td>
-      <td class="${riskClass}" style="font-size:0.75rem">${risk}</td>
+      <td style="color:var(--green);font-family:'DM Mono',monospace">${r.local.pct.toFixed(2)}%</td>
+      <td style="color:var(--red);font-family:'DM Mono',monospace">${r.foreign.pct.toFixed(2)}%</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600;color:${ffCol}">${ff.toFixed(2)}%</td>
+      <td style="font-size:.75rem;color:var(--text2)">${TYPE_FULL[tl]} (${((r.local[tl]||0)/r.sec_num*100).toFixed(1)}%)</td>
+      <td style="font-size:.75rem;color:var(--text2)">${TYPE_FULL[tf]} (${((r.foreign[tf]||0)/r.sec_num*100).toFixed(1)}%)</td>
+      <td style="font-size:.75rem">${ffRisk(ff)}</td>
     </tr>`;
   }).join('');
 }
 
-// ─── CONGLOMERATE ───────────────────────────────────────────────
-let activeCong = null;
-function renderConglomerate() {
-  const grid = document.getElementById('congGrid');
-  grid.innerHTML = CONGLOMERATES.map((g,i) => `
+// ─── CONGLOMERATE ────────────────────────────────────────────────
+function renderConglomerate(){
+  const grid=document.getElementById('congGrid');
+  grid.innerHTML=CONGLOMERATES.map((g,i)=>`
     <div class="cong-card" id="cong-${i}" onclick="selectCong(${i})">
       <div class="cong-name">${g.name}</div>
-      <div class="cong-tickers">${g.tickers.map(t=>`<span class="cong-ticker-tag">${t}</span>`).join('')}</div>
+      <div class="cong-tickers">${g.tickers.map(t=>`<span class="cong-tag">${t}</span>`).join('')}</div>
       <div class="cong-count">${g.tickers.length} tickers</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function selectCong(i) {
+function selectCong(i){
   document.querySelectorAll('.cong-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('cong-'+i).classList.add('active');
-  activeCong = i;
-  const g = CONGLOMERATES[i];
-  const detail = document.getElementById('congDetail');
-  detail.style.display = 'block';
-  document.getElementById('congDetailLabel').textContent = g.name + ' — Holdings';
-  const rows = SAMPLE_DATA.filter(r => g.tickers.includes(r.ticker));
-  const body = document.getElementById('congDetailBody');
-  if (!rows.length) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-state-title">Data tidak tersedia di sample</div><div class="empty-state-sub">Connect ke KSEI scraper untuk data lengkap</div></div>`;
+  const g=CONGLOMERATES[i];
+  const det=document.getElementById('congDetail');
+  det.style.display='block';
+  document.getElementById('congDetailLabel').textContent=g.name+' — Data Kepemilikan';
+  const rows=g.tickers.map(t=>DATA.find(r=>r.ticker===t)).filter(Boolean);
+  const body=document.getElementById('congDetailBody');
+  if(!rows.length){
+    body.innerHTML=`<div class="empty"><strong>Data tidak tersedia</strong>Ticker tidak ada di data KSEI bulan ini</div>`;
     return;
   }
-  body.innerHTML = rows.map(r=>`
-    <div class="table-row">
-      <div class="td td-ticker">${r.ticker}</div>
-      <div class="td" style="font-size:0.78rem;color:var(--text2)">${r.company}</div>
-      <div class="td" style="font-size:0.75rem;color:var(--text2);overflow:hidden">${r.investor}</div>
-      <div class="td"><span class="badge badge-${r.type}">${r.type}</span></div>
-      <div class="td"><span class="badge badge-${r.lf}">${r.lf}</span></div>
-      <div class="td" style="font-family:'DM Mono',monospace;color:${r.lf==='F'?'var(--red)':'var(--green)'};font-weight:600">${r.pct.toFixed(2)}%</div>
-    </div>
-  `).join('');
+  body.innerHTML=rows.map(r=>`
+    <div class="cong-row" onclick="switchTab('search');document.getElementById('searchInput').value='${r.ticker}';onSearch()">
+      <div class="cong-cell" style="font-family:'Syne',sans-serif;font-weight:700;color:var(--amber)">${r.ticker}</div>
+      <div class="cong-cell mono" style="color:var(--green)">${r.local.pct.toFixed(2)}%</div>
+      <div class="cong-cell mono" style="color:var(--red)">${r.foreign.pct.toFixed(2)}%</div>
+      <div class="cong-cell mono" style="color:${r.free_float<15?'var(--red)':r.free_float<50?'var(--amber)':'var(--green)'}">${r.free_float.toFixed(2)}%</div>
+      <div class="cong-cell mono" style="color:var(--text2)">${fmt(r.sec_num)}</div>
+    </div>`).join('');
 }
 
-// ─── HEATMAP ────────────────────────────────────────────────────
-const HEATMAP_DATA = [
-  {ticker:'BBCA',foreign:7.4,float:41.2,change:1.2,mktcap:1050000},
-  {ticker:'BBRI',foreign:3.1,float:41.5,change:-0.8,mktcap:690000},
-  {ticker:'BMRI',foreign:5.2,float:44.4,change:0.5,mktcap:520000},
-  {ticker:'TLKM',foreign:12.3,float:43.9,change:-1.5,mktcap:310000},
-  {ticker:'ASII',foreign:52.6,float:49.9,change:0.3,mktcap:235000},
-  {ticker:'UNTR',foreign:8.1,float:40.3,change:2.1,mktcap:98000},
-  {ticker:'ITMG',foreign:67.1,float:32.9,change:-0.4,mktcap:43000},
-  {ticker:'INCO',foreign:44.3,float:56.9,change:1.8,mktcap:18700},
-  {ticker:'ESSA',foreign:15.1,float:27.7,change:-2.3,mktcap:7800},
-  {ticker:'LSIP',foreign:4.2,float:40.2,change:0.9,mktcap:12500},
-  {ticker:'DCII',foreign:0.2,float:0.2,change:-0.1,mktcap:45000},
-  {ticker:'GIAA',foreign:4.0,float:4.0,change:-3.2,mktcap:8200},
-  {ticker:'BBNI',foreign:18.4,float:43.2,change:0.6,mktcap:190000},
-  {ticker:'BREN',foreign:9.1,float:15.2,change:4.1,mktcap:890000},
-  {ticker:'SMGR',foreign:6.3,float:48.5,change:-0.2,mktcap:38000},
-  {ticker:'PGAS',foreign:11.2,float:43.2,change:0.1,mktcap:95000},
-  {ticker:'ADRO',foreign:34.5,float:54.2,change:1.4,mktcap:120000},
-  {ticker:'ANTM',foreign:21.3,float:35.1,change:-1.1,mktcap:44000},
-  {ticker:'TINS',foreign:8.9,float:34.8,change:0.7,mktcap:9800},
-  {ticker:'MAPI',foreign:28.4,float:49.2,change:2.3,mktcap:22000},
-];
+// ─── HEATMAP ─────────────────────────────────────────────────────
+function setHeatmap(btn,mode){
+  document.querySelectorAll('.heatmap-controls .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  hmMode=mode; renderHeatmap();
+}
 
-function renderHeatmap() {
-  const grid = document.getElementById('heatmapGrid');
-  grid.innerHTML = HEATMAP_DATA.sort((a,b)=>b.mktcap-a.mktcap).map(d => {
-    let val, cls, label;
-    if (heatmapMode === 'foreign') {
-      val = d.foreign;
-      cls = val > 50 ? 'cell-vbear' : val > 30 ? 'cell-bear' : val > 15 ? 'cell-flat' : val > 5 ? 'cell-bull' : 'cell-vbull';
-      label = val.toFixed(1)+'%F';
-    } else if (heatmapMode === 'float') {
-      val = d.float;
-      cls = val < 5 ? 'cell-vbear' : val < 20 ? 'cell-bear' : val < 40 ? 'cell-flat' : val < 60 ? 'cell-bull' : 'cell-vbull';
-      label = val.toFixed(1)+'%';
+function renderHeatmap(){
+  const grid=document.getElementById('hmGrid');
+  if(!DATA.length){ grid.innerHTML='<div class="empty">Data belum tersedia</div>'; return; }
+
+  // Sort by market cap proxy (price * sec_num), ambil top 120
+  const sorted=[...DATA].sort((a,b)=>(b.price*b.sec_num)-(a.price*a.sec_num)).slice(0,150);
+
+  grid.innerHTML=sorted.map(r=>{
+    let val,cls,label;
+    if(hmMode==='foreign'){
+      val=r.foreign.pct;
+      cls=val>50?'c-vbear':val>30?'c-bear':val>15?'c-flat':val>5?'c-bull':'c-vbull';
+      label=val.toFixed(1)+'%F';
+    } else if(hmMode==='local'){
+      val=r.local.pct;
+      cls=val>70?'c-vbull':val>50?'c-bull':val>30?'c-flat':val>15?'c-bear':'c-vbear';
+      label=val.toFixed(1)+'%L';
     } else {
-      val = d.change;
-      cls = val < -2 ? 'cell-vbear' : val < 0 ? 'cell-bear' : val === 0 ? 'cell-flat' : val < 2 ? 'cell-bull' : 'cell-vbull';
-      label = (val>=0?'+':'')+val.toFixed(1)+'%';
+      val=r.free_float;
+      cls=val>50?'c-vbull':val>30?'c-bull':val>15?'c-flat':val>5?'c-bear':'c-vbear';
+      label=val.toFixed(1)+'%';
     }
-    return `<div class="heatmap-cell ${cls}" title="${d.ticker}">
-      <div class="heatmap-cell-ticker">${d.ticker}</div>
-      <div class="heatmap-cell-pct">${label}</div>
+    return `<div class="hm-cell ${cls}" title="${r.ticker} — ${label}" onclick="switchTab('search');document.getElementById('searchInput').value='${r.ticker}';onSearch()">
+      <div class="hm-ticker">${r.ticker}</div>
+      <div class="hm-val">${label}</div>
     </div>`;
   }).join('');
 }
 
-function switchHeatmap(btn, mode) {
-  document.querySelectorAll('.heatmap-controls .chip').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  heatmapMode = mode;
-  renderHeatmap();
-}
-
-// ─── INIT — fetch data/ksei.json ────────────────────────────────
-async function loadData() {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-  dot.className = 'status-dot loading';
-  txt.textContent = 'Memuat data KSEI...';
-
-  try {
-    const res = await fetch('data/ksei.json');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-
-    // Format baru dari scraper v2 — data agregat per ticker
-    const raw = json.records || [];
-    DATA_META = { generated_at: json.generated_at, data_date: json.data_date, stats: json.stats || {} };
-
-    // Convert ke format yang bisa dirender tabel:
-    // Tiap ticker jadi beberapa "baris" per tipe investor yang significant
-    SAMPLE_DATA = [];
-    const TYPE_LABEL = { IS:'Insurance', CP:'Corporate', PF:'Pension Fund',
-                         IB:'Inv. Bank', ID:'Individual', MF:'Mutual Fund',
-                         SC:'Securities', FD:'Foundation', OT:'Other' };
-
-    raw.forEach(r => {
-      const secNum = r.sec_num || 1;
-      // Lokal
-      ['IS','CP','PF','IB','ID','MF','SC','FD','OT'].forEach(t => {
-        const shares = (r.local[t] || 0) + (r.foreign[t] || 0);
-        if (shares === 0) return;
-        const pct = shares / secNum * 100;
-        if (pct < 0.5) return; // skip yang sangat kecil
-        SAMPLE_DATA.push({
-          ticker:   r.ticker,
-          company:  r.ticker, // nama perusahaan tidak ada di file agregat
-          investor: TYPE_LABEL[t] + ' (Agregat)',
-          type:     t,
-          lf:       r.local[t] >= r.foreign[t] ? 'L' : 'F',
-          shares:   shares,
-          pct:      +pct.toFixed(4),
-          sector:   r.sector || '',
-          mktcap:   r.price * secNum / 1e9,
-          // Simpan data lengkap untuk heatmap & screener
-          _raw: r,
-        });
-      });
-    });
-
-    // Update stats bar
-    const s = DATA_META.stats;
-    document.getElementById('stat-tickers').textContent  = (s.total_tickers || raw.length).toLocaleString();
-    document.getElementById('stat-investors').textContent = '9 Tipe';
-    document.getElementById('stat-local').textContent    = (s.local_pct || 0) + '%';
-    document.getElementById('stat-foreign').textContent  = (s.foreign_pct || 0) + '%';
-
-    // Update timestamp
-    const dateLabel = DATA_META.data_date || DATA_META.generated_at?.slice(0,10) || '';
-    if (dateLabel) {
-      const d = new Date(dateLabel);
-      const label = isNaN(d) ? dateLabel : d.toLocaleDateString('id-ID', { year:'numeric', month:'long' });
-      document.querySelector('.page-eyebrow').innerHTML =
-        `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor" opacity="0.5"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
-        KSEI · IDX Data · ${label}`;
-    }
-
-    dot.className = 'status-dot ready';
-    txt.textContent = `Data KSEI loaded — ${raw.length.toLocaleString()} tickers · ${dateLabel}`;
-
-    // Hapus info box demo mode
-    const infoBox = document.querySelector('.info-box');
-    if (infoBox) infoBox.remove();
-
-    // Feed HEATMAP_DATA dari data real
-    window.HEATMAP_DATA = raw.map(r => ({
-      ticker:  r.ticker,
-      foreign: r.foreign.pct,
-      float:   r.free_float,
-      change:  0, // tidak ada di file KSEI, perlu dari sumber lain
-      mktcap:  r.price * r.sec_num / 1e9,
-    }));
-
-  } catch (err) {
-    dot.className = 'status-dot error';
-    txt.textContent = 'Gagal load data/ksei.json — jalankan scraper dulu';
-    console.error('loadData error:', err);
-  }
-
-  applyFilters();
-  renderFloatTable();
-}
-
+// ─── INIT ────────────────────────────────────────────────────────
 loadData();
 </script>
 </body>
