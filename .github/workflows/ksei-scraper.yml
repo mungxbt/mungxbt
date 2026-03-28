@@ -2,7 +2,7 @@ name: KSEI Monthly Scraper
 
 on:
   schedule:
-    - cron: "0 19 6 * *"   # Tiap tanggal 6, jam 02:00 WIB
+    - cron: "0 19 6 * *"
   workflow_dispatch:
 
 env:
@@ -12,7 +12,6 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     permissions:
       contents: write
 
@@ -25,25 +24,21 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run scraper
+      - name: Run parser
         run: python scraper.py
 
       - name: Check output
         run: |
-          if [ ! -f data/ksei.json ]; then
-            echo "ERROR: data/ksei.json tidak ditemukan!"
-            exit 1
-          fi
           SIZE=$(wc -c < data/ksei.json)
           echo "ksei.json size: $SIZE bytes"
           if [ "$SIZE" -lt 50000 ]; then
-            echo "ERROR: File terlalu kecil ($SIZE bytes), scraping mungkin gagal"
+            echo "ERROR: File terlalu kecil. Pastikan file .txt ada di data/raw/"
             cat data/ksei.json
             exit 1
           fi
-          echo "✓ File OK"
+          echo "OK"
 
-      - name: Commit & push data
+      - name: Commit & push
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
