@@ -134,6 +134,22 @@
   .farm-type { font-size: 0.72rem; color: var(--text3); margin-top: 1px; }
   .farm-tier { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; color: var(--amber); background: var(--amber-glow); border: 1px solid var(--amber-border); padding: 3px 8px; border-radius: 3px; }
 
+  /* Simpul Arena Banner */
+  .arena-banner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 1.25rem 2rem 0; }
+  .arena-card { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; background: var(--card); border: 1px solid var(--amber-border); border-radius: 12px; padding: 1.4rem 1.75rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+  .arena-card::before { content: ''; position: absolute; inset: 0; background: var(--amber-glow); pointer-events: none; }
+  .arena-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(239,159,39,0.12); }
+  .arena-card-left { position: relative; z-index: 1; }
+  .arena-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .arena-live-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
+  .arena-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .arena-title span { color: var(--amber); }
+  .arena-desc { font-size: 0.78rem; color: var(--text2); line-height: 1.5; max-width: 400px; }
+  .arena-card-right { position: relative; z-index: 1; flex-shrink: 0; display: flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--amber); white-space: nowrap; }
+  .arena-arrow { transition: transform 0.2s; }
+  .arena-card:hover .arena-arrow { transform: translateX(4px); }
+  @media (max-width: 480px) { .arena-banner { padding: 1.5rem 1rem 0; } .arena-card { flex-direction: column; align-items: flex-start; gap: 1rem; } .arena-desc { max-width: 100%; } }
+
   footer { position: relative; z-index: 1; border-top: 1px solid var(--border); max-width: 900px; margin: 3rem auto 0; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
   .footer-left { font-size: 0.75rem; color: var(--text3); font-family: 'DM Mono', monospace; }
   .footer-links { display: flex; gap: 1.5rem; }
@@ -316,6 +332,20 @@
     </div>
   </div>
 </section>
+
+<div class="arena-banner">
+  <a href="calls.html" class="arena-card">
+    <div class="arena-card-left">
+      <div class="arena-eyebrow"><span class="arena-live-dot"></span>Live · Simpulcrypto Group</div>
+      <div class="arena-title">Simpul <span>Arena</span></div>
+      <div class="arena-desc">Member grup adu call, ditrack otomatis — winrate & leaderboard yang buktiin siapa yang beneran jago. DYOR.</div>
+    </div>
+    <div class="arena-card-right">
+      Lihat Arena
+      <svg class="arena-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </div>
+  </a>
+</div>
 
 <section>
   <div class="section-header">
