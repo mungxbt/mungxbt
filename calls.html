@@ -27,25 +27,10 @@
     --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
     --card: #ffffff;
   }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg); color: var(--text);
-    min-height: 100vh; transition: background 0.3s, color 0.3s;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px; pointer-events: none; z-index: 0;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
 
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--bg); border-bottom: 1px solid var(--border);
-    padding: 0 2rem; height: 56px;
-    display: flex; align-items: center; justify-content: space-between;
-    backdrop-filter: blur(12px);
-  }
+  nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); }
   .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
@@ -57,24 +42,14 @@
   .light .theme-btn::after { transform: translateX(16px); }
 
   .hero { position: relative; z-index: 1; padding: 2.5rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow);
-    padding: 3px 9px; border-radius: 4px; margin-bottom: 1.25rem;
-  }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow); padding: 3px 9px; border-radius: 4px; margin-bottom: 1.25rem; }
   .live-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
   h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 0.75rem; color: var(--text); }
   h1 .accent { color: var(--amber); }
   .hero-sub { font-size: 0.85rem; color: var(--text2); max-width: 480px; line-height: 1.6; font-weight: 300; }
 
-  .stats-row {
-    position: relative; z-index: 1; max-width: 900px; margin: 2rem auto 0;
-    padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; border: 1px solid var(--border); background: var(--border);
-    border-radius: 10px; overflow: hidden;
-  }
+  .stats-row { position: relative; z-index: 1; max-width: 900px; margin: 2rem auto 0; padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid var(--border); background: var(--border); border-radius: 10px; overflow: hidden; }
   @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
   .stat { background: var(--card); padding: 1.25rem 1.5rem; transition: background 0.2s; }
   .stat:hover { background: var(--bg3); }
@@ -89,67 +64,41 @@
   .section-line { flex: 1; height: 1px; background: var(--border); }
   .section-count { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
 
-  /* Month selector */
-  .month-select {
-    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em;
-    color: var(--text2); background: var(--bg2); border: 1px solid var(--border2);
-    padding: 4px 10px; border-radius: 4px; cursor: pointer; outline: none;
-    transition: border-color 0.15s;
-  }
+  .month-select { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; color: var(--text2); background: var(--bg2); border: 1px solid var(--border2); padding: 4px 10px; border-radius: 4px; cursor: pointer; outline: none; transition: border-color 0.15s; }
   .month-select:hover, .month-select:focus { border-color: var(--amber-border); color: var(--amber); }
 
   .calls-grid { display: flex; flex-direction: column; gap: 10px; }
-  .call-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 1.1rem 1.4rem; transition: border-color 0.2s, transform 0.15s;
-    display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
-  }
+  .call-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.4rem; transition: border-color 0.2s, transform 0.15s; display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; }
   .call-card:hover { border-color: var(--amber-border); transform: translateY(-1px); }
   .call-card.buy { border-left: 2px solid var(--green); }
   .call-card.sell { border-left: 2px solid var(--red); }
-  .call-dir {
-    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 3px 8px; border-radius: 3px; white-space: nowrap;
-  }
+  .call-dir { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
   .call-dir.buy { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
   .call-dir.sell { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
   .call-main { min-width: 0; }
   .call-symbol { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
   .call-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); margin-top: 3px; }
-  .call-prices { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: flex-end; }
+  .call-prices { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; }
   .call-price-item { text-align: right; }
   .call-price-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 2px; }
   .call-price-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
   .call-price-val.entry { color: var(--amber); }
   .call-price-val.tp { color: var(--green); }
   .call-price-val.sl { color: var(--red); }
-
-  @media (max-width: 580px) {
-    .call-card { grid-template-columns: 1fr; gap: 0.75rem; }
-    .call-prices { justify-content: flex-start; }
-    .call-price-item { text-align: left; }
-  }
+  .call-price-val.fpos { color: var(--green); }
+  .call-price-val.fneg { color: var(--red); }
+  .call-price-val.fload { color: var(--text3); font-size: 0.75rem; }
+  @media (max-width: 580px) { .call-card { grid-template-columns: 1fr; gap: 0.75rem; } .call-prices { justify-content: flex-start; } .call-price-item { text-align: left; } }
 
   .filter-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .filter-tab {
-    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: transparent;
-    color: var(--text3); cursor: pointer; transition: all 0.15s;
-  }
+  .filter-tab { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; }
   .filter-tab:hover { color: var(--text2); border-color: var(--border2); }
   .filter-tab.active { background: var(--amber-glow); border-color: var(--amber-border); color: var(--amber); }
 
   .history-list { display: flex; flex-direction: column; gap: 8px; }
-  .history-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 1rem;
-    transition: border-color 0.2s; flex-wrap: wrap;
-  }
+  .history-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 1rem; transition: border-color 0.2s; flex-wrap: wrap; }
   .history-card:hover { border-color: var(--border2); }
-  .history-result {
-    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em;
-    text-transform: uppercase; padding: 2px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
-  }
+  .history-result { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
   .history-result.tp_hit { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
   .history-result.sl_hit { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
   .history-symbol { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); min-width: 60px; }
@@ -161,50 +110,46 @@
   .history-pnl.neutral { color: var(--text2); }
   .history-by { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); white-space: nowrap; }
 
-  /* Pagination */
-  .pagination {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-top: 1.25rem; padding-bottom: 0.5rem;
-  }
-  .page-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em;
-    padding: 5px 14px; border-radius: 4px; border: 1px solid var(--border);
-    background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s;
-  }
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.25rem; padding-bottom: 0.5rem; }
+  .page-btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; padding: 5px 14px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; }
   .page-btn:hover:not(:disabled) { border-color: var(--amber-border); color: var(--amber); }
   .page-btn:disabled { opacity: 0.3; cursor: default; }
   .page-info { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); }
 
-  .state-box {
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 2.5rem; text-align: center;
-  }
+  /* Leaderboard */
+  .lb-grid { display: flex; flex-direction: column; gap: 8px; }
+  .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s; }
+  .lb-card:hover { border-color: var(--border2); }
+  .lb-card.rank-1 { border-color: var(--amber-border); background: var(--amber-glow); }
+  .lb-card.rank-2 { border-color: rgba(180,180,180,0.2); }
+  .lb-card.rank-3 { border-color: rgba(180,120,60,0.2); }
+  .lb-rank { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--text3); text-align: center; }
+  .lb-card.rank-1 .lb-rank { color: var(--amber); }
+  .lb-card.rank-2 .lb-rank { color: #b0b0b0; }
+  .lb-card.rank-3 .lb-rank { color: #b47c3c; }
+  .lb-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .lb-sub { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); }
+  .lb-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+  .lb-roi { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; white-space: nowrap; }
+  .lb-roi.pos { color: var(--green); }
+  .lb-roi.neg { color: var(--red); }
+  .lb-wr { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); white-space: nowrap; }
+
+  .state-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 2.5rem; text-align: center; }
   .state-icon { font-size: 2rem; margin-bottom: 0.75rem; }
   .state-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
   .state-desc { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); line-height: 1.7; }
 
-  .skeleton {
-    background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
-    background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px;
-  }
+  .skeleton { background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
   @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   .sk-card { height: 76px; margin-bottom: 10px; }
 
-  .refresh-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--text3); border: 1px solid var(--border); background: transparent;
-    padding: 4px 12px; border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
+  .refresh-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); border: 1px solid var(--border); background: transparent; padding: 4px 12px; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .refresh-btn:hover { color: var(--amber); border-color: var(--amber-border); }
   .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
   @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-  footer {
-    position: relative; z-index: 1; max-width: 900px; margin: 4rem auto 0;
-    padding: 1.5rem 2rem; border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
-  }
+  footer { position: relative; z-index: 1; max-width: 900px; margin: 4rem auto 0; padding: 1.5rem 2rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
   .footer-left { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
   .footer-links { display: flex; gap: 1.25rem; }
   .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
@@ -226,15 +171,12 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-eyebrow">
-    <span class="live-dot"></span>
-    Live Data · MungBot
-  </div>
+  <div class="hero-eyebrow"><span class="live-dot"></span>Live Data · MungBot</div>
   <h1>Call <span class="accent">Tracker</span></h1>
   <p class="hero-sub">Semua call aktif dan track record historis dari grup Telegram gw. Data langsung dari bot, updated real-time.</p>
 </div>
 
-<div class="stats-row" id="statsRow" style="margin-left:2rem;margin-right:2rem;max-width:calc(900px - 0px);">
+<div class="stats-row" id="statsRow" style="margin-left:2rem;margin-right:2rem;">
   <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Total Calls</div></div>
   <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Win Rate</div></div>
   <div class="stat"><div class="skeleton" style="width:40px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">TP Hit</div></div>
@@ -252,7 +194,6 @@
     </button>
   </div>
   <div id="activeCalls">
-    <div class="skeleton sk-card"></div>
     <div class="skeleton sk-card"></div>
     <div class="skeleton sk-card" style="height:60px;"></div>
   </div>
@@ -280,6 +221,19 @@
   <div class="pagination" id="pagination" style="display:none;"></div>
 </section>
 
+<section>
+  <div class="section-header">
+    <span class="section-tag">Leaderboard</span>
+    <div class="section-line"></div>
+    <span class="section-count" id="lbMonthLabel">—</span>
+  </div>
+  <div id="leaderboard">
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card" style="height:60px;"></div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-left">© 2026 mungxbt.site &nbsp;·&nbsp; <span id="lastUpdated">—</span></div>
   <div class="footer-links">
@@ -289,7 +243,6 @@
 </footer>
 
 <script>
-  // Theme
   if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
   document.getElementById('themeBtn').addEventListener('click', () => {
     document.body.classList.toggle('light');
@@ -308,16 +261,14 @@
     if (isNaN(n)) return val;
     if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
     if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
-    return '$' + n.toLocaleString(undefined, {maximumFractionDigits: 4});
+    return '$' + n.toLocaleString(undefined, {maximumFractionDigits: 6});
   }
-
   function fmtPnl(pnl) {
     if (!pnl && pnl !== 0) return { text: '—', cls: 'neutral' };
     const n = parseFloat(pnl);
     if (isNaN(n)) return { text: String(pnl), cls: 'neutral' };
     return { text: (n >= 0 ? '+' : '') + n.toFixed(2) + '%', cls: n >= 0 ? 'positive' : 'negative' };
   }
-
   function timeAgo(iso) {
     if (!iso) return '';
     const diff = Date.now() - new Date(iso).getTime();
@@ -328,94 +279,66 @@
     if (h < 24) return h + 'h ago';
     return Math.floor(h / 24) + 'd ago';
   }
-
   function fmtDate(iso) {
     if (!iso) return '';
     return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
   }
-
   function fmtMonthLabel(ym) {
-    // ym = "2026-03"
+    if (!ym) return '—';
     const [y, m] = ym.split('-');
-    const d = new Date(parseInt(y), parseInt(m) - 1, 1);
-    return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    return new Date(parseInt(y), parseInt(m)-1, 1).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
   }
-
   function getCurrentMonth() {
     const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    return `${y}-${m}`;
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   }
 
-  function buildMonthOptions(history) {
-    const months = [...new Set(history.map(h => h.month).filter(Boolean))].sort().reverse();
-    const sel = document.getElementById('monthSelect');
-    sel.innerHTML = '';
-    months.forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m;
-      opt.textContent = fmtMonthLabel(m);
-      sel.appendChild(opt);
-    });
-    // default to current month if exists, else first
-    const cur = getCurrentMonth();
-    if (months.includes(cur)) {
-      sel.value = cur;
-      selectedMonth = cur;
-    } else {
-      selectedMonth = months[0] || cur;
-      sel.value = selectedMonth;
-    }
+  // Binance price
+  async function getBinancePrice(symbol) {
+    try {
+      const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}USDT`);
+      if (!r.ok) return null;
+      return parseFloat((await r.json()).price);
+    } catch { return null; }
+  }
+  function calcFloating(entry, price, direction) {
+    const e = parseFloat(entry);
+    if (!price || isNaN(e) || e === 0) return null;
+    return direction === 'buy' ? ((price - e) / e) * 100 : ((e - price) / e) * 100;
   }
 
+  // Stats
   function calcStatsFromHistory(history) {
     const closed = history.filter(h => h.result === 'tp_hit' || h.result === 'sl_hit');
     const wins = closed.filter(h => h.result === 'tp_hit').length;
     const losses = closed.filter(h => h.result === 'sl_hit').length;
     const total = closed.length;
-    const winrate = total > 0 ? ((wins / total) * 100).toFixed(1) : '0.0';
-    const pnlValues = closed.map(h => parseFloat(h.pnlPct)).filter(v => !isNaN(v));
-    const avgPnl = pnlValues.length > 0
-      ? (pnlValues.reduce((a, b) => a + b, 0) / pnlValues.length).toFixed(2)
-      : '0.00';
-    return { total, wins, losses, winrate, avgPnl };
+    const winrate = total > 0 ? ((wins/total)*100).toFixed(1) : '0.0';
+    return { total, wins, losses, winrate };
   }
-
   function renderStats(stats) {
     const wr = parseFloat(stats.winrate);
     document.getElementById('statsRow').innerHTML = `
-      <div class="stat">
-        <div class="stat-num">${stats.total}</div>
-        <div class="stat-label">Total Calls</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num ${wr >= 50 ? 'green' : 'red'}">${stats.winrate}%</div>
-        <div class="stat-label">Win Rate</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num green">${stats.wins}</div>
-        <div class="stat-label">TP Hit</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num red">${stats.losses}</div>
-        <div class="stat-label">SL Hit</div>
-      </div>`;
+      <div class="stat"><div class="stat-num">${stats.total}</div><div class="stat-label">Total Calls</div></div>
+      <div class="stat"><div class="stat-num ${wr>=50?'green':'red'}">${stats.winrate}%</div><div class="stat-label">Win Rate</div></div>
+      <div class="stat"><div class="stat-num green">${stats.wins}</div><div class="stat-label">TP Hit</div></div>
+      <div class="stat"><div class="stat-num red">${stats.losses}</div><div class="stat-label">SL Hit</div></div>`;
   }
 
-  function renderActiveCalls(calls) {
+  // Active calls with floating PnL
+  async function renderActiveCalls(calls) {
     const el = document.getElementById('activeCalls');
     document.getElementById('activeCount').textContent = calls.length + ' open';
     if (!calls.length) {
-      el.innerHTML = `<div class="state-box"><div class="state-icon">📭</div><div class="state-title">No Active Calls</div><div class="state-desc">Belum ada call aktif saat ini. Stay tuned di grup Telegram.</div></div>`;
+      el.innerHTML = `<div class="state-box"><div class="state-icon">📭</div><div class="state-title">No Active Calls</div><div class="state-desc">Belum ada call aktif saat ini.</div></div>`;
       return;
     }
-    el.innerHTML = `<div class="calls-grid">${calls.map(c => `
+    el.innerHTML = `<div class="calls-grid">${calls.map((c, i) => `
       <div class="call-card ${c.direction}">
-        <span class="call-dir ${c.direction}">${c.direction === 'buy' ? '↑ Long' : '↓ Short'}</span>
+        <span class="call-dir ${c.direction}">${c.direction==='buy'?'↑ Long':'↓ Short'}</span>
         <div class="call-main">
           <div class="call-symbol">${c.symbol}/USDT</div>
-          <div class="call-meta">by ${c.username || 'MungBot'} · ${timeAgo(c.createdAt)}</div>
+          <div class="call-meta">by ${c.username||'MungBot'} · ${timeAgo(c.createdAt)}</div>
         </div>
         <div class="call-prices">
           <div class="call-price-item">
@@ -430,29 +353,64 @@
             <div class="call-price-label">SL</div>
             <div class="call-price-val sl">${fmt(c.sl)}</div>
           </div>
+          <div class="call-price-item" id="float-${i}">
+            <div class="call-price-label">Floating</div>
+            <div class="call-price-val fload">…</div>
+          </div>
         </div>
-      </div>`).join('')}
-    </div>`;
+      </div>`).join('')}</div>`;
+
+    for (let i = 0; i < calls.length; i++) {
+      const c = calls[i];
+      const price = await getBinancePrice(c.symbol);
+      const floatEl = document.getElementById(`float-${i}`);
+      if (!floatEl) continue;
+      const pct = calcFloating(c.entry, price, c.direction);
+      if (pct === null) {
+        floatEl.querySelector('.call-price-val').textContent = '—';
+        floatEl.querySelector('.call-price-val').className = 'call-price-val fload';
+      } else {
+        const cls = pct >= 0 ? 'fpos' : 'fneg';
+        const txt = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+        floatEl.querySelector('.call-price-val').textContent = txt;
+        floatEl.querySelector('.call-price-val').className = `call-price-val ${cls}`;
+      }
+    }
   }
 
+  // Month selector
+  function buildMonthOptions(history) {
+    const months = [...new Set(history.map(h => h.month).filter(Boolean))].sort().reverse();
+    const sel = document.getElementById('monthSelect');
+    sel.innerHTML = '';
+    months.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m; o.textContent = fmtMonthLabel(m);
+      sel.appendChild(o);
+    });
+    const cur = getCurrentMonth();
+    selectedMonth = months.includes(cur) ? cur : (months[0] || cur);
+    sel.value = selectedMonth;
+  }
+
+  // History
   function getFilteredHistory() {
-    let filtered = allHistory.filter(h => h.month === selectedMonth);
-    if (activeFilter === 'tp_hit') filtered = filtered.filter(h => h.result === 'tp_hit');
-    else if (activeFilter === 'sl_hit') filtered = filtered.filter(h => h.result === 'sl_hit');
-    else if (activeFilter === 'buy') filtered = filtered.filter(h => h.callType === 'buy');
-    else if (activeFilter === 'sell') filtered = filtered.filter(h => h.callType === 'sell');
-    return filtered;
+    let f = allHistory.filter(h => h.month === selectedMonth);
+    if (activeFilter === 'tp_hit') f = f.filter(h => h.result === 'tp_hit');
+    else if (activeFilter === 'sl_hit') f = f.filter(h => h.result === 'sl_hit');
+    else if (activeFilter === 'buy') f = f.filter(h => h.callType === 'buy');
+    else if (activeFilter === 'sell') f = f.filter(h => h.callType === 'sell');
+    return f;
   }
-
   function renderHistory() {
     const filtered = getFilteredHistory();
     const el = document.getElementById('historyList');
     const pagEl = document.getElementById('pagination');
-
-    // Update stats based on current month (all calls in month, not filtered)
     const monthHistory = allHistory.filter(h => h.month === selectedMonth);
-    renderStats(calcStatsFromHistory(monthHistory));
 
+    renderStats(calcStatsFromHistory(monthHistory));
+    renderLeaderboard(monthHistory);
+    document.getElementById('lbMonthLabel').textContent = fmtMonthLabel(selectedMonth);
     document.getElementById('historyCount').textContent = filtered.length + ' calls';
 
     if (!filtered.length) {
@@ -460,52 +418,40 @@
       pagEl.style.display = 'none';
       return;
     }
-
     const totalPages = Math.ceil(filtered.length / PER_PAGE);
     if (currentPage > totalPages) currentPage = totalPages;
-    const start = (currentPage - 1) * PER_PAGE;
-    const pageItems = filtered.slice(start, start + PER_PAGE);
+    const pageItems = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
 
     el.innerHTML = `<div class="history-list">${pageItems.map(h => {
       const pnl = fmtPnl(h.pnlPct);
-      const resLabel = h.result === 'tp_hit' ? '✓ TP' : h.result === 'sl_hit' ? '✗ SL' : h.result || '—';
-      const byUser = h.username ? `by ${h.username}` : '';
+      const resLabel = h.result==='tp_hit'?'✓ TP':h.result==='sl_hit'?'✗ SL':h.result||'—';
       return `<div class="history-card">
         <span class="history-result ${h.result}">${resLabel}</span>
-        <div class="history-symbol">${h.symbol || '—'}</div>
-        <div class="history-meta">${h.callType === 'buy' ? '↑ Long' : h.callType === 'sell' ? '↓ Short' : '—'} · Entry ${h.entry || '—'} · ${fmtDate(h.closedDate) || h.month || '—'}</div>
+        <div class="history-symbol">${h.symbol||'—'}</div>
+        <div class="history-meta">${h.callType==='buy'?'↑ Long':h.callType==='sell'?'↓ Short':'—'} · Entry ${h.entry||'—'} · ${fmtDate(h.closedDate)||h.month||'—'}</div>
         <div class="history-right">
           <div class="history-pnl ${pnl.cls}">${pnl.text}</div>
-          ${byUser ? `<div class="history-by">${byUser}</div>` : ''}
+          ${h.username?`<div class="history-by">by ${h.username}</div>`:''}
         </div>
       </div>`;
     }).join('')}</div>`;
 
-    // Pagination
-    if (totalPages <= 1) {
-      pagEl.style.display = 'none';
-    } else {
-      pagEl.style.display = 'flex';
-      pagEl.innerHTML = `
-        <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>← Prev</button>
-        <span class="page-info">${currentPage} / ${totalPages}</span>
-        <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next →</button>
-      `;
-    }
+    pagEl.style.display = totalPages <= 1 ? 'none' : 'flex';
+    if (totalPages > 1) pagEl.innerHTML = `
+      <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage<=1?'disabled':''}>← Prev</button>
+      <span class="page-info">${currentPage} / ${totalPages}</span>
+      <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}>Next →</button>`;
   }
-
   function goPage(p) {
     currentPage = p;
     renderHistory();
-    document.querySelector('section:last-of-type').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('historyList').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
   function onMonthChange() {
     selectedMonth = document.getElementById('monthSelect').value;
     currentPage = 1;
     renderHistory();
   }
-
   document.getElementById('filterTabs').addEventListener('click', e => {
     const btn = e.target.closest('.filter-tab');
     if (!btn) return;
@@ -516,6 +462,47 @@
     renderHistory();
   });
 
+  // Leaderboard
+  function renderLeaderboard(monthHistory) {
+    const el = document.getElementById('leaderboard');
+    const closed = monthHistory.filter(h => h.result === 'tp_hit' || h.result === 'sl_hit');
+    if (!closed.length) {
+      el.innerHTML = `<div class="state-box"><div class="state-icon">🏆</div><div class="state-title">No Data</div><div class="state-desc">Belum ada data untuk bulan ini.</div></div>`;
+      return;
+    }
+    const traders = {};
+    closed.forEach(h => {
+      const name = h.username || 'Unknown';
+      if (!traders[name]) traders[name] = { wins: 0, losses: 0, pnlSum: 0 };
+      if (h.result === 'tp_hit') traders[name].wins++;
+      else traders[name].losses++;
+      const p = parseFloat(h.pnlPct);
+      if (!isNaN(p)) traders[name].pnlSum += p;
+    });
+    const sorted = Object.entries(traders).map(([name, d]) => {
+      const calls = d.wins + d.losses;
+      return { name, wins: d.wins, losses: d.losses, calls, roi: d.pnlSum, winrate: calls > 0 ? ((d.wins/calls)*100).toFixed(0) : '0' };
+    }).sort((a, b) => b.roi - a.roi);
+
+    const emoji = ['🥇','🥈','🥉'];
+    el.innerHTML = `<div class="lb-grid">${sorted.map((t, i) => {
+      const rankCls = i < 3 ? `rank-${i+1}` : '';
+      const roiTxt = (t.roi >= 0 ? '+' : '') + t.roi.toFixed(2) + '%';
+      return `<div class="lb-card ${rankCls}">
+        <div class="lb-rank">${i < 3 ? emoji[i] : '#'+(i+1)}</div>
+        <div>
+          <div class="lb-name">${t.name}</div>
+          <div class="lb-sub">${t.wins}W / ${t.losses}L · ${t.calls} calls</div>
+        </div>
+        <div class="lb-right">
+          <div class="lb-roi ${t.roi>=0?'pos':'neg'}">${roiTxt}</div>
+          <div class="lb-wr">${t.winrate}% WR</div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  // Load
   async function loadData() {
     const btn = document.getElementById('refreshBtn');
     btn.classList.add('spinning');
@@ -525,20 +512,14 @@
       const data = await res.json();
       allHistory = data.history || [];
       buildMonthOptions(allHistory);
-      renderActiveCalls(data.activeCalls || []);
+      await renderActiveCalls(data.activeCalls || []);
       renderHistory();
-      if (data.updatedAt) {
-        document.getElementById('lastUpdated').textContent = 'Updated ' + timeAgo(data.updatedAt);
-      }
+      if (data.updatedAt) document.getElementById('lastUpdated').textContent = 'Updated ' + timeAgo(data.updatedAt);
     } catch (err) {
       console.error(err);
       document.getElementById('activeCalls').innerHTML = `
-        <div class="state-box">
-          <div class="state-icon">⚠️</div>
-          <div class="state-title">Gagal Load Data</div>
-          <div class="state-desc">Pastikan Vercel Function sudah di-deploy dan NOTION_API_KEY sudah diset.<br><br><code style="font-size:0.6rem;color:var(--text3)">${err.message}</code></div>
-        </div>`;
-      document.getElementById('historyList').innerHTML = '';
+        <div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Gagal Load Data</div>
+        <div class="state-desc">Pastikan Vercel Function sudah di-deploy.<br><br><code style="font-size:0.6rem;color:var(--text3)">${err.message}</code></div></div>`;
     } finally {
       btn.classList.remove('spinning');
     }
