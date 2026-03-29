@@ -33,6 +33,15 @@
   nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); }
   .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
+  @media (max-width: 480px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.03em; }
+  }
+  @media (max-width: 360px) {
+    .nav-links { gap: 0.5rem; }
+    .nav-links a { font-size: 0.65rem; }
+  }
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
   .nav-links { display: flex; gap: 1.5rem; list-style: none; }
   .nav-links a { font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--text2); text-decoration: none; transition: color 0.2s; }
@@ -150,24 +159,24 @@
   .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
   @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-  footer { position: relative; z-index: 1; max-width: 900px; margin: 4rem auto 0; padding: 1.5rem 2rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-  .footer-left { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
-  .footer-links { display: flex; gap: 1.25rem; }
-  .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--border); max-width: 900px; margin: 3rem auto 0; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-left { font-size: 0.75rem; color: var(--text3); font-family: 'DM Mono', monospace; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.75rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--amber); }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="/" class="nav-logo">MUNG<span>XBT</span></a>
+  <a class="nav-logo" href="index.html">mungxbt<span>.</span>site</a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/calls.html" class="active">Calls</a></li>
-      <li><a href="https://t.me/mungxbt" target="_blank">Telegram</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="calls.html" class="active">Calls</a></li>
     </ul>
-    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
+    <button class="theme-btn" id="themeBtn"></button>
   </div>
 </nav>
 
@@ -246,6 +255,12 @@
 </footer>
 
 <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlTheme = urlParams.get('theme');
+  if (urlTheme) {
+    localStorage.setItem('theme', urlTheme);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
   if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
   document.getElementById('themeBtn').addEventListener('click', () => {
     document.body.classList.toggle('light');
