@@ -99,11 +99,11 @@
         <div class="w3-modal-title">Connect Wallet</div>
         <div class="w3-modal-sub">Pilih wallet untuk login & simpan progress belajar lo.</div>
         <div class="w3-wallet-option" id="w3OptMetaMask">
-          <img src="https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/SVG_MetaMask_Icon_Color.svg" alt="MetaMask">
+          <div style="width:28px;height:28px;border-radius:6px;background:#E88331;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🦊</div>
           <div><div class="w3-wallet-name">MetaMask</div><div class="w3-wallet-chain">EVM · Ethereum, BSC, dll</div></div>
         </div>
         <div class="w3-wallet-option" id="w3OptPhantom">
-          <img src="https://187760183-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MVOiF6Zqit57qRLGABr-887967055%2Fuploads%2FKgDkHURy9PA7zkUKJAiT%2FPhantom_SVG_Icon.svg?alt=media" alt="Phantom">
+          <div style="width:28px;height:28px;border-radius:6px;background:#AB9FF2;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">👻</div>
           <div><div class="w3-wallet-name">Phantom</div><div class="w3-wallet-chain">Solana</div></div>
         </div>
         <div class="w3-status-msg" id="w3StatusMsg"></div>
