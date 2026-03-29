@@ -215,6 +215,7 @@
     <span class="section-tag">Leaderboard</span>
     <div class="section-line"></div>
     <span class="section-count" id="lbMonthLabel">—</span>
+    <select class="month-select" id="lbMonthSelect" onchange="onLbMonthChange()"></select>
   </div>
   <div id="leaderboard">
     <div class="skeleton sk-card"></div>
@@ -399,15 +400,25 @@
   function buildMonthOptions(history) {
     const months = [...new Set(history.map(h => h.month).filter(Boolean))].sort().reverse();
     const sel = document.getElementById('monthSelect');
-    sel.innerHTML = '';
-    months.forEach(m => {
-      const o = document.createElement('option');
-      o.value = m; o.textContent = fmtMonthLabel(m);
-      sel.appendChild(o);
+    const lbSel = document.getElementById('lbMonthSelect');
+    [sel, lbSel].forEach(s => {
+      s.innerHTML = '';
+      months.forEach(m => {
+        const o = document.createElement('option');
+        o.value = m; o.textContent = fmtMonthLabel(m);
+        s.appendChild(o);
+      });
     });
     const cur = getCurrentMonth();
     selectedMonth = months.includes(cur) ? cur : (months[0] || cur);
     sel.value = selectedMonth;
+    lbSel.value = selectedMonth;
+  }
+  function onLbMonthChange() {
+    const lbMonth = document.getElementById('lbMonthSelect').value;
+    const monthHistory = allHistory.filter(h => h.month === lbMonth);
+    renderLeaderboard(monthHistory);
+    document.getElementById('lbMonthLabel').textContent = fmtMonthLabel(lbMonth);
   }
 
   // History
@@ -426,8 +437,6 @@
     const monthHistory = allHistory.filter(h => h.month === selectedMonth);
 
     renderStats(calcStatsFromHistory(monthHistory));
-    renderLeaderboard(monthHistory);
-    document.getElementById('lbMonthLabel').textContent = fmtMonthLabel(selectedMonth);
     document.getElementById('historyCount').textContent = filtered.length + ' calls';
 
     if (!filtered.length) {
@@ -531,6 +540,7 @@
       buildMonthOptions(allHistory);
       await renderActiveCalls(data.activeCalls || []);
       renderHistory();
+      onLbMonthChange();
       if (data.updatedAt) document.getElementById('lastUpdated').textContent = 'Updated ' + timeAgo(data.updatedAt);
     } catch (err) {
       console.error(err);
