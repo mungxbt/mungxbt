@@ -12,6 +12,9 @@ const HISTORY_DB_ID = "47f287ad128844b0b4911c6e6f983b16";  // MungBot Call Histo
 const NOTION_VERSION = "2022-06-28";
 
 async function queryNotionDB(databaseId, filter) {
+  const body = { page_size: 100 };
+  if (filter) body.filter = filter; // only include filter if provided
+
   const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
     method: "POST",
     headers: {
@@ -19,7 +22,7 @@ async function queryNotionDB(databaseId, filter) {
       "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ filter, page_size: 100 }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -132,8 +135,8 @@ export default async function handler(req, res) {
       ],
     });
 
-    // Fetch all history (we'll filter by chat_id in parseHistory)
-    const historyData = await queryNotionDB(HISTORY_DB_ID, {});
+    // Fetch all history (no filter, we'll filter by chat_id in parseHistory)
+    const historyData = await queryNotionDB(HISTORY_DB_ID, null);
 
     const activeCalls = parseActiveCalls(alertsData.results || []);
     const history = parseHistory(historyData.results || []);
