@@ -42,6 +42,22 @@
     }
     .wallet-banner-btn:hover { opacity: 0.85; }
     #walletBanner { display: none; }
+
+    /* Reset button */
+    #resetProgressBtn {
+      display: none; width: 100%; margin-top: 10px;
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
+      border: 1px solid var(--red-border, rgba(226,75,74,0.25));
+      background: transparent; color: var(--text3, #5a5754);
+      transition: all 0.2s;
+    }
+    #resetProgressBtn:hover {
+      background: var(--red-bg, rgba(226,75,74,0.08));
+      border-color: var(--red-border, rgba(226,75,74,0.25));
+      color: var(--red, #E24B4A);
+    }
   `;
   document.head.appendChild(style);
 
@@ -74,6 +90,16 @@
         updated_at: new Date().toISOString(),
       }),
     });
+  }
+
+  async function deleteProgress(address) {
+    await fetch(
+      `${SUPABASE_URL}/rest/v1/progress?wallet_address=eq.${encodeURIComponent(address)}`,
+      {
+        method: 'DELETE',
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+      }
+    );
   }
 
   // ── Toast notification ────────────────────────────────────────────────────
@@ -113,11 +139,39 @@
     });
   }
 
+  // ── Reset button di sidebar ───────────────────────────────────────────────
+  function injectResetBtn() {
+    const progressBar = document.querySelector('.sidebar-progress');
+    if (!progressBar || document.getElementById('resetProgressBtn')) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'resetProgressBtn';
+    btn.textContent = '↺ Reset Progress';
+    btn.addEventListener('click', async () => {
+      if (!confirm('Reset semua progress belajar lo? Ini tidak bisa dibatalkan.')) return;
+      const session = window.WalletConnect?.getSession();
+      if (!session?.address) return;
+      try {
+        await deleteProgress(session.address);
+        done.clear();
+        _originalGoTo(0);
+        updateSidebar();
+        showToast('🗑️', 'Progress Direset', 'Semua progress dihapus.');
+      } catch (e) {
+        showToast('❌', 'Gagal Reset', 'Coba lagi.');
+        console.warn('[bitcoin-progress] Gagal reset:', e);
+      }
+    });
+
+    progressBar.after(btn);
+  }
+
   function updateBanner() {
     const session = window.WalletConnect?.getSession();
     const banner = document.getElementById('walletBanner');
-    if (!banner) return;
-    banner.style.display = session?.address ? 'none' : 'flex';
+    const resetBtn = document.getElementById('resetProgressBtn');
+    if (banner) banner.style.display = session?.address ? 'none' : 'flex';
+    if (resetBtn) resetBtn.style.display = session?.address ? 'block' : 'none';
   }
 
   // ── Core: load + patch goTo ───────────────────────────────────────────────
@@ -131,13 +185,10 @@
       const { doneLessons, lastLesson } = await fetchProgress(session.address);
       if (doneLessons.length === 0) return;
 
-      // Load done lessons ke Set
       doneLessons.forEach(l => done.add(l));
       updateSidebar();
 
-      // Resume ke lesson terakhir yang dibuka
       if (lastLesson !== null && lastLesson !== current) {
-        // Pakai originalGoTo biar gak trigger scheduleSave saat resume
         _originalGoTo(lastLesson);
         showToast('▶️', 'Melanjutkan', `Bab ${lastLesson + 1} — lanjut dari terakhir lo baca.`);
       } else {
@@ -191,6 +242,7 @@
   // ── Init ──────────────────────────────────────────────────────────────────
   function init() {
     injectBanner();
+    injectResetBtn();
     patchGoTo();
     updateBanner();
 
