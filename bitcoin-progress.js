@@ -131,7 +131,7 @@
         <strong>💾 Simpan Progress Belajar Lo</strong>
         Login untuk nyimpen progress biar gak ilang kalau refresh atau ganti device.
       </div>
-      <button class="wallet-banner-btn" id="bannerConnectBtn">LOGIN/button>
+      <button class="wallet-banner-btn" id="bannerConnectBtn">LOGIN</button>
     `;
     contentArea.insertBefore(banner, contentArea.firstChild);
     document.getElementById('bannerConnectBtn').addEventListener('click', () => {
