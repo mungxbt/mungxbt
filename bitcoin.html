@@ -864,27 +864,93 @@
 
     <!-- BAB 10 -->
     <div class="lesson" id="lesson-14">
-      <div class="lesson-eyebrow">Bab 15 dari 30 · Praktek untuk Pemula</div>
+      <div class="lesson-eyebrow">Bab 15 dari 31 · Praktek untuk Pemula</div>
       <h2>Cara Beli <span class="acc">Bitcoin</span></h2>
       <div class="lesson-body">
         <p>Beli Bitcoin di Indonesia sangat mudah. Lo bisa mulai dari <strong>Rp 10.000 saja.</strong></p>
-        <div class="term-grid">
-          <div class="term-card"><div class="term-word">Indodax</div><div class="term-def">Exchange lokal terbesar. Terdaftar OJK. Cocok untuk pemula.</div></div>
-          <div class="term-card"><div class="term-word">Tokocrypto</div><div class="term-def">Terafiliasi Binance. Interface lebih modern.</div></div>
-          <div class="term-card"><div class="term-word">Pintu</div><div class="term-def">Paling simpel, cocok banget untuk pertama kali beli.</div></div>
-          <div class="term-card"><div class="term-word">Binance</div><div class="term-def">Exchange global terbesar. Lebih lengkap tapi agak kompleks.</div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:1.25rem 0;">
+          <a href="https://indodax.com/ref/angga25nfs/1" target="_blank" rel="noopener" style="text-decoration:none;">
+            <div class="term-card" style="border-color:var(--border2);background:var(--card);cursor:pointer;transition:background 0.2s,border-color 0.2s;height:100%;" onmouseover="this.style.background='#EF9F27';this.style.borderColor='#EF9F27';this.querySelector('.term-word').style.color='#0e0e0e';this.querySelector('.term-def').style.color='#0e0e0e';" onmouseout="this.style.background='var(--card)';this.style.borderColor='var(--border2)';this.querySelector('.term-word').style.color='';this.querySelector('.term-def').style.color='';">
+              <div class="term-word" style="transition:color 0.2s;">Indodax <span style="font-size:0.6rem;font-family:'DM Sans',sans-serif;font-weight:400;">↗ Daftar</span></div>
+              <div class="term-def" style="transition:color 0.2s;">Exchange lokal terbesar Indonesia. Terdaftar OJK & Bappebti. Deposit/withdraw Rupiah paling mudah. Cocok untuk beli pertama kali dan tarik ke rekening bank.</div>
+            </div>
+          </a>
+          <a href="https://accounts.bmwweb.biz/en/register?ref=GRO_28502_PBKA8&utm_source=default&registerChannel=&return_to=aHR0cHM6Ly93d3cuYm13d2ViLmJpei9lbi9yZWZlcnJhbC9lYXJuLXRvZ2V0aGVyL3JlZmVyMmVhcm4tdXNkYy9jbGFpbT9obD1lbiZyZWY9R1JPXzI4NTAyX1BCS0E4JnV0bV9zb3VyY2U9ZGVmYXVsdA==" target="_blank" rel="noopener" style="text-decoration:none;">
+            <div class="term-card" style="border-color:var(--border2);background:var(--card);cursor:pointer;transition:background 0.2s,border-color 0.2s;height:100%;" onmouseover="this.style.background='#EF9F27';this.style.borderColor='#EF9F27';this.querySelector('.term-word').style.color='#0e0e0e';this.querySelector('.term-def').style.color='#0e0e0e';" onmouseout="this.style.background='var(--card)';this.style.borderColor='var(--border2)';this.querySelector('.term-word').style.color='';this.querySelector('.term-def').style.color='';">
+              <div class="term-word" style="transition:color 0.2s;">Binance <span style="font-size:0.6rem;font-family:'DM Sans',sans-serif;font-weight:400;">↗ Daftar</span></div>
+              <div class="term-def" style="transition:color 0.2s;">Exchange global terbesar di dunia. Pilihan coin terlengkap, likuiditas tertinggi, fee lebih murah. Cocok untuk trading aktif dan akses ke semua ekosistem crypto.</div>
+            </div>
+          </a>
         </div>
-        <h3>Langkah beli</h3>
+
+        <div class="callout-red">
+          <div class="ct">⚠️ Binance diblokir di Indonesia</div>
+          Binance tidak bisa diakses langsung di Indonesia tanpa mengubah DNS.
+          <div style="margin-top:10px;">
+            <button onclick="(function(btn){var el=document.getElementById('dns-tips');var open=el.style.display==='block';el.style.display=open?'none':'block';btn.textContent=open?'Tips ▸':'Tips ▾';})(this)" style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;padding:5px 12px;border-radius:5px;border:1px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'">Tips ▸</button>
+          </div>
+          <div id="dns-tips" style="display:none;margin-top:12px;display:none;">
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:0.82rem;color:var(--text2);line-height:1.7;">
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">📱 Cara 1 — Install app 1.1.1.1 (Paling Mudah)</strong>
+                Download app <strong>1.1.1.1</strong> dari Cloudflare di App Store atau Play Store → buka app → aktifkan toggle. Selesai. Semua traffic HP lo lewat DNS Cloudflare otomatis.
+              </div>
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">📶 Cara 2 — Ganti DNS di WiFi (Android)</strong>
+                Settings → Connections → WiFi → tahan nama WiFi → Manage network settings → Advanced → IP Settings ganti ke <strong>Static</strong> → isi DNS 1: <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.1.1.1</code> DNS 2: <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.0.0.1</code> → Save.
+              </div>
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">🍎 Cara 3 — Ganti DNS di WiFi (iPhone)</strong>
+                Settings → WiFi → klik ikon (i) di samping nama WiFi → Configure DNS → Manual → hapus DNS yang ada → Add Server → masukkan <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.1.1.1</code> → Save.
+              </div>
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">💻 Cara 4 — Ganti DNS di Laptop (Windows)</strong>
+                Control Panel → Network and Internet → Network Connections → klik kanan adapter aktif → Properties → Internet Protocol Version 4 (TCP/IPv4) → Properties → Use the following DNS → Preferred: <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.1.1.1</code> Alternate: <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.0.0.1</code> → OK.
+              </div>
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">🍎 Cara 5 — Ganti DNS di Laptop (Mac)</strong>
+                System Settings → Network → pilih koneksi aktif → Details → DNS → klik + → masukkan <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.1.1.1</code> dan <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-family:'DM Mono',monospace;">1.0.0.1</code> → OK → Apply.
+              </div>
+
+              <div>
+                <strong style="color:var(--text);display:block;margin-bottom:4px;">🌐 Cara 6 — Ganti DNS di Browser (Chrome/Brave)</strong>
+                Settings → Privacy and security → Security → Use secure DNS → pilih <strong>Cloudflare (1.1.1.1)</strong>. Hanya berlaku di browser itu saja.
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <h3>Langkah Beli Bitcoin di Indodax</h3>
         <div class="step-list">
-          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Download app</strong> dan daftar akun.</div></div>
-          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Verifikasi KYC</strong> — upload KTP dan selfie. Wajib sesuai regulasi.</div></div>
-          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Deposit Rupiah</strong> via transfer bank atau QRIS.</div></div>
-          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Beli Bitcoin (BTC)</strong> mulai Rp 10.000.</div></div>
-          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Konfirmasi.</strong> Selesai.</div></div>
+          <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Daftar & verifikasi KYC</strong> — upload KTP dan selfie. Proses 1–24 jam.</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Deposit Rupiah</strong> via transfer bank (BCA, Mandiri, BNI, BRI, dll) atau QRIS. Minimum deposit Rp 10.000.</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Cari BTC</strong> di search bar → klik Buy/Beli → masukkan nominal Rupiah yang mau dibelanjakan.</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Konfirmasi order.</strong> Bitcoin langsung masuk ke wallet Indodax lo dalam hitungan detik.</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Kalau mau ke Binance:</strong> Withdraw BTC dari Indodax ke address wallet Binance lo (Bitcoin network).</div></div>
         </div>
-        <div class="callout-info">
+
+        <h3>Video Tutorial: Cara Beli di Indodax</h3>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;border:1px solid var(--border2);margin:1.25rem 0;">
+          <iframe
+            src="https://www.youtube.com/embed/6iC9nuOy4-Y"
+            title="Tutorial Beli Bitcoin di Indodax"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="position:absolute;top:0;left:0;width:100%;height:100%;">
+          </iframe>
+        </div>
+
+        <div class="callout">
           <div class="ct">💡 DCA — Strategi terbaik untuk pemula</div>
-          Dollar Cost Averaging: beli rutin jumlah kecil setiap bulan terlepas dari harga. Misal Rp 100.000/bulan. Mengurangi risiko beli di harga puncak.
+          Dollar Cost Averaging: beli rutin jumlah tetap setiap bulan terlepas dari harga. Misal Rp 100.000/bulan. Mengurangi risiko beli di harga puncak dan menghilangkan tekanan untuk "timing" market.
         </div>
       </div>
       <div class="lesson-nav"><button class="btn-nav" onclick="goTo(13)">← Sebelumnya</button><button class="btn-nav btn-nav--next" onclick="goTo(15)">Selanjutnya: Cara Simpan dengan Aman →</button></div>
