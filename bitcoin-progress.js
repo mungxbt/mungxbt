@@ -48,14 +48,17 @@
   // ── Supabase helpers ──────────────────────────────────────────────────────
   async function fetchProgress(address) {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/progress?wallet_address=eq.${encodeURIComponent(address)}&select=done_lessons`,
+      `${SUPABASE_URL}/rest/v1/progress?wallet_address=eq.${encodeURIComponent(address)}&select=done_lessons,last_lesson`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const data = await res.json();
-    return data?.[0]?.done_lessons || [];
+    return {
+      doneLessons: data?.[0]?.done_lessons || [],
+      lastLesson: data?.[0]?.last_lesson ?? null,
+    };
   }
 
-  async function saveProgress(address, doneLessons) {
+  async function saveProgress(address, doneLessons, lastLesson) {
     await fetch(`${SUPABASE_URL}/rest/v1/progress`, {
       method: 'POST',
       headers: {
@@ -67,6 +70,7 @@
       body: JSON.stringify({
         wallet_address: address,
         done_lessons: doneLessons,
+        last_lesson: lastLesson,
         updated_at: new Date().toISOString(),
       }),
     });
@@ -124,23 +128,32 @@
     if (!session?.address) return;
 
     try {
-      const lessons = await fetchProgress(session.address);
-      if (lessons.length === 0) return;
+      const { doneLessons, lastLesson } = await fetchProgress(session.address);
+      if (doneLessons.length === 0) return;
 
-      // Inject ke Set done yang sudah ada di bitcoin.html
-      lessons.forEach(l => done.add(l));
+      // Load done lessons ke Set
+      doneLessons.forEach(l => done.add(l));
       updateSidebar();
-      showToast('✅', 'Progress Dimuat', `${lessons.length} materi udah selesai.`);
+
+      // Resume ke lesson terakhir yang dibuka
+      if (lastLesson !== null && lastLesson !== current) {
+        // Pakai originalGoTo biar gak trigger scheduleSave saat resume
+        _originalGoTo(lastLesson);
+        showToast('▶️', 'Melanjutkan', `Bab ${lastLesson + 1} — lanjut dari terakhir lo baca.`);
+      } else {
+        showToast('✅', 'Progress Dimuat', `${doneLessons.length} materi udah selesai.`);
+      }
     } catch (e) {
       console.warn('[bitcoin-progress] Gagal load progress:', e);
     }
   }
 
+  let _originalGoTo = null;
+
   function patchGoTo() {
-    // Wrap goTo original biar setiap navigasi auto-save
-    const originalGoTo = window.goTo;
+    _originalGoTo = window.goTo;
     window.goTo = function (n) {
-      originalGoTo(n);
+      _originalGoTo(n);
       scheduleSave();
     };
   }
@@ -152,7 +165,7 @@
       if (!session?.address) return;
       try {
         const doneLessons = Array.from(done);
-        await saveProgress(session.address, doneLessons);
+        await saveProgress(session.address, doneLessons, current);
         showToast('💾', 'Progress Tersimpan', `${doneLessons.length}/${total} materi selesai.`);
       } catch (e) {
         console.warn('[bitcoin-progress] Gagal save:', e);
@@ -169,8 +182,8 @@
 
   window.addEventListener('walletDisconnected', () => {
     updateBanner();
-    // Reset done set & UI saat disconnect
     done.clear();
+    _originalGoTo(0);
     updateSidebar();
     showToast('👋', 'Wallet Disconnected', 'Progress lokal dihapus.');
   });
@@ -181,18 +194,15 @@
     patchGoTo();
     updateBanner();
 
-    // Load progress kalau wallet udah connect sebelumnya
     const session = window.WalletConnect?.getSession();
     if (session?.address) {
       loadProgressFromDB();
     }
   }
 
-  // Tunggu DOMContentLoaded + wallet.js selesai init
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
-    // Delay kecil biar wallet.js sempat init duluan
     setTimeout(init, 50);
   }
 })();
