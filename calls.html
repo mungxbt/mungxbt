@@ -49,7 +49,8 @@
   h1 .accent { color: var(--amber); }
   .hero-sub { font-size: 0.85rem; color: var(--text2); max-width: 480px; line-height: 1.6; font-weight: 300; }
 
-  .stats-row { position: relative; z-index: 1; max-width: 900px; margin: 2rem auto 0; padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid var(--border); background: var(--border); border-radius: 10px; overflow: hidden; }
+  .stats-wrapper { position: relative; z-index: 1; max-width: 900px; margin: 2rem auto 0; padding: 0 2rem; }
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid var(--border); background: var(--border); border-radius: 10px; overflow: hidden; }
   @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
   .stat { background: var(--card); padding: 1.25rem 1.5rem; transition: background 0.2s; }
   .stat:hover { background: var(--bg3); }
@@ -176,11 +177,13 @@
   <p class="hero-sub">Semua call aktif dan track record historis dari grup Telegram gw. Data langsung dari bot, updated real-time.</p>
 </div>
 
-<div class="stats-row" id="statsRow" style="margin-left:2rem;margin-right:2rem;">
+<div class="stats-wrapper">
+<div class="stats-row" id="statsRow">
   <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Total Calls</div></div>
   <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Win Rate</div></div>
   <div class="stat"><div class="skeleton" style="width:40px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">TP Hit</div></div>
   <div class="stat"><div class="skeleton" style="width:40px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">SL Hit</div></div>
+</div>
 </div>
 
 <section>
@@ -194,6 +197,19 @@
     </button>
   </div>
   <div id="activeCalls">
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card" style="height:60px;"></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <span class="section-tag">Leaderboard</span>
+    <div class="section-line"></div>
+    <span class="section-count" id="lbMonthLabel">—</span>
+  </div>
+  <div id="leaderboard">
+    <div class="skeleton sk-card"></div>
     <div class="skeleton sk-card"></div>
     <div class="skeleton sk-card" style="height:60px;"></div>
   </div>
@@ -219,19 +235,6 @@
     <div class="skeleton sk-card" style="height:60px;"></div>
   </div>
   <div class="pagination" id="pagination" style="display:none;"></div>
-</section>
-
-<section>
-  <div class="section-header">
-    <span class="section-tag">Leaderboard</span>
-    <div class="section-line"></div>
-    <span class="section-count" id="lbMonthLabel">—</span>
-  </div>
-  <div id="leaderboard">
-    <div class="skeleton sk-card"></div>
-    <div class="skeleton sk-card"></div>
-    <div class="skeleton sk-card" style="height:60px;"></div>
-  </div>
 </section>
 
 <footer>
