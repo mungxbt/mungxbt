@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Tracker · MUNGXBT</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e;
+    --text: #f0ede8; --text2: #9a9690; --text3: #5a5754;
+    --amber: #EF9F27; --amber-dim: #BA7517;
+    --amber-glow: rgba(239,159,39,0.12); --amber-border: rgba(239,159,39,0.25);
+    --green: #1D9E75; --green-glow: rgba(29,158,117,0.10); --green-border: rgba(29,158,117,0.25);
+    --red: #E24B4A; --red-glow: rgba(226,75,74,0.08); --red-border: rgba(226,75,74,0.2);
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --card: #141414;
+  }
+  .light {
+    --bg: #faf9f7; --bg2: #f2f0eb; --bg3: #e8e5de;
+    --text: #1a1816; --text2: #6b6762; --text3: #a8a4a0;
+    --amber: #BA7517; --amber-dim: #854F0B;
+    --amber-glow: rgba(186,117,23,0.08); --amber-border: rgba(186,117,23,0.2);
+    --green: #157A58; --green-glow: rgba(21,122,88,0.08); --green-border: rgba(21,122,88,0.22);
+    --red: #C0392B; --red-glow: rgba(192,57,43,0.06); --red-border: rgba(192,57,43,0.18);
+    --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
+    --card: #ffffff;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; transition: background 0.3s, color 0.3s;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none; z-index: 0;
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--amber); }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--text2); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--amber); }
+  .theme-btn { width: 36px; height: 20px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; position: relative; transition: background 0.3s; }
+  .theme-btn::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--amber); border-radius: 50%; transition: transform 0.3s; }
+  .light .theme-btn::after { transform: translateX(16px); }
+
+  .hero { position: relative; z-index: 1; padding: 2.5rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--amber); border: 1px solid var(--amber-border); background: var(--amber-glow);
+    padding: 3px 9px; border-radius: 4px; margin-bottom: 1.25rem;
+  }
+  .live-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 0.75rem; color: var(--text); }
+  h1 .accent { color: var(--amber); }
+  .hero-sub { font-size: 0.85rem; color: var(--text2); max-width: 480px; line-height: 1.6; font-weight: 300; }
+
+  .stats-row {
+    position: relative; z-index: 1; max-width: 900px; margin: 2rem auto 0;
+    padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; border: 1px solid var(--border); background: var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--card); padding: 1.25rem 1.5rem; transition: background 0.2s; }
+  .stat:hover { background: var(--bg3); }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--amber); letter-spacing: -0.02em; }
+  .stat-num.green { color: var(--green); }
+  .stat-num.red { color: var(--red); }
+  .stat-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  section { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 0; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .section-tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); background: var(--amber-glow); border: 1px solid var(--amber-border); padding: 3px 8px; border-radius: 3px; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-count { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
+
+  .calls-grid { display: flex; flex-direction: column; gap: 10px; }
+  .call-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.1rem 1.4rem; transition: border-color 0.2s, transform 0.15s;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
+  }
+  .call-card:hover { border-color: var(--amber-border); transform: translateY(-1px); }
+  .call-card.buy { border-left: 2px solid var(--green); }
+  .call-card.sell { border-left: 2px solid var(--red); }
+  .call-dir {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+  }
+  .call-dir.buy { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
+  .call-dir.sell { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
+  .call-main { min-width: 0; }
+  .call-symbol { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+  .call-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); margin-top: 3px; }
+  .call-prices { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: flex-end; }
+  .call-price-item { text-align: right; }
+  .call-price-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 2px; }
+  .call-price-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .call-price-val.entry { color: var(--amber); }
+  .call-price-val.tp { color: var(--green); }
+  .call-price-val.sl { color: var(--red); }
+
+  @media (max-width: 580px) {
+    .call-card { grid-template-columns: 1fr; gap: 0.75rem; }
+    .call-prices { justify-content: flex-start; }
+    .call-price-item { text-align: left; }
+  }
+
+  .filter-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .filter-tab {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: transparent;
+    color: var(--text3); cursor: pointer; transition: all 0.15s;
+  }
+  .filter-tab:hover { color: var(--text2); border-color: var(--border2); }
+  .filter-tab.active { background: var(--amber-glow); border-color: var(--amber-border); color: var(--amber); }
+
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 1rem;
+    transition: border-color 0.2s; flex-wrap: wrap;
+  }
+  .history-card:hover { border-color: var(--border2); }
+  .history-result {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+  }
+  .history-result.tp_hit { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
+  .history-result.sl_hit { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
+  .history-symbol { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); min-width: 70px; }
+  .history-meta { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); flex: 1; min-width: 0; }
+  .history-pnl { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-left: auto; white-space: nowrap; }
+  .history-pnl.positive { color: var(--green); }
+  .history-pnl.negative { color: var(--red); }
+  .history-pnl.neutral { color: var(--text2); }
+
+  .state-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 2.5rem; text-align: center;
+  }
+  .state-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .state-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+  .state-desc { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); line-height: 1.7; }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
+    background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .sk-card { height: 76px; margin-bottom: 10px; }
+
+  .refresh-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text3); border: 1px solid var(--border); background: transparent;
+    padding: 4px 12px; border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .refresh-btn:hover { color: var(--amber); border-color: var(--amber-border); }
+  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  footer {
+    position: relative; z-index: 1; max-width: 900px; margin: 4rem auto 0;
+    padding: 1.5rem 2rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
+  }
+  .footer-left { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
+  .footer-links { display: flex; gap: 1.25rem; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--amber); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">MUNG<span>XBT</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/calls.html" class="active">Calls</a></li>
+      <li><a href="https://t.me/mungxbt" target="_blank">Telegram</a></li>
+    </ul>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span class="live-dot"></span>
+    Live Data · MungBot
+  </div>
+  <h1>Call <span class="accent">Tracker</span></h1>
+  <p class="hero-sub">Semua call aktif dan track record historis dari grup Telegram gw. Data langsung dari bot, updated real-time.</p>
+</div>
+
+<div class="stats-row" id="statsRow" style="margin-left:2rem;margin-right:2rem;max-width:calc(900px - 0px);">
+  <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Total Calls</div></div>
+  <div class="stat"><div class="skeleton" style="width:56px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">Win Rate</div></div>
+  <div class="stat"><div class="skeleton" style="width:40px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">TP Hit</div></div>
+  <div class="stat"><div class="skeleton" style="width:40px;height:1.8rem;margin-bottom:4px;"></div><div class="stat-label">SL Hit</div></div>
+</div>
+
+<section>
+  <div class="section-header">
+    <span class="section-tag">Active Calls</span>
+    <div class="section-line"></div>
+    <span class="section-count" id="activeCount">—</span>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
+  </div>
+  <div id="activeCalls">
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card" style="height:60px;"></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <span class="section-tag">History</span>
+    <div class="section-line"></div>
+    <span class="section-count" id="historyCount">—</span>
+  </div>
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="tp_hit">✓ TP Hit</button>
+    <button class="filter-tab" data-filter="sl_hit">✗ SL Hit</button>
+    <button class="filter-tab" data-filter="buy">Long</button>
+    <button class="filter-tab" data-filter="sell">Short</button>
+  </div>
+  <div id="historyList">
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card"></div>
+    <div class="skeleton sk-card" style="height:60px;"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">© 2026 mungxbt.site &nbsp;·&nbsp; <span id="lastUpdated">—</span></div>
+  <div class="footer-links">
+    <a href="https://t.me/mungxbt" target="_blank">Telegram</a>
+    <a href="https://x.com/himiwhimiw" target="_blank">Twitter / X</a>
+  </div>
+</footer>
+
+<script>
+  // Theme
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  });
+
+  let allHistory = [];
+  let activeFilter = 'all';
+
+  function fmt(val) {
+    if (val === null || val === undefined || val === '') return '—';
+    const n = parseFloat(val);
+    if (isNaN(n)) return val;
+    if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+    if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+    return '$' + n.toLocaleString(undefined, {maximumFractionDigits: 4});
+  }
+
+  function fmtPnl(pnl) {
+    if (!pnl && pnl !== 0) return { text: '—', cls: 'neutral' };
+    const n = parseFloat(pnl);
+    if (isNaN(n)) return { text: String(pnl), cls: 'neutral' };
+    return { text: (n >= 0 ? '+' : '') + n.toFixed(2) + '%', cls: n >= 0 ? 'positive' : 'negative' };
+  }
+
+  function timeAgo(iso) {
+    if (!iso) return '';
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h / 24) + 'd ago';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function renderStats(stats) {
+    const wr = parseFloat(stats.winrate);
+    document.getElementById('statsRow').innerHTML = `
+      <div class="stat">
+        <div class="stat-num">${stats.total}</div>
+        <div class="stat-label">Total Calls</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num ${wr >= 50 ? 'green' : 'red'}">${stats.winrate}%</div>
+        <div class="stat-label">Win Rate</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num green">${stats.wins}</div>
+        <div class="stat-label">TP Hit</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num red">${stats.losses}</div>
+        <div class="stat-label">SL Hit</div>
+      </div>`;
+  }
+
+  function renderActiveCalls(calls) {
+    const el = document.getElementById('activeCalls');
+    document.getElementById('activeCount').textContent = calls.length + ' open';
+    if (!calls.length) {
+      el.innerHTML = `<div class="state-box"><div class="state-icon">📭</div><div class="state-title">No Active Calls</div><div class="state-desc">Belum ada call aktif saat ini. Stay tuned di grup Telegram.</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div class="calls-grid">${calls.map(c => `
+      <div class="call-card ${c.direction}">
+        <span class="call-dir ${c.direction}">${c.direction === 'buy' ? '↑ Long' : '↓ Short'}</span>
+        <div class="call-main">
+          <div class="call-symbol">${c.symbol}/USDT</div>
+          <div class="call-meta">by ${c.username || 'MungBot'} · ${timeAgo(c.createdAt)}</div>
+        </div>
+        <div class="call-prices">
+          <div class="call-price-item">
+            <div class="call-price-label">Entry</div>
+            <div class="call-price-val entry">${fmt(c.entry)}</div>
+          </div>
+          <div class="call-price-item">
+            <div class="call-price-label">TP</div>
+            <div class="call-price-val tp">${fmt(c.tp)}</div>
+          </div>
+          <div class="call-price-item">
+            <div class="call-price-label">SL</div>
+            <div class="call-price-val sl">${fmt(c.sl)}</div>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  function renderHistory(history) {
+    const el = document.getElementById('historyList');
+    let filtered = history;
+    if (activeFilter === 'tp_hit') filtered = history.filter(h => h.result === 'tp_hit');
+    else if (activeFilter === 'sl_hit') filtered = history.filter(h => h.result === 'sl_hit');
+    else if (activeFilter === 'buy') filtered = history.filter(h => h.callType === 'buy');
+    else if (activeFilter === 'sell') filtered = history.filter(h => h.callType === 'sell');
+    document.getElementById('historyCount').textContent = filtered.length + ' calls';
+    if (!filtered.length) {
+      el.innerHTML = `<div class="state-box"><div class="state-icon">🔍</div><div class="state-title">No results</div><div class="state-desc">Coba filter lain.</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div class="history-list">${filtered.map(h => {
+      const pnl = fmtPnl(h.pnlPct);
+      const resLabel = h.result === 'tp_hit' ? '✓ TP' : h.result === 'sl_hit' ? '✗ SL' : h.result || '—';
+      return `<div class="history-card">
+        <span class="history-result ${h.result}">${resLabel}</span>
+        <div class="history-symbol">${h.symbol || '—'}</div>
+        <div class="history-meta">${h.callType === 'buy' ? '↑ Long' : h.callType === 'sell' ? '↓ Short' : '—'} · Entry ${h.entry || '—'} · ${fmtDate(h.closedDate) || h.month || '—'}</div>
+        <div class="history-pnl ${pnl.cls}">${pnl.text}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  document.getElementById('filterTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-tab');
+    if (!btn) return;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderHistory(allHistory);
+  });
+
+  async function loadData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.classList.add('spinning');
+    try {
+      const res = await fetch('/api/notion');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      renderStats(data.stats);
+      renderActiveCalls(data.activeCalls || []);
+      allHistory = data.history || [];
+      renderHistory(allHistory);
+      if (data.updatedAt) {
+        document.getElementById('lastUpdated').textContent = 'Updated ' + timeAgo(data.updatedAt);
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('activeCalls').innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">⚠️</div>
+          <div class="state-title">Gagal Load Data</div>
+          <div class="state-desc">Pastikan Vercel Function sudah di-deploy dan NOTION_API_KEY sudah diset.<br><br><code style="font-size:0.6rem;color:var(--text3)">${err.message}</code></div>
+        </div>`;
+      document.getElementById('historyList').innerHTML = '';
+    } finally {
+      btn.classList.remove('spinning');
+    }
+  }
+
+  loadData();
+</script>
+</body>
+</html>
