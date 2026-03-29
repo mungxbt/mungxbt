@@ -222,20 +222,10 @@
   }
 
   // ── Google OAuth ──────────────────────────────────────────────────────────
-  async function connectGoogle() {
-    setStatus('Membuka Google login...');
-    try {
-      // Simpan current page untuk redirect balik
-      localStorage.setItem('mungxbt_auth_redirect', window.location.href);
-
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.origin + '/auth-callback.html')}`, {
-        headers: { apikey: SUPABASE_KEY }
-      });
-      // Supabase redirect langsung, ambil URL dari response
-      window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.origin + '/auth-callback.html')}`;
-    } catch (err) {
-      setStatus('Gagal membuka Google login.', true);
-    }
+  function connectGoogle() {
+    localStorage.setItem('mungxbt_auth_redirect', window.location.href);
+    const callbackUrl = window.location.origin + '/auth-callback.html';
+    window.location.href = SUPABASE_URL + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(callbackUrl);
   }
 
   // ── MetaMask ──────────────────────────────────────────────────────────────
