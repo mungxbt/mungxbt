@@ -84,10 +84,19 @@
   .stat-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; font-family: 'DM Mono', monospace; }
 
   section { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 0; }
-  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
   .section-tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); background: var(--amber-glow); border: 1px solid var(--amber-border); padding: 3px 8px; border-radius: 3px; }
   .section-line { flex: 1; height: 1px; background: var(--border); }
   .section-count { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); }
+
+  /* Month selector */
+  .month-select {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em;
+    color: var(--text2); background: var(--bg2); border: 1px solid var(--border2);
+    padding: 4px 10px; border-radius: 4px; cursor: pointer; outline: none;
+    transition: border-color 0.15s;
+  }
+  .month-select:hover, .month-select:focus { border-color: var(--amber-border); color: var(--amber); }
 
   .calls-grid { display: flex; flex-direction: column; gap: 10px; }
   .call-card {
@@ -143,12 +152,28 @@
   }
   .history-result.tp_hit { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
   .history-result.sl_hit { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
-  .history-symbol { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); min-width: 70px; }
+  .history-symbol { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); min-width: 60px; }
   .history-meta { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); flex: 1; min-width: 0; }
-  .history-pnl { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-left: auto; white-space: nowrap; }
+  .history-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: auto; }
+  .history-pnl { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; white-space: nowrap; }
   .history-pnl.positive { color: var(--green); }
   .history-pnl.negative { color: var(--red); }
   .history-pnl.neutral { color: var(--text2); }
+  .history-by { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); white-space: nowrap; }
+
+  /* Pagination */
+  .pagination {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 1.25rem; padding-bottom: 0.5rem;
+  }
+  .page-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em;
+    padding: 5px 14px; border-radius: 4px; border: 1px solid var(--border);
+    background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: var(--amber-border); color: var(--amber); }
+  .page-btn:disabled { opacity: 0.3; cursor: default; }
+  .page-info { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); }
 
   .state-box {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
@@ -238,6 +263,7 @@
     <span class="section-tag">History</span>
     <div class="section-line"></div>
     <span class="section-count" id="historyCount">—</span>
+    <select class="month-select" id="monthSelect" onchange="onMonthChange()"></select>
   </div>
   <div class="filter-tabs" id="filterTabs">
     <button class="filter-tab active" data-filter="all">All</button>
@@ -251,6 +277,7 @@
     <div class="skeleton sk-card"></div>
     <div class="skeleton sk-card" style="height:60px;"></div>
   </div>
+  <div class="pagination" id="pagination" style="display:none;"></div>
 </section>
 
 <footer>
@@ -271,6 +298,9 @@
 
   let allHistory = [];
   let activeFilter = 'all';
+  let currentPage = 1;
+  let selectedMonth = '';
+  const PER_PAGE = 10;
 
   function fmt(val) {
     if (val === null || val === undefined || val === '') return '—';
@@ -302,6 +332,54 @@
   function fmtDate(iso) {
     if (!iso) return '';
     return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function fmtMonthLabel(ym) {
+    // ym = "2026-03"
+    const [y, m] = ym.split('-');
+    const d = new Date(parseInt(y), parseInt(m) - 1, 1);
+    return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+  }
+
+  function getCurrentMonth() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    return `${y}-${m}`;
+  }
+
+  function buildMonthOptions(history) {
+    const months = [...new Set(history.map(h => h.month).filter(Boolean))].sort().reverse();
+    const sel = document.getElementById('monthSelect');
+    sel.innerHTML = '';
+    months.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = fmtMonthLabel(m);
+      sel.appendChild(opt);
+    });
+    // default to current month if exists, else first
+    const cur = getCurrentMonth();
+    if (months.includes(cur)) {
+      sel.value = cur;
+      selectedMonth = cur;
+    } else {
+      selectedMonth = months[0] || cur;
+      sel.value = selectedMonth;
+    }
+  }
+
+  function calcStatsFromHistory(history) {
+    const closed = history.filter(h => h.result === 'tp_hit' || h.result === 'sl_hit');
+    const wins = closed.filter(h => h.result === 'tp_hit').length;
+    const losses = closed.filter(h => h.result === 'sl_hit').length;
+    const total = closed.length;
+    const winrate = total > 0 ? ((wins / total) * 100).toFixed(1) : '0.0';
+    const pnlValues = closed.map(h => parseFloat(h.pnlPct)).filter(v => !isNaN(v));
+    const avgPnl = pnlValues.length > 0
+      ? (pnlValues.reduce((a, b) => a + b, 0) / pnlValues.length).toFixed(2)
+      : '0.00';
+    return { total, wins, losses, winrate, avgPnl };
   }
 
   function renderStats(stats) {
@@ -357,28 +435,75 @@
     </div>`;
   }
 
-  function renderHistory(history) {
+  function getFilteredHistory() {
+    let filtered = allHistory.filter(h => h.month === selectedMonth);
+    if (activeFilter === 'tp_hit') filtered = filtered.filter(h => h.result === 'tp_hit');
+    else if (activeFilter === 'sl_hit') filtered = filtered.filter(h => h.result === 'sl_hit');
+    else if (activeFilter === 'buy') filtered = filtered.filter(h => h.callType === 'buy');
+    else if (activeFilter === 'sell') filtered = filtered.filter(h => h.callType === 'sell');
+    return filtered;
+  }
+
+  function renderHistory() {
+    const filtered = getFilteredHistory();
     const el = document.getElementById('historyList');
-    let filtered = history;
-    if (activeFilter === 'tp_hit') filtered = history.filter(h => h.result === 'tp_hit');
-    else if (activeFilter === 'sl_hit') filtered = history.filter(h => h.result === 'sl_hit');
-    else if (activeFilter === 'buy') filtered = history.filter(h => h.callType === 'buy');
-    else if (activeFilter === 'sell') filtered = history.filter(h => h.callType === 'sell');
+    const pagEl = document.getElementById('pagination');
+
+    // Update stats based on current month (all calls in month, not filtered)
+    const monthHistory = allHistory.filter(h => h.month === selectedMonth);
+    renderStats(calcStatsFromHistory(monthHistory));
+
     document.getElementById('historyCount').textContent = filtered.length + ' calls';
+
     if (!filtered.length) {
-      el.innerHTML = `<div class="state-box"><div class="state-icon">🔍</div><div class="state-title">No results</div><div class="state-desc">Coba filter lain.</div></div>`;
+      el.innerHTML = `<div class="state-box"><div class="state-icon">🔍</div><div class="state-title">No results</div><div class="state-desc">Tidak ada call di bulan ini untuk filter ini.</div></div>`;
+      pagEl.style.display = 'none';
       return;
     }
-    el.innerHTML = `<div class="history-list">${filtered.map(h => {
+
+    const totalPages = Math.ceil(filtered.length / PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * PER_PAGE;
+    const pageItems = filtered.slice(start, start + PER_PAGE);
+
+    el.innerHTML = `<div class="history-list">${pageItems.map(h => {
       const pnl = fmtPnl(h.pnlPct);
       const resLabel = h.result === 'tp_hit' ? '✓ TP' : h.result === 'sl_hit' ? '✗ SL' : h.result || '—';
+      const byUser = h.username ? `by ${h.username}` : '';
       return `<div class="history-card">
         <span class="history-result ${h.result}">${resLabel}</span>
         <div class="history-symbol">${h.symbol || '—'}</div>
         <div class="history-meta">${h.callType === 'buy' ? '↑ Long' : h.callType === 'sell' ? '↓ Short' : '—'} · Entry ${h.entry || '—'} · ${fmtDate(h.closedDate) || h.month || '—'}</div>
-        <div class="history-pnl ${pnl.cls}">${pnl.text}</div>
+        <div class="history-right">
+          <div class="history-pnl ${pnl.cls}">${pnl.text}</div>
+          ${byUser ? `<div class="history-by">${byUser}</div>` : ''}
+        </div>
       </div>`;
     }).join('')}</div>`;
+
+    // Pagination
+    if (totalPages <= 1) {
+      pagEl.style.display = 'none';
+    } else {
+      pagEl.style.display = 'flex';
+      pagEl.innerHTML = `
+        <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>← Prev</button>
+        <span class="page-info">${currentPage} / ${totalPages}</span>
+        <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next →</button>
+      `;
+    }
+  }
+
+  function goPage(p) {
+    currentPage = p;
+    renderHistory();
+    document.querySelector('section:last-of-type').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function onMonthChange() {
+    selectedMonth = document.getElementById('monthSelect').value;
+    currentPage = 1;
+    renderHistory();
   }
 
   document.getElementById('filterTabs').addEventListener('click', e => {
@@ -387,7 +512,8 @@
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     activeFilter = btn.dataset.filter;
-    renderHistory(allHistory);
+    currentPage = 1;
+    renderHistory();
   });
 
   async function loadData() {
@@ -397,10 +523,10 @@
       const res = await fetch('/api/notion');
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      renderStats(data.stats);
-      renderActiveCalls(data.activeCalls || []);
       allHistory = data.history || [];
-      renderHistory(allHistory);
+      buildMonthOptions(allHistory);
+      renderActiveCalls(data.activeCalls || []);
+      renderHistory();
       if (data.updatedAt) {
         document.getElementById('lastUpdated').textContent = 'Updated ' + timeAgo(data.updatedAt);
       }
