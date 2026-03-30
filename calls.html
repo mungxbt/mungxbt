@@ -373,14 +373,16 @@
             <div class="call-price-val sl">${fmt(c.sl)}</div>
           </div>
           <div class="call-price-item" id="float-${i}">
-            <div class="call-price-label">Floating</div>
-            <div class="call-price-val fload">…</div>
+            <div class="call-price-label">${c.status === 'waiting' ? 'Status' : 'Floating'}</div>
+            <div class="call-price-val fload">${c.status === 'waiting' ? '⏳ Waiting' : '…'}</div>
           </div>
         </div>
       </div>`).join('')}</div>`;
 
     for (let i = 0; i < calls.length; i++) {
       const c = calls[i];
+      // skip floating calc for waiting calls
+      if (c.status === 'waiting') continue;
       const price = await getBinancePrice(c.symbol);
       const floatEl = document.getElementById(`float-${i}`);
       if (!floatEl) continue;
