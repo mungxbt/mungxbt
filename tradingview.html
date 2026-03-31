@@ -80,6 +80,18 @@
   .stat-label { font-size: 0.68rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
   .dedupe-info { display: none; align-items: center; gap: 8px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 14px; margin-bottom: 1.5rem; font-size: 0.78rem; color: var(--text2); }
   .dedupe-info.show { display: flex; }
+  .indo-block-notice { display: flex; align-items: flex-start; gap: 10px; background: rgba(226,75,74,0.07); border: 1px solid rgba(226,75,74,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; }
+  .indo-block-notice-text { font-size: 0.78rem; color: var(--text2); line-height: 1.7; }
+  .indo-block-notice-text strong { color: var(--text); }
+  .indo-block-notice-text code { font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--bg3); padding: 1px 6px; border-radius: 3px; color: var(--amber); }
+  .dns-error-banner { display: none; background: rgba(226,75,74,0.07); border: 1px solid rgba(226,75,74,0.3); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .dns-error-banner.show { display: block; }
+  .dns-error-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--red); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+  .dns-steps { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .dns-step { display: flex; gap: 10px; align-items: flex-start; font-size: 0.78rem; color: var(--text2); line-height: 1.6; }
+  .dns-step-num { width: 18px; height: 18px; border-radius: 50%; background: var(--red); color: #fff; font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .dns-step strong { color: var(--text); font-weight: 500; }
+  .dns-step code { font-family: 'DM Mono', monospace; font-size: 0.72rem; background: var(--bg3); padding: 1px 6px; border-radius: 3px; color: var(--amber); }
   .dedupe-info svg { flex-shrink: 0; color: var(--amber); }
   .status-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 0.78rem; color: var(--text2); }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
@@ -232,6 +244,29 @@
   <div class="dedupe-info" id="dedupeInfo">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
     <span id="dedupeText">Binance + MEXC dipilih — duplikat otomatis dihapus saat download gabungan.</span>
+  </div>
+
+  <!-- INDO BLOCK NOTICE -->
+  <div class="indo-block-notice">
+    <span style="font-size:1rem;flex-shrink:0;">🇮🇩</span>
+    <div class="indo-block-notice-text">
+      <strong>Pengguna Indonesia:</strong> Binance dan MEXC diblokir oleh Kominfo. Tool ini butuh akses langsung ke API mereka — pastikan kamu sudah ganti DNS ke <code>1.1.1.1</code> (Cloudflare) atau <code>8.8.8.8</code> (Google) sebelum buka halaman ini.
+    </div>
+  </div>
+
+  <!-- DNS ERROR BANNER (muncul otomatis kalau fetch gagal) -->
+  <div class="dns-error-banner" id="dnsErrorBanner">
+    <div class="dns-error-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Fetch gagal — kemungkinan DNS belum diganti
+    </div>
+    <div style="font-size:0.78rem;color:var(--text2);margin-bottom:0.75rem;">Binance &amp; MEXC diblokir di Indonesia. Ganti DNS dulu, lalu refresh halaman ini.</div>
+    <div class="dns-steps">
+      <div class="dns-step"><div class="dns-step-num">1</div><div><strong>Android:</strong> Settings → Connections → More connection settings → Private DNS → Custom → isi <code>one.one.one.one</code></div></div>
+      <div class="dns-step"><div class="dns-step-num">2</div><div><strong>iPhone:</strong> Settings → Wi-Fi → tap ikon (i) → Configure DNS → Manual → tambah <code>1.1.1.1</code> dan <code>1.0.0.1</code></div></div>
+      <div class="dns-step"><div class="dns-step-num">3</div><div><strong>Windows:</strong> Settings → Network → Change adapter options → klik kanan → Properties → IPv4 → DNS manual: <code>1.1.1.1</code> dan <code>1.0.0.1</code></div></div>
+      <div class="dns-step"><div class="dns-step-num">4</div><div>Setelah ganti DNS, <strong>refresh halaman ini</strong> — data akan otomatis ter-fetch.</div></div>
+    </div>
   </div>
 
   <!-- STATUS -->
@@ -423,7 +458,8 @@
       document.getElementById('btnSpotCombined').disabled = false;
     } catch (err) {
       dot.className = 'status-dot error';
-      txt.textContent = 'Gagal fetch data. Cek koneksi internet dan refresh halaman.';
+      txt.textContent = 'Gagal fetch data. Lihat panduan di bawah untuk solusi.';
+      document.getElementById('dnsErrorBanner').classList.add('show');
       console.error(err);
     }
   }
