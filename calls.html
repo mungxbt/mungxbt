@@ -129,16 +129,8 @@
 
   /* Leaderboard */
   .lb-grid { display: flex; flex-direction: column; gap: 8px; }
-  .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; cursor: pointer; position: relative; }
-  .lb-card:hover { border-color: var(--amber-border); transform: translateY(-1px); box-shadow: 0 0 0 3px var(--amber-glow), 0 4px 16px rgba(239,159,39,0.08); }
-  @keyframes lb-pulse { 0% { box-shadow: 0 0 0 0 var(--amber-glow); } 60% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
-  .lb-card:hover { animation: lb-pulse 0.6s ease-out; }
-
-  /* hint text + chevron on lb-card */
-  .lb-hint { display: inline-flex; align-items: center; gap: 3px; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); opacity: 0.7; margin-top: 3px; transition: color 0.2s, opacity 0.2s; }
-  .lb-hint .lb-chevron { font-size: 0.75rem; line-height: 1; transition: transform 0.2s; }
-  .lb-card:hover .lb-hint { color: var(--amber); opacity: 1; }
-  .lb-card:hover .lb-hint .lb-chevron { transform: translateX(3px); }
+  .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s; }
+  .lb-card:hover { border-color: var(--border2); }
   .lb-card.rank-1 { border-color: var(--amber-border); background: var(--amber-glow); }
   .lb-card.rank-2 { border-color: rgba(180,180,180,0.2); }
   .lb-card.rank-3 { border-color: rgba(180,120,60,0.2); }
@@ -530,7 +522,6 @@
         <div>
           <div class="lb-name">${t.name}</div>
           <div class="lb-sub">${t.wins}W / ${t.losses}L · ${t.calls} calls</div>
-          <div class="lb-hint">Lihat detail <span class="lb-chevron">›</span></div>
         </div>
         <div class="lb-right">
           <div class="lb-roi ${t.roi>=0?'pos':'neg'}">${roiTxt}</div>
