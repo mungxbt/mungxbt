@@ -129,8 +129,16 @@
 
   /* Leaderboard */
   .lb-grid { display: flex; flex-direction: column; gap: 8px; }
-  .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s; }
-  .lb-card:hover { border-color: var(--border2); }
+  .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; cursor: pointer; position: relative; }
+  .lb-card:hover { border-color: var(--amber-border); transform: translateY(-1px); box-shadow: 0 0 0 3px var(--amber-glow), 0 4px 16px rgba(239,159,39,0.08); }
+  @keyframes lb-pulse { 0% { box-shadow: 0 0 0 0 var(--amber-glow); } 60% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  .lb-card:hover { animation: lb-pulse 0.6s ease-out; }
+
+  /* hint text + chevron on lb-card */
+  .lb-hint { display: inline-flex; align-items: center; gap: 3px; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); opacity: 0.7; margin-top: 3px; transition: color 0.2s, opacity 0.2s; }
+  .lb-hint .lb-chevron { font-size: 0.75rem; line-height: 1; transition: transform 0.2s; }
+  .lb-card:hover .lb-hint { color: var(--amber); opacity: 1; }
+  .lb-card:hover .lb-hint .lb-chevron { transform: translateX(3px); }
   .lb-card.rank-1 { border-color: var(--amber-border); background: var(--amber-glow); }
   .lb-card.rank-2 { border-color: rgba(180,180,180,0.2); }
   .lb-card.rank-3 { border-color: rgba(180,120,60,0.2); }
@@ -145,6 +153,35 @@
   .lb-roi.pos { color: var(--green); }
   .lb-roi.neg { color: var(--red); }
   .lb-wr { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); white-space: nowrap; }
+
+  /* Trader detail modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px; width: 100%; max-width: 560px; max-height: 80vh; display: flex; flex-direction: column; transform: translateY(12px); transition: transform 0.2s; overflow: hidden; }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header { padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-shrink: 0; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .modal-sub { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); margin-top: 3px; }
+  .modal-close { width: 28px; height: 28px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 1rem; line-height: 1; flex-shrink: 0; transition: all 0.15s; }
+  .modal-close:hover { color: var(--text); border-color: var(--border2); }
+  .modal-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .modal-stat { background: var(--bg2); padding: 0.75rem 1rem; }
+  .modal-stat-num { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+  .modal-stat-num.amber { color: var(--amber); }
+  .modal-stat-num.green { color: var(--green); }
+  .modal-stat-num.red { color: var(--red); }
+  .modal-stat-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+  .modal-body { overflow-y: auto; padding: 1rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 7px; }
+  .modal-row { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: auto 1fr auto; gap: 0.75rem; align-items: center; }
+  .modal-row-result { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+  .modal-row-result.tp_hit { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
+  .modal-row-result.sl_hit { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
+  .modal-row-symbol { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .modal-row-meta { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); margin-top: 2px; }
+  .modal-row-pnl { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; white-space: nowrap; }
+  .modal-row-pnl.positive { color: var(--green); }
+  .modal-row-pnl.negative { color: var(--red); }
+  .modal-row-pnl.neutral { color: var(--text2); }
 
   .state-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 2.5rem; text-align: center; }
   .state-icon { font-size: 2rem; margin-bottom: 0.75rem; }
@@ -247,6 +284,20 @@
   <div class="pagination" id="pagination" style="display:none;"></div>
 </section>
 
+<div class="modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTraderName">—</div>
+        <div class="modal-sub" id="modalTraderSub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeTraderModal()">✕</button>
+    </div>
+    <div class="modal-stats" id="modalStats"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-left">© 2026 mungxbt.site &nbsp;·&nbsp; <span id="lastUpdated">—</span></div>
   <div class="footer-links">
@@ -270,6 +321,7 @@
 
   let allHistory = [];
   let activeFilter = 'all';
+  let activeTrader = '';
   let currentPage = 1;
   let selectedMonth = '';
   const PER_PAGE = 10;
@@ -431,6 +483,7 @@
     else if (activeFilter === 'sl_hit') f = f.filter(h => h.result === 'sl_hit');
     else if (activeFilter === 'buy') f = f.filter(h => h.callType === 'buy');
     else if (activeFilter === 'sell') f = f.filter(h => h.callType === 'sell');
+    if (activeTrader) f = f.filter(h => h.username === activeTrader);
     return f;
   }
   function renderHistory() {
@@ -522,6 +575,7 @@
         <div>
           <div class="lb-name">${t.name}</div>
           <div class="lb-sub">${t.wins}W / ${t.losses}L · ${t.calls} calls</div>
+          <div class="lb-hint">Lihat detail <span class="lb-chevron">›</span></div>
         </div>
         <div class="lb-right">
           <div class="lb-roi ${t.roi>=0?'pos':'neg'}">${roiTxt}</div>
@@ -554,6 +608,58 @@
       btn.classList.remove('spinning');
     }
   }
+
+  // Trader detail modal
+  function openTraderModal(name, monthHistory) {
+    const calls = monthHistory.filter(h => (h.username || 'Unknown') === name && (h.result === 'tp_hit' || h.result === 'sl_hit'));
+    const wins = calls.filter(h => h.result === 'tp_hit').length;
+    const losses = calls.filter(h => h.result === 'sl_hit').length;
+    const total = calls.length;
+    const roi = calls.reduce((s, h) => s + (parseFloat(h.pnlPct) || 0), 0);
+    const wr = total > 0 ? ((wins/total)*100).toFixed(0) : '0';
+
+    document.getElementById('modalTraderName').textContent = name;
+    document.getElementById('modalTraderSub').textContent = `${total} closed calls · ${fmtMonthLabel(document.getElementById('lbMonthSelect').value)}`;
+
+    document.getElementById('modalStats').innerHTML = `
+      <div class="modal-stat"><div class="modal-stat-num amber">${total}</div><div class="modal-stat-label">Calls</div></div>
+      <div class="modal-stat"><div class="modal-stat-num ${parseFloat(wr)>=50?'green':'red'}">${wr}%</div><div class="modal-stat-label">Win Rate</div></div>
+      <div class="modal-stat"><div class="modal-stat-num green">${wins}</div><div class="modal-stat-label">TP Hit</div></div>
+      <div class="modal-stat"><div class="modal-stat-num red">${losses}</div><div class="modal-stat-label">SL Hit</div></div>`;
+
+    const sorted = [...calls].sort((a, b) => new Date(b.closedDate||0) - new Date(a.closedDate||0));
+    document.getElementById('modalBody').innerHTML = sorted.length ? sorted.map(h => {
+      const pnl = fmtPnl(h.pnlPct);
+      const resLabel = h.result === 'tp_hit' ? '✓ TP' : '✗ SL';
+      return `<div class="modal-row">
+        <span class="modal-row-result ${h.result}">${resLabel}</span>
+        <div>
+          <div class="modal-row-symbol">${h.symbol || '—'}/USDT</div>
+          <div class="modal-row-meta">${h.callType==='buy'?'↑ Long':h.callType==='sell'?'↓ Short':'—'} · Entry ${h.entry||'—'} · ${fmtDate(h.closedDate)||h.month||'—'}</div>
+        </div>
+        <div class="modal-row-pnl ${pnl.cls}">${pnl.text}</div>
+      </div>`;
+    }).join('') : `<div class="state-box"><div class="state-icon">🔍</div><div class="state-title">No closed calls</div></div>`;
+
+    document.getElementById('traderModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTraderModal(e) {
+    if (e && e.target !== document.getElementById('traderModal')) return;
+    document.getElementById('traderModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Leaderboard card click
+  document.getElementById('leaderboard').addEventListener('click', e => {
+    const card = e.target.closest('.lb-card');
+    if (!card) return;
+    const name = card.querySelector('.lb-name')?.textContent;
+    if (!name) return;
+    const lbMonth = document.getElementById('lbMonthSelect').value;
+    const monthHistory = allHistory.filter(h => h.month === lbMonth);
+    openTraderModal(name, monthHistory);
+  });
 
   loadData();
 </script>
