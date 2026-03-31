@@ -130,7 +130,7 @@
   /* Leaderboard */
   .lb-grid { display: flex; flex-direction: column; gap: 8px; }
   .lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 1rem; align-items: center; transition: border-color 0.2s; }
-  .lb-card:hover { border-color: var(--amber-border); transform: translateY(-1px); }
+  .lb-card:hover { border-color: var(--border2); }
   .lb-card.rank-1 { border-color: var(--amber-border); background: var(--amber-glow); }
   .lb-card.rank-2 { border-color: rgba(180,180,180,0.2); }
   .lb-card.rank-3 { border-color: rgba(180,120,60,0.2); }
@@ -165,94 +165,6 @@
   .footer-links { display: flex; gap: 1.5rem; }
   .footer-links a { font-size: 0.75rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--amber); }
-
-  /* ── Trader Modal ── */
-  .modal-overlay {
-    position: fixed; inset: 0; z-index: 500;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 1rem;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--bg2); border: 1px solid var(--border2);
-    border-radius: 14px; width: 100%; max-width: 560px;
-    max-height: 85vh; display: flex; flex-direction: column;
-    transform: translateY(16px) scale(0.98);
-    transition: transform 0.22s cubic-bezier(.22,.68,0,1.2);
-    overflow: hidden;
-  }
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-
-  .modal-header {
-    padding: 1.25rem 1.5rem 1rem;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
-    flex-shrink: 0;
-  }
-  .modal-title-block {}
-  .modal-username {
-    font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800;
-    color: var(--text); letter-spacing: -0.02em;
-  }
-  .modal-username span { color: var(--amber); }
-  .modal-period { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); margin-top: 3px; }
-  .modal-close {
-    background: none; border: 1px solid var(--border); color: var(--text3);
-    width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
-    font-size: 1rem; line-height: 1; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .modal-close:hover { border-color: var(--border2); color: var(--text); }
-
-  .modal-stats {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--border);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .modal-stat { background: var(--bg2); padding: 0.85rem 1rem; text-align: center; }
-  .modal-stat-num { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--amber); }
-  .modal-stat-num.green { color: var(--green); }
-  .modal-stat-num.red { color: var(--red); }
-  .modal-stat-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
-
-  .modal-body { overflow-y: auto; padding: 1rem 1.5rem 1.5rem; flex: 1; }
-  .modal-section-label {
-    font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--text3); margin-bottom: 0.6rem; margin-top: 0.25rem;
-  }
-  .modal-calls { display: flex; flex-direction: column; gap: 7px; }
-  .modal-call-row {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 0.75rem 1rem;
-    display: grid; grid-template-columns: auto 1fr auto;
-    gap: 0.75rem; align-items: center;
-    transition: border-color 0.15s;
-  }
-  .modal-call-row:hover { border-color: var(--border2); }
-  .modal-call-row.tp { border-left: 2px solid var(--green); }
-  .modal-call-row.sl { border-left: 2px solid var(--red); }
-  .modal-call-badge {
-    font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em;
-    text-transform: uppercase; padding: 2px 6px; border-radius: 3px; white-space: nowrap;
-  }
-  .modal-call-badge.tp { background: var(--green-glow); color: var(--green); border: 1px solid var(--green-border); }
-  .modal-call-badge.sl { background: var(--red-glow); color: var(--red); border: 1px solid var(--red-border); }
-  .modal-call-info {}
-  .modal-call-symbol { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
-  .modal-call-detail { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); margin-top: 2px; line-height: 1.5; }
-  .modal-call-pnl { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; text-align: right; white-space: nowrap; }
-  .modal-call-pnl.pos { color: var(--green); }
-  .modal-call-pnl.neg { color: var(--red); }
-  .modal-call-date { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--text3); text-align: right; margin-top: 2px; }
-  @media (max-width: 480px) {
-    .modal-stats { grid-template-columns: repeat(2,1fr); }
-    .modal-call-row { grid-template-columns: auto 1fr; }
-    .modal-call-pnl, .modal-call-date { display: none; }
-  }
 </style>
 </head>
 <body>
@@ -599,13 +511,13 @@
     const sorted = Object.entries(traders).map(([name, d]) => {
       const calls = d.wins + d.losses;
       return { name, wins: d.wins, losses: d.losses, calls, roi: d.pnlSum, winrate: calls > 0 ? ((d.wins/calls)*100).toFixed(0) : '0' };
-    }).sort((a, b) => b.roi - a.roi);
+    }).sort((a, b) => b.roi - a.roi).slice(0, 10);
 
     const emoji = ['🥇','🥈','🥉'];
     el.innerHTML = `<div class="lb-grid">${sorted.map((t, i) => {
       const rankCls = i < 3 ? `rank-${i+1}` : '';
       const roiTxt = (t.roi >= 0 ? '+' : '') + t.roi.toFixed(2) + '%';
-      return `<div class="lb-card ${rankCls}" style="cursor:pointer;" onclick="openTraderModal('${t.name.replace(/'/g,"\\'")}', allHistory.filter(h=>h.month===document.getElementById('lbMonthSelect').value), document.getElementById('lbMonthLabel').textContent)">
+      return `<div class="lb-card ${rankCls}">
         <div class="lb-rank">${i < 3 ? emoji[i] : '#'+(i+1)}</div>
         <div>
           <div class="lb-name">${t.name}</div>
@@ -643,81 +555,8 @@
     }
   }
 
-  // ── Trader Modal ──
-  function openTraderModal(username, monthHistory, monthLabel) {
-    const calls = monthHistory
-      .filter(h => h.username === username && (h.result === 'tp_hit' || h.result === 'sl_hit'))
-      .sort((a, b) => (b.closedDate || '').localeCompare(a.closedDate || ''));
-
-    const wins = calls.filter(h => h.result === 'tp_hit').length;
-    const losses = calls.filter(h => h.result === 'sl_hit').length;
-    const total = calls.length;
-    const wr = total > 0 ? ((wins/total)*100).toFixed(0) : '0';
-    const pnlSum = calls.reduce((s, h) => s + (parseFloat(h.pnlPct) || 0), 0);
-    const avgPnl = total > 0 ? (pnlSum / total).toFixed(2) : '0.00';
-
-    document.getElementById('modalUsername').innerHTML = `<span>@</span>${username}`;
-    document.getElementById('modalPeriod').textContent = monthLabel;
-
-    const wrCls = parseFloat(wr) >= 50 ? 'green' : 'red';
-    const pnlCls = pnlSum >= 0 ? 'green' : 'red';
-    document.getElementById('modalStats').innerHTML = `
-      <div class="modal-stat"><div class="modal-stat-num">${total}</div><div class="modal-stat-label">Calls</div></div>
-      <div class="modal-stat"><div class="modal-stat-num ${wrCls}">${wr}%</div><div class="modal-stat-label">Win Rate</div></div>
-      <div class="modal-stat"><div class="modal-stat-num green">${wins}W / <span style="color:var(--red)">${losses}L</span></div><div class="modal-stat-label">W / L</div></div>
-      <div class="modal-stat"><div class="modal-stat-num ${pnlCls}">${pnlSum >= 0 ? '+' : ''}${pnlSum.toFixed(2)}%</div><div class="modal-stat-label">Total PnL</div></div>`;
-
-    document.getElementById('modalCalls').innerHTML = calls.length ? calls.map(h => {
-      const pnl = fmtPnl(h.pnlPct);
-      const isTp = h.result === 'tp_hit';
-      const dir = h.callType === 'buy' ? '↑ Buy' : '↓ Sell';
-      const dateStr = h.closedDate ? fmtDate(h.closedDate) : (h.month || '—');
-      return `<div class="modal-call-row ${isTp ? 'tp' : 'sl'}">
-        <span class="modal-call-badge ${isTp ? 'tp' : 'sl'}">${isTp ? '✓ TP' : '✗ SL'}</span>
-        <div class="modal-call-info">
-          <div class="modal-call-symbol">${h.symbol || '—'} <span style="font-family:'DM Mono',monospace;font-size:0.6rem;font-weight:400;color:var(--text3)">${dir}</span></div>
-          <div class="modal-call-detail">Entry ${fmt(h.entry)} · TP ${fmt(h.tp)} · SL ${fmt(h.sl)}</div>
-        </div>
-        <div>
-          <div class="modal-call-pnl ${pnl.cls}">${pnl.text}</div>
-          <div class="modal-call-date">${dateStr}</div>
-        </div>
-      </div>`;
-    }).join('') : `<div class="state-box" style="padding:1.5rem;"><div class="state-desc">Tidak ada call closed.</div></div>`;
-
-    document.getElementById('traderModal').classList.add('open');
-  }
-
-  function closeModal(e) {
-    if (e.target === document.getElementById('traderModal')) {
-      document.getElementById('traderModal').classList.remove('open');
-    }
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.getElementById('traderModal').classList.remove('open');
-  });
-
   loadData();
 </script>
 <script src="wallet.js"></script>
-
-<!-- Trader Detail Modal -->
-<div class="modal-overlay" id="traderModal" onclick="closeModal(event)">
-  <div class="modal" id="modalBox">
-    <div class="modal-header">
-      <div class="modal-title-block">
-        <div class="modal-username" id="modalUsername">—</div>
-        <div class="modal-period" id="modalPeriod">—</div>
-      </div>
-      <button class="modal-close" onclick="document.getElementById('traderModal').classList.remove('open')">✕</button>
-    </div>
-    <div class="modal-stats" id="modalStats"></div>
-    <div class="modal-body">
-      <div class="modal-section-label">Riwayat Call</div>
-      <div class="modal-calls" id="modalCalls"></div>
-    </div>
-  </div>
-</div>
-
+</body>
 </html>
