@@ -364,13 +364,27 @@
     return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   }
 
-  // Binance price
+  // Ticker yang ada collision antara Spot dan Futures (coin berbeda).
+  // Untuk simbol ini, TIDAK fallback ke Spot — Futures only.
+  // LIT: Spot = Litentry, Futures = Lighter
+  const FUTURES_ONLY_SYMBOLS = new Set(['LIT']);
+
+  // Binance price — Futures first, fallback ke Spot (kecuali FUTURES_ONLY_SYMBOLS)
   async function getBinancePrice(symbol) {
+    const sym = symbol.toUpperCase();
+    // Coba Futures dulu
     try {
-      const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}USDT`);
-      if (!r.ok) return null;
-      return parseFloat((await r.json()).price);
-    } catch { return null; }
+      const r = await fetch(`https://fapi.binance.com/fapi/v1/ticker/price?symbol=${sym}USDT`);
+      if (r.ok) return parseFloat((await r.json()).price);
+    } catch {}
+    // Jangan fallback ke Spot kalau simbol ada di denylist collision
+    if (FUTURES_ONLY_SYMBOLS.has(sym)) return null;
+    // Fallback ke Spot
+    try {
+      const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${sym}USDT`);
+      if (r.ok) return parseFloat((await r.json()).price);
+    } catch {}
+    return null;
   }
   function calcFloating(entry, price, direction) {
     const e = parseFloat(entry);
